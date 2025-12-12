@@ -28,7 +28,7 @@ function passwordUpdatedTemplate(username) {
                                   border-radius:12px;
                                   box-shadow:0 4px 10px rgba(0,0,0,0.15);
                               ">
-                                  <img src="https://i.ibb.co/YSWfjjd/GE-logo-removebg-preview.png"
+                                  <img src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
                                        alt="GE Logo"
                                        style="width:110px; height:auto;">
                               </div>

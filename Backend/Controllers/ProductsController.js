@@ -4,6 +4,7 @@ const {  ApiFilter } = require("../Utils/ApiFilter");
 const bcrypt=require('bcryptjs');
 const sendMails = require("../Utils/Nodemailer");
 const passwordUpdatedTemplate = require("../EmailTempletes/UpdatePasswordTemplete");
+const UserAccountDeletedTemplate = require("../EmailTempletes/AccountDeletionNotification");
 //creating the products controller
 const CreateProducts=async(req,res)=>{
 
@@ -321,7 +322,40 @@ const Change_the_role=async(req,res)=>{
 }
 }
 
+//adding the feature through which admin can delete the user account
+const DeleteUser=async(req,res)=>{
+  const id=req.params.id;
+
+  const user=await UserModel.findOne({_id:id})
+  if(user.role==="admin"){
+    return res.status(403).json({
+    success:false,
+    message:"admin cannot deltete the other admin accounts",
+    
+  })
+
+  }
+  try{
+  const delUser=await UserModel.findOneAndDelete({_id:id});
+  const html=UserAccountDeletedTemplate(delUser.name);
+  const options={
+to:delUser.email,
+subject:`the admin ${req.RequestName.name} has deleted the user ${delUser.name}`,
+html
+  }
+  await sendMails(options);
+  return res.status(200).json({
+    success:true,
+    message:`the user ${delUser.name} account is completely deleted by admin ${req.RequestName.name}`
+  })
+}catch(err){
+  return res.status(500).json({
+    success:false,
+    message:"Internal server error",
+    error:err.message
+  })
+}
+}
 
 
-
-module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role};
+module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser};

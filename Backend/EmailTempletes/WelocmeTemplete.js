@@ -129,7 +129,7 @@ function Commerce3WelcomeEmail(userName) {
                       <tr>
                           <td class="header">
                               <div class="logo-box">
-                                  <img src="https://i.ibb.co/YSWfjjd/GE-logo-removebg-preview.png" alt="GE Group Logo">
+                                  <img src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg" alt="GE Group Logo">
                               </div>
                               <div class="header-title">Commerce3 by GE Group</div>
                           </td>

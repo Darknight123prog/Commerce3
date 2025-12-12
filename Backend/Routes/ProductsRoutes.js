@@ -1,5 +1,5 @@
 const express=require('express');
-const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role} = require('../Controllers/ProductsController');
+const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser} = require('../Controllers/ProductsController');
 const{ auth,roleBasedAccess} = require('../Utils/Authetication');
 
 const router=express.Router();
@@ -12,7 +12,7 @@ router.route('/api/v1/admin/profileInfo').get(auth,roleBasedAccess('admin'),getP
 router.route('/api/v1/admin/updatePassword').post(auth,roleBasedAccess('admin'),UpdatePassword);
 router.route('/api/v1/admin/updateProfileInfo').post(auth,roleBasedAccess('admin'),UpdateUserProfile);
 router.route('/api/v1/admin/accesss_to_all_users_admins').get(auth,roleBasedAccess('admin'),getAllUser_Admins);
-router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBasedAccess('admin'),get_single_user_and_admin).put(auth,roleBasedAccess('admin'),Change_the_role);
+router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBasedAccess('admin'),get_single_user_and_admin).put(auth,roleBasedAccess('admin'),Change_the_role).delete(auth,roleBasedAccess('admin'),DeleteUser);
 
 
 

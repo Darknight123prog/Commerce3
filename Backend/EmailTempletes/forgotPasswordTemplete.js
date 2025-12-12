@@ -5,7 +5,7 @@ function ForgetPasswordTemplete(name, resetLink) {
     <!-- Header -->
     <div style="background:#0f3b63;padding:32px 20px;text-align:center;border-radius:12px 12px 0 0;">
       <img 
-        src="https://i.ibb.co/YSWfjjd/GE-logo-removebg-preview.png" 
+        src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
         alt="GE Groups" 
         style="width:110px;margin-bottom:12px;"
       />
