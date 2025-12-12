@@ -50,6 +50,10 @@ const ProductScheme=new mongoose.Schema({
     default:0,
   },
   reviews:[{
+    user:{
+      type:mongoose.Schema.ObjectId,
+      ref:"UserModel"
+    },
     user_name:{
       type:String,
       required:true,

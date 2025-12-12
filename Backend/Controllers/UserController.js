@@ -6,6 +6,7 @@ const sendMails = require('../Utils/Nodemailer');
 const ForgetPasswordTemplete = require('../EmailTempletes/forgotPasswordTemplete');
 const Commerce3WelcomeEmail = require('../EmailTempletes/WelocmeTemplete');
 const passwordUpdatedTemplate = require('../EmailTempletes/UpdatePasswordTemplete');
+const ProductsModel = require('../Models/ProductsModel');
 
 
 const createUser=async(req,res)=>{
@@ -165,6 +166,7 @@ catch(err){
 }
 }
 const resetPassword=async(req,res,next)=>{
+  
   const token=req.params.token;
 
  const resetHashedToken= crypto.createHash("sha256").update(token).digest("hex")
@@ -216,9 +218,53 @@ if(!user){
   }
 }
 
+//adding the feature for the adding the new or update the existing review & rating
+const AddReviewAndUpdate=async(req,res)=>{
+  const user=req.RequestName;
+  const product_id=req.query.Product_id;
+  const product=await ProductsModel.findOne({_id:product_id});
+  if(!product){
+    return res.status(404).json({
+      success:false,
+      message:"product not found"
+    })
+  }
+  else{
+   
+    let reviews=product.reviews;
+    const {rating,review}=req.body;
+   const foundIndex= reviews.findIndex(r=>String(r.user)===String(user._id));
+    if(foundIndex!==-1){
+      // reviews=await ProductsModel.findOne({_id:product_id});
+      reviews.splice(foundIndex,1);
+
+
+  }
+  reviews.push({
+        user:user._id,
+        user_name:user.name,
+        rating,
+        review
+      })
+    
+    let sum=0;
+    reviews.forEach(rev=>{sum+=rev.rating});
+    let rate=sum/(reviews.length);
+    let number_of_review=reviews.length;
+ const data= await ProductsModel.findOneAndUpdate({_id:product_id},{
+      reviews,
+      number_of_review,
+      rating:rate.toFixed(3)
+    },{new:true});
+    return res.status(200).json({
+      success:true,
+      message:"Product review are updated successfully",
+      product_details:data
+    })
+
+} }
 
 
 
 
-
-module.exports={createUser,UserSignIn,UserLogOut,ForgetPassword,resetPassword}
+module.exports={createUser,UserSignIn,UserLogOut,ForgetPassword,resetPassword,AddReviewAndUpdate}

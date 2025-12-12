@@ -17,6 +17,8 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 
 
 
+
+
 //user routes
   router.route('/api/v1/products').get(auth,GetAllProducts)
 
@@ -26,6 +28,7 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 router.route('/api/v1/profileInfo').get(auth,getProfileInfo);
 router.route('/api/v1/updatePassword').post(auth,UpdatePassword);
 router.route('/api/v1/updateProfileInfo').post(auth,UpdateUserProfile);
+
 
 
 module.exports={router};
