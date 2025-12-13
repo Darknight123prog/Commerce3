@@ -237,8 +237,6 @@ const AddReviewAndUpdate=async(req,res)=>{
     if(foundIndex!==-1){
       // reviews=await ProductsModel.findOne({_id:product_id});
       reviews.splice(foundIndex,1);
-
-
   }
   reviews.push({
         user:user._id,

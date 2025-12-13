@@ -19,7 +19,7 @@ if(!flag){
     message:"Not sign in"
   })
 }
-console.log(flag);
+// console.log(flag);
 
 const user=await UserModel.findOne({email:flag.email});
 req.RequestName=user;
