@@ -357,5 +357,9 @@ html
 }
 }
 
+const viewReviews=async(req,res)=>{
+ console.log(req.query.id);
+}
 
-module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser};
+
+module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews};

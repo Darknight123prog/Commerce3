@@ -2,7 +2,7 @@ const express =require("express");
 const app=express();
 const cookieParser=require("cookie-parser");
 const  Db_Connect  = require("./Database/Database_Connection");
-const { router } = require("./Routes/ProductsRoutes");
+const  router  = require("./Routes/ProductsRoutes");
 const Router_User = require("./Routes/UserRoutes");
 require("dotenv").config();
 app.use(cookieParser());

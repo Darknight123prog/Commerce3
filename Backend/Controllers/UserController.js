@@ -262,6 +262,9 @@ const AddReviewAndUpdate=async(req,res)=>{
 
 } }
 
+//adding a feature through which user or any one without the auth can also the review of the product & indiviual reviws
+
+
 
 
 

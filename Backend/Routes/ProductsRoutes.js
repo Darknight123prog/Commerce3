@@ -1,5 +1,5 @@
 const express=require('express');
-const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser} = require('../Controllers/ProductsController');
+const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews} = require('../Controllers/ProductsController');
 const{ auth,roleBasedAccess} = require('../Utils/Authetication');
 
 const router=express.Router();
@@ -20,15 +20,17 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 
 
 //user routes
+ router.route('/api/v1/reviews').get(viewReviews)
   router.route('/api/v1/products').get(auth,GetAllProducts)
 
-  router.route('/api/v1/products/:id').get(auth,GetOneProduct)
+  
 
 
 router.route('/api/v1/profileInfo').get(auth,getProfileInfo);
 router.route('/api/v1/updatePassword').post(auth,UpdatePassword);
 router.route('/api/v1/updateProfileInfo').post(auth,UpdateUserProfile);
+router.route('/api/v1/products/:id').get(auth,GetOneProduct)
 
 
 
-module.exports={router};
+module.exports=router;
