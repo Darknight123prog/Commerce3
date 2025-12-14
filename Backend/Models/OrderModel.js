@@ -57,7 +57,7 @@ const OrderSchema=new mongoose.Schema({
     type:String,
   },
   paidAt:{
-    type:String,
+    type:Date,
   },
   itemPrice:{
     type:Number,
@@ -76,4 +76,4 @@ const OrderSchema=new mongoose.Schema({
   }
 
 },{timestamps:true});
-module.exports=mongoose.model("OrderModel",{OrderSchema});
+module.exports=mongoose.model("OrderModel",OrderSchema);

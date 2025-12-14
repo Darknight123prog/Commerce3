@@ -4,6 +4,7 @@ const cookieParser=require("cookie-parser");
 const  Db_Connect  = require("./Database/Database_Connection");
 const  router  = require("./Routes/ProductsRoutes");
 const Router_User = require("./Routes/UserRoutes");
+const OrderRouter = require("./Routes/OrderRoutes");
 require("dotenv").config();
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
@@ -16,6 +17,7 @@ Db_Connect()
 //routes for all the products routes
 app.use('/',router);
 app.use('/',Router_User);
+app.use('/api/v1',OrderRouter)
 
 
 
