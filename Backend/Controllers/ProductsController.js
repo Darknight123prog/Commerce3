@@ -358,8 +358,65 @@ html
 }
 
 const viewReviews=async(req,res)=>{
- console.log(req.query.id);
+ const product_id=req.query.id;
+ const product=await ProductsModel.findOne({_id:product_id});
+ if(!product){
+  return res.status(404).json({
+    success:false,
+    message:"Product not found",
+  })
+ }
+ else{
+  return res.status(200).json({
+    success:true,
+    message:"Product reviews are fetched",
+    Product_reviews:product.reviews
+  })
+ }
+}
+
+//adding the feature through which registedred user can deltet it's own reviews
+const DeleteOwnReview=async(req,res)=>{
+  const user=req.RequestName;
+  const DeleteProductId=req.query.id;
+  const product=await ProductsModel.findOne({_id:DeleteProductId});
+
+  //if product is not found then returning the error
+  if(!product){
+    return res.status(404).json({
+      success:false,
+      message:"Product is not found"
+    })
+  }
+  else{
+  //reviews array is fetched
+  const reviews=product.reviews;
+  console.log(reviews)
+console.log(user._id);
+
+  const finder=reviews.findIndex(rev=>String(rev.user)===String(user._id))
+  if(finder===-1){
+    return res.status(403).json({
+     success:false,
+     message:"unauthrize access or the cretear can delete the review"
+    })
+  }
+  else{
+    reviews.splice(finder,1);
+    let rate=0;
+    reviews.forEach(rev=>{rate+=rev.rating});
+    rate=(rate/reviews.length).toFixed(3);
+    const number_of_review=reviews.length;
+   const updatedrev= await ProductsModel.findOneAndUpdate({_id:DeleteProductId},{reviews,number_of_review,rating:rate},{new:true});
+    return res.status(200).json({
+      success:true,
+      message:"review is delted sucessfully",
+      updatedreviws:updatedrev
+    })
+  }
+  }
+
 }
 
 
-module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews};
+module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews,DeleteOwnReview};
