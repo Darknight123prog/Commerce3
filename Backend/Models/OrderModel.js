@@ -44,6 +44,10 @@ const OrderSchema=new mongoose.Schema({
     type:mongoose.Schema.ObjectId,
     ref:"UserModel"
   },
+  OrderStatus:{
+    type:String,
+    default:"processing"
+  },
   paymentInfo:{
     id:{
       type:String,
