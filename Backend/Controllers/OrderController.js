@@ -1,4 +1,5 @@
 const OrderModel = require("../Models/OrderModel");
+const ProductsModel = require("../Models/ProductsModel");
 
 //adding the creating order feature
 const createOrder=async(req,res)=>{
@@ -100,4 +101,62 @@ return res.status(200).json({
   })
 }
 }
-module.exports={createOrder,getOrderDetails,OrderViewUser,getSingleOrder};
+
+//adding the featue of updating the order status
+const UpdateOrderStatus=async(req,res)=>{
+  const OrderId=req.params.id;
+  const status=req.body.status;
+  const Order=await OrderModel.findOne({_id:OrderId});
+    
+  if(!Order){
+    return res.status(404).json({
+      success:false,
+      message:"Order not found"
+    })
+  }
+  else{
+   
+    if(String(Order.OrderStatus)==="delivered"){
+      return res.status(400).json({
+        sucess:false,
+        message:"Order is already deliverded"
+      })
+    }
+    await Promise.all(Order.OrderInfo.map(ee=> UpdateStock(ee,status)));
+     Order.OrderStatus=status;
+    await Order.save();
+    return res.status(200).json({
+      success:true,
+      message:`Order Status is changed to ${status} of Order :${OrderId}`
+    })
+   
+  }
+}
+//sub part of the Update Stutsu
+const UpdateStock=async(OrderItems, currentStatus)=>{
+const Product_id=OrderItems.Product_id;
+
+
+const product=await ProductsModel.findOne({_id:Product_id});
+
+if(!product){
+  throw new Error("Product not found or insufficient stock");
+}
+
+if(currentStatus==='dispatch' && OrderItems.OrderStatus!=='dispatch'){
+
+const TotalStockLeft =product.stock-OrderItems.quantity;
+if(TotalStockLeft<0){
+  throw new Error("Out of Stock");
+}
+else{
+product.stock=TotalStockLeft;
+
+await product.save();
+}
+}
+
+
+
+}
+module.exports={createOrder,getOrderDetails,OrderViewUser,getSingleOrder,UpdateOrderStatus};
