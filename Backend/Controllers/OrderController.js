@@ -74,5 +74,30 @@ const OrderViewUser=async(req,res)=>{
 }
 }
 
-//adding the 
-module.exports={createOrder,getOrderDetails,OrderViewUser};
+//adding the feature of the getting the single order details through the params id for the admin only access
+const getSingleOrder=async (req,res)=>{
+  try{
+  const Order_id=req.params.id;
+  const Order=await OrderModel.findOne({_id:Order_id});
+  if(!Order){
+    return res.status(404).json({
+      success:false,
+      message:"Order not found"
+    })
+  }
+  else{
+return res.status(200).json({
+  success:true,
+  message:"Order is fetached successfully",
+  order_details:Order
+})
+  }
+}catch(err){
+  return res.status(500).json({
+    success:false,
+    message:"Internal server erorr",
+    error:err.message
+  })
+}
+}
+module.exports={createOrder,getOrderDetails,OrderViewUser,getSingleOrder};
