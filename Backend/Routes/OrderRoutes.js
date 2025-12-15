@@ -5,6 +5,6 @@ const OrderRouter=express.Router();
 
 
 OrderRouter.route('/createOrder').post(auth,createOrder);
-OrderRouter.route('/viewUserOrder/:id').post(auth,OrderViewUser);
+OrderRouter.route('/viewUserOrder/').get(auth,OrderViewUser);
 OrderRouter.route('/admin/getOrderDetails').post(auth,roleBasedAccess('admin'),getOrderDetails);
 module.exports=OrderRouter;

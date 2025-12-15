@@ -56,36 +56,23 @@ const getOrderDetails=async(req,res)=>{
 
 //adding the all orders view by the user;
 const OrderViewUser=async(req,res)=>{
- const OrderId=req.params.id;
- const Order=await OrderModel.findOne({_id:OrderId});
+  try{
 
-
- if(!Order){
-
- return res.status(404).json({
-    success:false,
-    message:"Order not found"
-  })
- }
- else{
-  // console.log(Order);
- const userId=req.RequestName._id;
- 
- if(userId.toString()!==Order.user.toString()){
-  return res.status(403).json({
-    success:false,
-    messsage:"Access is forbidden"
-  })
- }
- else{
+  const user=req.RequestName;
+  const UserOrders=await OrderModel.find({user:user._id});
   return res.status(200).json({
     success:true,
-    message:"Order details of the user is succesfully fetched",
-    Order_details:Order
+    message:"Order details found ",
+    order_details:UserOrders
   })
- }
+}catch(err){
+  return res.status(500).json({
+    success:false,
+    message:"Internal server error",
+    error:err.message
+  })
 }
 }
 
-//
+//adding the 
 module.exports={createOrder,getOrderDetails,OrderViewUser};
