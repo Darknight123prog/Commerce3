@@ -151,12 +151,26 @@ if(TotalStockLeft<0){
 }
 else{
 product.stock=TotalStockLeft;
-
 await product.save();
 }
 }
-
-
-
 }
-module.exports={createOrder,getOrderDetails,OrderViewUser,getSingleOrder,UpdateOrderStatus};
+//adding the feature of the delete the order by admin
+const deleteOrder=async (req,res)=>{
+  const Order_id=req.params.id;
+  const data=await OrderModel.findOneAndDelete({_id:Order_id});;
+  if(!data){
+   return res.status(404).json({
+      success:false,
+      message:"Order not found"
+    })
+  }
+  else{
+    return res.status(200).json({
+      success:true,
+      message:"Order is deleted successfully",
+      Deleted_order:data
+    })
+  }
+}
+module.exports={createOrder,getOrderDetails,OrderViewUser,getSingleOrder,UpdateOrderStatus,deleteOrder};
