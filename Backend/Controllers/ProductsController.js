@@ -126,7 +126,7 @@ const DeleteOne=async(req,res)=>{
 const GetAllProducts=async (req,res,next)=>{
   //adding the filter functionality
   try{
-    const productPerPage=3;
+    const productPerPage=12;
   const ApiFilterFinder=new ApiFilter(ProductsModel.find(),req.query).search().filter();
   const ApiCopy=ApiFilterFinder.query.clone();
 

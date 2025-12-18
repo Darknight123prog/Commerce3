@@ -5,6 +5,8 @@ const  Db_Connect  = require("./Database/Database_Connection");
 const  router  = require("./Routes/ProductsRoutes");
 const Router_User = require("./Routes/UserRoutes");
 const OrderRouter = require("./Routes/OrderRoutes");
+const AddBannerRouter = require("./Routes/AddBannerRoutes");
+const cors=require('cors');
 require("dotenv").config();
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
@@ -14,10 +16,18 @@ app.use(express.json());
 //connecting withe database
 Db_Connect()
 
+//allowing only limited number of users to access the backend
+app.use(cors({
+  origin:process.env.frontend_url,
+    credentials: true,
+}))
+
+
 //routes for all the products routes
 app.use('/',router);
 app.use('/',Router_User);
 app.use('/api/v1',OrderRouter)
+app.use('/api/v1',AddBannerRouter);
 
 
 

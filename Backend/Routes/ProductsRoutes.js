@@ -21,7 +21,7 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 
 //user routes
  router.route('/api/v1/reviews').get(viewReviews)
-  router.route('/api/v1/products').get(auth,GetAllProducts)
+  router.route('/api/v1/products').get(GetAllProducts)
    router.route('/api/v1/deleteReview').delete(auth,DeleteOwnReview)
 
   
