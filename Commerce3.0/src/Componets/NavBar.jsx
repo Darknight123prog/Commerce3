@@ -1,11 +1,20 @@
 import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
-
+ 
 function NavBar() {
+ 
   const [menu, setMenu] = useState(false);
+  const [search,setSearch]=useState('');
+const navigate=useNavigate();
+  const   SubmitHandeller=(e)=>{
+   e.preventDefault();
+  {search.trim()?(navigate(`/product?keyword=${encodeURIComponent(search)}`)):(navigate('/product'))}
+  
+  }
+
 
   return (
     <header className="bg-white shadow-sm relative z-50">
@@ -22,9 +31,9 @@ function NavBar() {
           </Link>
 
          {/* //adding the search bar here */}
-         <form name="search" className="flex gap-1" >
-         <input className="border-2 rounded-md hover:border-cyan-600 hover:border-2 p-1" placeholder="Search...." type="text" name="search" />
-        <button type="text" ><IoMdSearch className="mt-1 ml-3" size={22} /></button>
+         <form name="keyword" onSubmit={SubmitHandeller}  className="flex gap-1" >
+         <input onChange={(e)=>(setSearch(e.target.value))} className="border-2 rounded-md hover:border-cyan-600 hover:border-2 p-1" placeholder="Search...." type="text" name="keyword" />
+        <button type="submit"  ><IoMdSearch className="mt-1 ml-3" size={22} /></button>
 
          </form>
           <nav className="hidden md:flex space-x-4 text-sm font-medium">

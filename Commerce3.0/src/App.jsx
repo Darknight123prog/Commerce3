@@ -5,8 +5,10 @@ import About from './assets/Pages/About'
 import Footer from './Componets/Footer'
 import Header from './Componets/Header'
 import NavBar from './Componets/NavBar'
-import Product from './Componets/Product'
+
 import Devloper from './Componets/Devloper'
+import SingleProductDetails from './assets/Pages/SingleProductDetails'
+import ProductMainPage from './assets/Pages/ProductMainPage'
 
 function App() {
   return (
@@ -20,8 +22,9 @@ function App() {
           
         <Route path='/' element={<Home/>} />
         <Route path='/about' element={<About/>}/>
-        <Route path='/product'element={<Product/>}/>
+        <Route path='/product'element={<ProductMainPage/>}/>
         <Route path='/devloperInfo' element={<Devloper/>}/>
+        <Route path='/ProductDetails/:id'  element={<SingleProductDetails/>} />
         </Routes>
       
      <Footer/>
