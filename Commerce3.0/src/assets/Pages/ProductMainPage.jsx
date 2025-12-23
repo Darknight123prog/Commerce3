@@ -3,15 +3,24 @@ import React, { useEffect, useState } from 'react';
 import { HashLoader } from "react-spinners";
 import Product from '../../Componets/Product';
 import { useLocation } from 'react-router-dom';
-import Filter from '../../Componets/Filter';
+import Pagination from '../../Componets/Pagination';
+
 
 function ProductMainPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const[page,setPage]=useState(1);
+  const[totalPage,setTotalPage]=useState(null);
+  const[catogary,setCatogary]=useState(undefined);
+  const[totalProducts,setTotalProducts]=useState(null);
+  // const [Range,setRange]=useState([0,500000]);
+  // const [page,setPage]=[1];
 
   const { search } = useLocation();
+ 
+ 
   const query = new URLSearchParams(search).get("keyword");
-  const filter = new URLSearchParams(search).get("catogary");
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,11 +29,16 @@ function ProductMainPage() {
         const res = await axios.get(`http://localhost:8568/api/v1/products`, {
           params: {
             keyword: query || undefined,
-            catogary: filter || undefined
+            catogary:catogary || undefined,
+            page
           }
         });
-        console.log(query, filter);
+       console.log(res.data);
         setProducts(res.data.details);
+        setPage(res.data.page);
+        setTotalPage(res.data.total_page);
+        setTotalProducts(res.data.No_of_products);
+       
       } catch (err) {
         console.error(err);
       } finally {
@@ -33,7 +47,7 @@ function ProductMainPage() {
     };
 
     fetchProducts();
-  }, [query, filter]);
+  }, [query,page,catogary,totalPage,totalProducts]);
 
   if (loading) {
     return (
@@ -45,7 +59,10 @@ function ProductMainPage() {
 
   if (products.length === 0) {
     return (
+      <>
+      
       <div className='bg-white h-screen w-full flex flex-col justify-center items-center'>
+        
         <h1 className='text-xl mb-4 text-center'>Sorry, Product Not Found 😔</h1>
         <img
           src='https://res.cloudinary.com/djgboajkm/image/upload/f_auto/9318688_iwlwvb'
@@ -53,32 +70,73 @@ function ProductMainPage() {
           alt="No Product"
         />
       </div>
-    );
+    </>);
   }
 
   return (
-    <div className='flex flex-col md:flex-row h-auto bg-[#aa98a9] gap-4 p-3 w-full'>
-      
-      {/* Filters */}
-      <div className='w-full md:w-1/4 bg-[#997a8d] p-3 rounded-md'>
-     <div>
-      <h5>Price Range</h5>
-       <input type='range' min={20} max={10000000} />
-        </div>
+  <div className="flex flex-col md:flex-row min-h-screen bg-[#aa98a9] gap-4 p-3 w-full">
+
+    {/* FILTER SIDEBAR */}
+    <aside className="w-full md:w-1/4 bg-[#997a8d] p-4 rounded-lg shadow-md">
+      <h4 className="text-lg font-semibold mb-3 text-white">
+        Categories
+      </h4>
+
+      <ul className="flex flex-col gap-2">
+        {[
+          "Electronics",
+          "Clothes",
+          "Headphones",
+          "Mobile Phones",
+          "Furniture",
+        ].map((item) => (
+          <li key={item}>
+            <button
+              onClick={() => setCatogary(item)}
+              className={`w-full text-left px-3 py-2 rounded-md transition
+                ${
+                  catogary === item
+                    ? "bg-white text-[#997a8d] font-semibold"
+                    : "bg-[#b497a8] text-white hover:bg-white hover:text-[#997a8d]"
+                }`}
+            >
+              {item}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </aside>
+
+    {/* PRODUCTS SECTION */}
+    <main className="w-full md:w-3/4 bg-white p-4 rounded-lg shadow-md">
+      <div className="flex items-center justify-between mb-4">
+        <h5 className="text-lg font-semibold">Best Sellers</h5>
+        {query && (
+          <span className="text-sm text-gray-600">
+            Total Products: {totalProducts}
+          </span>
+        )}
       </div>
 
-      {/* Products */}
-      <div className='w-full md:w-3/4 bg-white p-3 rounded-md'>
-        <h5 className='text-lg font-semibold mb-3'>Best Seller</h5>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {products.map(prod => (
-            <Product key={prod._id} product={prod} />
-          ))}
-        </div>
+      {/* PRODUCT GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {products.map((prod) => (
+          <Product key={prod._id} product={prod} />
+        ))}
       </div>
 
-    </div>
-  );
+      {/* PAGINATION */}
+      <div className="mt-6 flex justify-center">
+        <Pagination
+          currentPage={page}
+          totalPages={totalPage}
+          onPageChange={setPage}
+        />
+      </div>
+    </main>
+  </div>
+);
+
 }
 
 export default ProductMainPage;

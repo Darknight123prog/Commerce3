@@ -9,6 +9,11 @@ import NavBar from './Componets/NavBar'
 import Devloper from './Componets/Devloper'
 import SingleProductDetails from './assets/Pages/SingleProductDetails'
 import ProductMainPage from './assets/Pages/ProductMainPage'
+import Register from './assets/Pages/Register'
+import Profile from './assets/Pages/Profile'
+import LogOut from './assets/Pages/LogOut'
+import LogIn from './assets/Pages/LogIn'
+
 
 function App() {
   return (
@@ -21,7 +26,11 @@ function App() {
         <Routes>
           
         <Route path='/' element={<Home/>} />
+        <Route path='/login' element={<LogIn/>} />
         <Route path='/about' element={<About/>}/>
+         <Route path='/logout' element={<LogOut/>}/>
+         <Route path='/Userauth/profile' element={<Profile/>}/>
+        <Route path='/register' element={<Register/>}/>
         <Route path='/product'element={<ProductMainPage/>}/>
         <Route path='/devloperInfo' element={<Devloper/>}/>
         <Route path='/ProductDetails/:id'  element={<SingleProductDetails/>} />
