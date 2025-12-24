@@ -5,19 +5,28 @@ class ApiFilter{
   }
 
   //methods
-  search(){
-    const keyword=this.queryStr.keyword?{
-     name:{
-      $regex:this.queryStr.keyword,
-      $options:'i',
-     }
-    }:{};
-
-    this.query=this.query.find({...keyword});
-    return this;
-    
-    
+  search() {
+  if (this.queryStr.keyword) {
+    this.query = this.query.find({
+      $or: [
+        {
+          name: {
+            $regex: this.queryStr.keyword,
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: this.queryStr.keyword,
+            $options: "i",
+          },
+        },
+      ],
+    });
   }
+  return this;
+}
+
   filter(){
     const copyQuerStr={...this.queryStr};
     const removeOther=["page","limit","keyword"];
@@ -27,11 +36,11 @@ class ApiFilter{
   }
 
   pagination(productPerPage){
-    const page=Number(this.queryStr.page)||1;
-    const skip=productPerPage*(page-1);
-    this.query=this.query.limit(productPerPage).skip(skip);
-    return this;
+  const page = Number(this.queryStr.page) || 1;
+  const skip = productPerPage * (page - 1);
+  this.query = this.query.limit(productPerPage).skip(skip);
+  return this;
+}
 
-  }
 }
 module.exports=  {ApiFilter}

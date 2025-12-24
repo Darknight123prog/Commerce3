@@ -1,4 +1,6 @@
 import React from 'react'
+import GoogleLogin from './GoogleLogin'
+import { Link } from 'react-router-dom'
 
 function LogIn() {
   return (
@@ -58,12 +60,12 @@ function LogIn() {
 
         {/* Footer */}
         <p className="text-center text-xs sm:text-sm text-gray-600 mt-6">
-          Already have an account?{" "}
+         Don't have an account?{" "}
           <Link
-           to="/login"
+           to="/register"
             className="text-indigo-600 font-medium hover:underline"
           >
-            Login
+            SignUp
           </Link>
         </p>
       </div>

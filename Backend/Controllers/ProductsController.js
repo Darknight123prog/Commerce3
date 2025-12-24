@@ -126,12 +126,12 @@ const DeleteOne=async(req,res)=>{
 const GetAllProducts=async (req,res,next)=>{
   //adding the filter functionality
   try{
-    const productPerPage=12;
+    const productPerPage=3;
   const ApiFilterFinder=new ApiFilter(ProductsModel.find(),req.query).search().filter();
   const ApiCopy=ApiFilterFinder.query.clone();
 
   const page=Number(req.query.page)||1;
-  const docCount=await ApiCopy.countDocument;
+  const docCount=await ApiCopy.estimatedDocumentCount();
   const total_page=Math.ceil(docCount/productPerPage);
 
   if(page>total_page && docCount>0){
@@ -141,7 +141,7 @@ const GetAllProducts=async (req,res,next)=>{
       })
   };
   if(docCount==0){
-    res.status(404).json({
+   return res.status(404).json({
       success:false,
       message:"Product not found"
     })
@@ -150,13 +150,16 @@ const GetAllProducts=async (req,res,next)=>{
   ApiFilterFinder.pagination(productPerPage);
   
   const data=await ApiFilterFinder.query;
-  res.status(200).json({
+ return res.status(200).json({
     success:true,
     message:"Successfully brought the data",
-    details:data
+    details:data,
+    page:page,
+    total_page:total_page,
+    No_of_products:page
   })
 }catch(err){
-  res.status(500).json({
+ return res.status(500).json({
     success:false,
     message:"Cannot retrive Data",
     error:err.message

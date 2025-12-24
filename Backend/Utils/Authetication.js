@@ -3,6 +3,7 @@ const UserModel = require('../Models/UserModel');
 
 const auth=async(req,res,next)=>{
 const token=req.cookies.token;
+console.log("here is the set token",token)
 
 if(!token){
   return res.status(404).json({
@@ -13,13 +14,14 @@ if(!token){
 //if token exist then verifi=ying the token
 const flag=jwt.verify(token,process.env.JWT_Secrete);
 // const user_mail=jwt.sign('token',token,process.env.JWT_Secrete);
+
 if(!flag){
   return res.status(404).json({
     success:false,
     message:"Not sign in"
   })
 }
-// console.log(flag);
+
 
 const user=await UserModel.findOne({email:flag.email});
 req.RequestName=user;

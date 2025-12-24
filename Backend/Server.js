@@ -11,10 +11,19 @@ require("dotenv").config();
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+const passport = require("passport");
+const session = require("express-session");
+require("./config/passport");
+const AuthRouter = require("./Routes/authRoutes");
+
+
+
 
 
 //connecting withe database
 Db_Connect()
+
+
 
 //allowing only limited number of users to access the backend
 app.use(cors({
@@ -22,12 +31,25 @@ app.use(cors({
     credentials: true,
 }))
 
+app.use(
+  session({
+    secret: "passport_secret",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //routes for all the products routes
 app.use('/',router);
 app.use('/',Router_User);
 app.use('/api/v1',OrderRouter)
 app.use('/api/v1',AddBannerRouter);
+app.use('/api/v1', AuthRouter);
+
 
 
 

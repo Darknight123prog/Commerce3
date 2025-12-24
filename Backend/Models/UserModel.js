@@ -1,45 +1,39 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 const validator = require('validator');
 
-const UserSchema=new mongoose.Schema({
-  name:{
-    type:String,
-    required:true,
-    maxLength:[25,"Name cannot excced the 25 characters"],
-    minLength:[3,"Name must have 3 characters"],
+const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    maxLength: [25, "Name cannot exceed 25 characters"],
+    minLength: [3, "Name must have at least 3 characters"],
   },
-  email:{
-    type:String,
-    required:true,
-    unique:true,
-    validate:[validator.isEmail,"invalid E-mail"]
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+    validate: [validator.isEmail, "Invalid E-mail"]
   },
-  password:{
-    type:String,
-    required:true,
-    minLength:[4,"Password cannot be less then 4 characters"],
-  },
-  avator:{
-    public_id:{
-      type:String,
-      required:true
-    },
-    url:{
-      type:String,
-      required:true,
-    }
-  },
-  role:{
-    type:String,
-    default:"User",
-  },
-  resetPasswordToken:{
-    type:String
-  },
-  resetPasswordExpire:{
-    type:Date
+  googleId: { type: String },
+  password: {
+  type: String,
+  required: function() {
+    return this.authType === 'local';
   }
+},
+  authType: {
+    type: String,
+    enum: ["local", "google"],
+    default: "local"
+  },
+  avator: {
+    public_id: { type: String, default: '' },
+    url: { type: String, default: '' }
+  },
+  role: { type: String, default: "User" },
+  resetPasswordToken: { type: String },
+  resetPasswordExpire: { type: Date }
+}, { timestamps: true });
 
-},{timestamps:true});
-
-module.exports=mongoose.model("UserModel",UserSchema);
+module.exports = mongoose.model("UserModel", UserSchema);

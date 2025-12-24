@@ -111,12 +111,12 @@ const UserSignIn=async(req,res,next)=>{
 
 //adding the log out feature
 const UserLogOut=async(req,res)=>{
-  res.cookie("token",null,{
-    secure:true,
-    httpOnly:true,
-    expires:new Date(Date.now())
-  })
-  res.status(200).json({success:true,message:"user log out successfully"});
+ res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "lax"
+  });
+
+  res.status(200).json({ success: true });
 }
 
 //adding the forget password functionality

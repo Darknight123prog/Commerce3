@@ -21,6 +21,7 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 
 //user routes
  router.route('/api/v1/reviews').get(viewReviews)
+ 
   router.route('/api/v1/products').get(GetAllProducts)
    router.route('/api/v1/deleteReview').delete(auth,DeleteOwnReview)
 
@@ -30,7 +31,7 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 router.route('/api/v1/profileInfo').get(auth,getProfileInfo);
 router.route('/api/v1/updatePassword').post(auth,UpdatePassword);
 router.route('/api/v1/updateProfileInfo').post(auth,UpdateUserProfile);
-router.route('/api/v1/products/:id').get(auth,GetOneProduct)
+router.route('/api/v1/products/:id').get(GetOneProduct)
 
 
 

@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true
       })
       console.log("after the ",res.data.user);
+      console.log()
         setUser(res.data.user);
         setLoading(false)
     }

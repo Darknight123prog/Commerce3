@@ -1,11 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleLogin from "./GoogleLogin";
 import { useAuth } from "../../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
-  const { user } = useAuth();
+  const { user ,setUser} = useAuth();
   const navigate = useNavigate();
+  const[form,setForm]=useState({
+    name:"",
+    email:"",
+    password:""
+  })
+const handleChange=(e)=>{
+ setForm({...form,
+  [e.target.name]:e.target.value
+ })
+
+}
+const handleSubmit=(e)=>{
+  e.preventDefault();
+  const signup=async()=>{
+    try{
+   const Muser= await axios.post('http://localhost:8568/api/v1/register',form);
+  
+   setUser(Muser.data.details);
+   navigate('/');
+    }catch(err){
+      console.error(err);
+    }
+
+  }
+  signup();
+
+}
+
+  useEffect(()=>{
+
+  },[]);
 
   useEffect(() => {
     if (user) navigate("/");
@@ -44,22 +76,28 @@ const Register = () => {
         </div>
 
         {/* Email Signup Form */}
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
+          onChange={(e)=>handleChange(e)}
             type="text"
             placeholder="Full Name"
+            name="name"
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
 
           <input
             type="email"
+            onChange={(e)=>handleChange(e)}
+            name="email"
             placeholder="Email address"
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
 
           <input
             type="password"
+            onChange={(e)=>handleChange(e)}
             placeholder="Password"
+            name="password"
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
 
