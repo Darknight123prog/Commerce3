@@ -1,8 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import GoogleLogin from './GoogleLogin'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate} from 'react-router-dom'
+import axios from 'axios'
+import { useAuth } from '../../Context/AuthContext'
+import GitHub from './GitHub'
 
 function LogIn() {
+  const navigate=useNavigate();
+const {setUser,setLoading}=useAuth()
+  const [form,setForm]=useState({
+    email:"",
+    password:""
+  })
+ const handleChange=(e)=>{
+  setForm({...form,[e.target.name]:e.target.value});
+ }
+ const handleSubmit=async(e)=>{
+  e.preventDefault();
+  console.log("form datta",form);
+  try{
+const logedIn=await axios.post('http://localhost:8568/api/v1/signin',form);
+setUser(logedIn.data.details)
+setLoading(false);
+navigate('/');
+  }
+  catch(err){
+    console.error(err);
+  }
+
+ }
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/f_auto/log_c1i9j1')] bg-cover bg-center px-4 sm:px-6">
       
@@ -27,6 +53,7 @@ function LogIn() {
         <div className="mb-5 bg-white rounded-xl">
           <GoogleLogin />
         </div>
+        <GitHub/>
 
         {/* Divider */}
         <div className="flex items-center my-5">
@@ -36,16 +63,21 @@ function LogIn() {
         </div>
 
         {/* Email Signup Form */}
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           
           <input
             type="email"
+            onChange={(e)=>handleChange(e)}
             placeholder="Email address"
+            name='email'
+           
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
 
           <input
             type="password"
+            onChange={(e)=>handleChange(e)}
+            name='password'
             placeholder="Password"
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
@@ -54,7 +86,7 @@ function LogIn() {
             type="submit"
             className="w-full py-2.5 sm:py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition text-sm sm:text-base"
           >
-            Sign Up
+            Log in
           </button>
         </form>
 

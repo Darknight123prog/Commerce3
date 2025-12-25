@@ -14,8 +14,8 @@ export const AuthProvider = ({ children }) => {
       .get("http://localhost:8568/api/v1/me", {
         withCredentials: true
       })
-      console.log("after the ",res.data.user);
-      console.log()
+      // console.log("after the ",res.data.user);
+      // console.log()
         setUser(res.data.user);
         setLoading(false)
     }
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
  
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading ,setLoading}}>
       {children}
     </AuthContext.Provider>
   );

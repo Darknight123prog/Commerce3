@@ -31,6 +31,39 @@ router.get(
   }
 );
 
+
+
+
+router.get(
+  "/auth/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+// GitHub callback
+router.get(
+  "/auth/github/callback",
+  passport.authenticate("github", {
+    session: false,
+    failureRedirect: "/login",
+  }),
+  (req, res) => {
+    const token = jwt.sign(
+      { email: req.user.email },
+      process.env.JWT_Secrete,
+      { expiresIn: "7d" }
+    );
+    res.cookie("token", token, {
+  httpOnly: true,
+  sameSite: "lax",
+  secure: process.env.NODE_ENV === "production"
+});
+
+    res.redirect(
+      `http://localhost:5173`
+    );
+  }
+);
+
+
 router.get("/me", auth, (req, res) => {
   console.log('after auth data user',req.RequestName);
   res.json({ user: req.RequestName });

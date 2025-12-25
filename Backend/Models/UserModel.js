@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
     validate: [validator.isEmail, "Invalid E-mail"]
   },
   googleId: { type: String },
+  githubId: String,
   password: {
   type: String,
   required: function() {
@@ -24,7 +25,7 @@ const UserSchema = new mongoose.Schema({
 },
   authType: {
     type: String,
-    enum: ["local", "google"],
+    enum: ["local", "google","github"],
     default: "local"
   },
   avator: {

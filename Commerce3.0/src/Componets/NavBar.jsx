@@ -4,57 +4,53 @@ import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { useAuth } from "../Context/AuthContext";
-import { IoIosLogOut } from "react-icons/io";
-import { CiLogin } from "react-icons/ci";
 
 import { showSuccess, showError } from "../Utils/Toast";
 import axios from "axios";
- 
+
 function NavBar() {
- 
   const [menu, setMenu] = useState(false);
-  const [search,setSearch]=useState('');
-  
-  const navigate=useNavigate();
+  const [search, setSearch] = useState("");
 
-   const { user,setUser }=useAuth()
-  
+  const navigate = useNavigate();
+  const { user, setUser } = useAuth();
 
-   
-    const HanndleLogOut=async()=>{
-      try{
-      await axios.post('http://localhost:8568/api/v1/signout',{},{withCredentials:true})
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8568/api/v1/signout",
+        {},
+        { withCredentials: true }
+      );
+
       setUser(null);
-      showSuccess("Log Out sucessfully");
-      navigate('/');
-      }
-      catch(err){
-        showError(err.message);
-      }
+      showSuccess("Logged out successfully");
+      navigate("/");
+    } catch (err) {
+      showError(err.response?.data?.message || "Logout failed");
     }
+  };
 
-    const HanndleLogIn=()=>{
-      showSuccess('redirecting to SignUp/logIn page');
-      navigate('/register');
+  const handleLogin = () => {
+    showSuccess("Redirecting to SignUp / Login");
+    navigate("/register");
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    if (search.trim()) {
+      navigate(`/product?keyword=${encodeURIComponent(search)}`);
+    } else {
+      navigate("/product");
     }
-  
-
-   
-
-  const   SubmitHandeller=(e)=>{
-   e.preventDefault();
-  {search.trim()?(navigate(`/product?keyword=${encodeURIComponent(search)}`)):(navigate('/product'))}
-  
-  }
-
-
-
+  };
 
   return (
     <header className="bg-white shadow-sm relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2">
-
+          
           {/* Logo */}
           <Link to="/">
             <img
@@ -64,23 +60,61 @@ function NavBar() {
             />
           </Link>
 
-         {/* //adding the search bar here */}
-         <form name="keyword" onSubmit={SubmitHandeller}  className="flex gap-1" >
-         <input onChange={(e)=>(setSearch(e.target.value))} className="border-2 rounded-md hover:border-cyan-600 hover:border-2 p-1" placeholder="Search...." type="text" name="keyword" />
-        <button type="submit"  ><IoMdSearch className="mt-1 ml-3" size={22} /></button>
+          {/* Search */}
+          <form onSubmit={submitHandler} className="flex gap-1">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border-2 rounded-md p-1 hover:border-cyan-600"
+              placeholder="Search..."
+              type="text"
+            />
+            <button type="submit">
+              <IoMdSearch className="mt-1 ml-2" size={22} />
+            </button>
+          </form>
 
-         </form>
-          <nav className="hidden md:flex space-x-4 text-sm font-medium">
-            <Link to="/" className="text-gray-700 hover:text-purple-700">Home</Link>
-            <Link to="/product" className="text-gray-700 hover:text-purple-700">Product</Link>
-            <Link to="/about" className="text-gray-700 hover:text-purple-700">About</Link>
-            
-            <Link to="/devloperInfo" className="text-gray-700 hover:text-purple-700">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex space-x-4 text-sm font-medium items-center">
+            <Link to="/" className="text-gray-700 hover:text-purple-700">
+              Home
+            </Link>
+            <Link to="/product" className="text-gray-700 hover:text-purple-700">
+              Product
+            </Link>
+            <Link to="/about" className="text-gray-700 hover:text-purple-700">
+              About
+            </Link>
+            <Link
+              to="/devloperInfo"
+              className="text-gray-700 hover:text-purple-700"
+            >
               Developer Info
             </Link>
-            {<Link to='/Userauth/profile'>{user?(<img className="rounded-full h-10"  src={user.avator.url}></img>):('')}</Link>}
+
+            {user && (
+              <Link to="/Userauth/profile">
+                <img
+                  className="rounded-full h-10 w-10 object-cover"
+                  src={
+                    user?.avator?.url ||
+                    "https://res.cloudinary.com/djgboajkm/image/upload/f_auto/7ae28c97-cb1f-4d1d-b74c-4db76b2081ad_w1kalp"
+                  }
+                  alt="profile"
+                />
+              </Link>
+            )}
+
+            {user ? (
+              <button type="button" onClick={handleLogout}>
+                LogOut
+              </button>
+            ) : (
+              <button type="button" onClick={handleLogin}>
+                LogIn / SignUp
+              </button>
+            )}
           </nav>
-          <div className="hidden md:flex space-x-4 text-sm font-medium" >{user?(<button type="submit"  onClick={HanndleLogOut} >LogOut</button>):(<button type="submit" onClick={HanndleLogIn} >LogIn/SignUp</button>)}</div>
 
           {/* Mobile Icon */}
           <div className="md:hidden text-2xl">
@@ -90,15 +124,14 @@ function NavBar() {
               <GiHamburgerMenu onClick={() => setMenu(true)} />
             )}
           </div>
-
         </div>
       </div>
 
-      
+      {/* Mobile Menu */}
       <div
         className={`
           md:hidden absolute top-full left-0 w-full bg-white shadow-md z-50
-          overflow-hidden transition-all duration-300 ease-in-out
+          overflow-hidden transition-all duration-300
           ${menu ? "max-h-64 opacity-100" : "max-h-0 opacity-0"}
         `}
       >
@@ -110,10 +143,6 @@ function NavBar() {
             <Link to="/product" onClick={() => setMenu(false)}>Product</Link>
           </li>
           <li>
-            <div>{user?(<button type="submit"   onClick={HanndleLogOut} >LogOut</button>):(<button type="submit" onClick={HanndleLogIn} >LogIn/SignUp</button>)}</div>
-          </li>
-          
-          <li>
             <Link to="/about" onClick={() => setMenu(false)}>About</Link>
           </li>
           <li>
@@ -121,9 +150,19 @@ function NavBar() {
               Developer Info
             </Link>
           </li>
+          <li>
+            {user ? (
+              <button type="button" onClick={handleLogout}>
+                LogOut
+              </button>
+            ) : (
+              <button type="button" onClick={handleLogin}>
+                LogIn / SignUp
+              </button>
+            )}
+          </li>
         </ul>
       </div>
-
     </header>
   );
 }
