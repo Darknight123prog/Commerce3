@@ -1,10 +1,17 @@
 const express=require('express');
 const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews,DeleteOwnReview} = require('../Controllers/ProductsController');
 const{ auth,roleBasedAccess} = require('../Utils/Authetication');
+const upload = require('../middleware/uploads');
 
 const router=express.Router();
 //admin routes
-router.route('/api/v1/admin/allproducts').get(auth,roleBasedAccess('admin'),GetAllProducts).post(auth,roleBasedAccess('admin'),CreateProducts);
+router.route('/api/v1/admin/allproducts').get(auth,roleBasedAccess('admin'),GetAllProducts)
+
+
+
+router.route('/api/v1/admin/createProducts').post(auth,roleBasedAccess('admin'),upload.array("image",5),CreateProducts) 
+
+
 
 router.route('/api/v1/admin/products/:id').get(auth,roleBasedAccess('admin'),GetOneProduct).put(auth,roleBasedAccess('admin'),UpdatetheProducts).delete(auth,roleBasedAccess('admin'),DeleteOne);
 

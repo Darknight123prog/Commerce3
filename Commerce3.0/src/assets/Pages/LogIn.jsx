@@ -30,14 +30,14 @@ navigate('/');
 
  }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/f_auto/log_c1i9j1')] bg-cover bg-center px-4 sm:px-6">
+    <div className="min-h-screen flex items-center  justify-center bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/f_auto/log_c1i9j1')] bg-cover bg-center px-4 sm:px-6">
       
-      <div className="w-full max-w-sm sm:max-w-md bg-[#98d5f3]/90 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8">
+      <div className="w-full max-w-sm sm:max-w-md bg-[white]/20  backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8">
         
         {/* Header */}
         <div className="flex flex-col items-center mb-6">
           <img
-            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full mb-3"
+            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full  border-b-cyan-300 shadow-2xl border-2  mb-3"
             src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
             alt="Logo"
           />
@@ -53,7 +53,7 @@ navigate('/');
         <div className="mb-5 bg-white rounded-xl">
           <GoogleLogin />
         </div>
-        <GitHub/>
+        {/* <GitHub/> */}
 
         {/* Divider */}
         <div className="flex items-center my-5">

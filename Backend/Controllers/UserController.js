@@ -90,13 +90,14 @@ const UserSignIn=async(req,res,next)=>{
   }
   //password is verified
   //storing the value of user in req
-  console.log(req.user);
+  
   req.user=user;
-  console.log(req.user);
+  
   //generta the tokens
   const token=await jwt.sign({email:email},process.env.JWT_Secrete);
   res.cookie("token",token,({
-    secure:true,
+    secure: false,  
+     sameSite: "lax",
     httpOnly:true,
     expires:new Date(Date.now()+1000*60*30),
   })) 
@@ -165,6 +166,8 @@ catch(err){
   })
 }
 }
+
+
 const resetPassword=async(req,res,next)=>{
   
   const token=req.params.token;
@@ -262,10 +265,106 @@ const AddReviewAndUpdate=async(req,res)=>{
 
 } }
 
-//adding a feature through which user or any one without the auth can also the review of the product & indiviual reviws
+//adding the feature ->Add the cart
+const AddToCart=async(req,res)=>{
+  try{
+  const user=await UserModel.findOne({_id:req.RequestName._id});
+  if(!user){
+    return res.status(404).json({
+      success:false,
+      message:"User not found"
+    })
+  }
+  const Product_id=req.body.Product_id;
+ if(user.cart.includes(Product_id)){
+  return res.status(400).json({
+    success:false,
+    message:"Alredy added to cart"
+  })
+ }
+ else{
+  user.cart.push(Product_id);
+  await user.save();
+ }
+  
+  
+ 
+  return res.status(200).json({
+    success:true,
+    message:"Added to cart successfully",
+    details:user.cart
+  })
+}
+catch(err){
+  return res.status(500).json({
+    success:false,
+    message:err.message
+  })
+}
+  
+}
+
+//adding the feature of getting all the cart list for the user
+const GetCartProductList=async(req,res)=>{
+  try{
+
+  
+  const user=await UserModel.findOne({_id:req.RequestName._id});
+  const data=user.cart;
+  if(!data){
+    return res.status(404).json({
+      success:false,
+      message:"User not exist"
+    })
+  }
+  else{
+    return res.status(200).json({
+      success:true,
+      message:"fetched all the data",
+      details:data
+    })
+  }
+}
+catch(err){
+  return res.status(500).json({
+    success:false,
+    mesage:err.mesage
+  })
+}
+}
+
+const RemoveFromCart=async(req,res)=>{
+  const Product_id=req.body.Product_id;
+  const user=await UserModel.findOne({_id:req.RequestName._id});
+  if(!user){
+    return res.status(404).json({
+      success:false,
+      message:"User not exists"
+    })
+  }
+  let cart=user.cart;
+  const index=cart.findIndex((cart)=>cart.toString()===Product_id.toString());
+  
+  if(index===-1){
+    return res.status(404).json({
+      success:false,
+      message:"not in cart"
+    })
+  }
+  else{
+    cart.splice(index,1);
+    await user.save();
+    return res.status(200).json({
+      success:true,
+      message:"Removed from cart",
+      details:user.cart
+    })
+  }
+
+}
 
 
 
 
 
-module.exports={createUser,UserSignIn,UserLogOut,ForgetPassword,resetPassword,AddReviewAndUpdate}
+module.exports={createUser,UserSignIn,UserLogOut,ForgetPassword,resetPassword,AddReviewAndUpdate,AddToCart,GetCartProductList,RemoveFromCart}

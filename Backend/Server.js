@@ -1,5 +1,6 @@
 const express =require("express");
 const app=express();
+require("dotenv").config();
 const cookieParser=require("cookie-parser");
 const  Db_Connect  = require("./Database/Database_Connection");
 const  router  = require("./Routes/ProductsRoutes");
@@ -7,7 +8,7 @@ const Router_User = require("./Routes/UserRoutes");
 const OrderRouter = require("./Routes/OrderRoutes");
 const AddBannerRouter = require("./Routes/AddBannerRoutes");
 const cors=require('cors');
-require("dotenv").config();
+
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());

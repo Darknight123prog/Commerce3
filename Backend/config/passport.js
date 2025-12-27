@@ -45,21 +45,28 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:8568/api/v1/auth/github/callback",
+      callbackURL: "http://localhost:5173/auth/github/callback",
       scope: ["user:email"]
     },
     async (accessToken, refreshToken, profile, done) => {
+       console.log("ACCESS TOKEN:", accessToken);
+        console.log("PROFILE:", profile);
+      if (!accessToken) {
+        return done(new Error("Access token not generated"));
+      }
       try {
-        const email = profile.emails && profile.emails.length > 0
-          ? profile.emails[0].value
-          : null;
+        const email =
+          profile.emails?.[0]?.value ||
+          `${profile.username}@github.local`;
 
-        let user = await User.findOne({
+        const query = {
           $or: [
             { githubId: profile.id },
-            email ? { email } : {}
+            { email }
           ]
-        });
+        };
+
+        let user = await User.findOne(query);
 
         if (!user) {
           user = await User.create({
@@ -82,6 +89,7 @@ passport.use(
     }
   )
 );
+
 
 
 module.exports = passport;

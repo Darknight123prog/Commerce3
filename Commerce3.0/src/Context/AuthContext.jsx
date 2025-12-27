@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cart,setCart]=useState([]);
 
   useEffect(() => {
     
@@ -14,9 +15,10 @@ export const AuthProvider = ({ children }) => {
       .get("http://localhost:8568/api/v1/me", {
         withCredentials: true
       })
-      // console.log("after the ",res.data.user);
+      // console.log("in the context ",res.data.user.cart);
       // console.log()
         setUser(res.data.user);
+        setCart(res.data.user.cart);
         setLoading(false)
     }
     fetchuser();
@@ -26,10 +28,10 @@ export const AuthProvider = ({ children }) => {
  
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading ,setLoading}}>
+    <AuthContext.Provider value={{ user, setUser, loading ,setLoading,setCart,cart}}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const  useAuth = () => useContext(AuthContext);

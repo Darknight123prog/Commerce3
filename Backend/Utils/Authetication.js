@@ -3,7 +3,7 @@ const UserModel = require('../Models/UserModel');
 
 const auth=async(req,res,next)=>{
 const token=req.cookies.token;
-console.log("here is the set token",token)
+
 
 if(!token){
   return res.status(404).json({

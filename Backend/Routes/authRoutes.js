@@ -35,7 +35,7 @@ router.get(
 
 
 router.get(
-  "/auth/github",
+  "/auth/github/callback",
   passport.authenticate("github", { scope: ["user:email"] })
 );
 // GitHub callback
@@ -43,14 +43,14 @@ router.get(
   "/auth/github/callback",
   passport.authenticate("github", {
     session: false,
-    failureRedirect: "/login",
+    failureRedirect: "http://localhost:5173",
   }),
   (req, res) => {
     const token = jwt.sign(
-      { email: req.user.email },
-      process.env.JWT_Secrete,
-      { expiresIn: "7d" }
-    );
+  { githubId: req.user.id },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
     res.cookie("token", token, {
   httpOnly: true,
   sameSite: "lax",

@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema({
     return this.authType === 'local';
   }
 },
+cart:[{
+  type:mongoose.Schema.ObjectId,
+  ref:"ProductModel"
+}],
   authType: {
     type: String,
     enum: ["local", "google","github"],

@@ -13,6 +13,9 @@ import Register from './assets/Pages/Register'
 import Profile from './assets/Pages/Profile'
 import LogOut from './assets/Pages/LogOut'
 import LogIn from './assets/Pages/LogIn'
+import Admin from './assets/Pages/Admin'
+import MainAdminPannel from './assets/Pages/MainAdminPannel'
+import PageNotFound from './assets/Pages/PageNotFound'
 
 
 function App() {
@@ -33,7 +36,10 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/product'element={<ProductMainPage/>}/>
         <Route path='/devloperInfo' element={<Devloper/>}/>
+         <Route path='/auth/admin'element={<Admin/>}/>
+         <Route path='/auth/admin'element={<MainAdminPannel/>}/>
         <Route path='/ProductDetails/:id'  element={<SingleProductDetails/>} />
+        <Route path='*' element={<PageNotFound/>} />
         </Routes>
       
      <Footer/>

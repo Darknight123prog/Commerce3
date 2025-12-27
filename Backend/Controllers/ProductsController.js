@@ -2,48 +2,73 @@ const ProductsModel = require("../Models/ProductsModel");
 const UserModel = require("../Models/UserModel");
 const {  ApiFilter } = require("../Utils/ApiFilter");
 const bcrypt=require('bcryptjs');
+const mongoose = require("mongoose");
 const sendMails = require("../Utils/Nodemailer");
 const passwordUpdatedTemplate = require("../EmailTempletes/UpdatePasswordTemplete");
 const UserAccountDeletedTemplate = require("../EmailTempletes/AccountDeletionNotification");
+const { cloudinary_js_config: cloudinary } = require("../config/cloudinary");
+const fs = require("fs");
 //creating the products controller
-const CreateProducts=async(req,res)=>{
+const CreateProducts = async (req, res) => {
+  try {
+    const { name, description, price, catogary, stock } = req.body;
+    const user = req.RequestName._id;
 
-  const {name,description,price,rating,image,catogary,stock,number_of_review,reviews}=req.body;
-  const user=req.RequestName._id;
-  // console.log(user);
- try{
-  
-  const data=await ProductsModel.create({
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one image is required",
+      });
+    }
+
+    // ✅ Upload all images to cloudinary
+    const uploads = req.files.map((file) =>
+      cloudinary.uploader.upload(file.path, {
+        folder: "products",
+      })
+    );
+
+    const results = await Promise.all(uploads);
+
+    // ✅ Remove local files after upload
+    req.files.forEach((file) => fs.unlinkSync(file.path));
+
+    const images = results.map((img) => ({
+      product_id: new mongoose.Types.ObjectId().toString(),
+      public_url: img.secure_url,
+      public_id: img.public_id,
+    }));
+
+    const product = new ProductsModel({
       name,
       description,
       price,
-      rating,
-      image,
       catogary,
       stock,
-      number_of_review,
-      reviews,
-      user:user
+      user,
+      rating: 2,
+      image: images,
+    });
+
+    await product.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Product created successfully",
+      details: product,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Product creation failed",
+      error: err.message,
+    });
+  }
+};
 
 
-  })
-  res.status(200).json({
-    sucess:true,
-    message:"Product is successfully added to the Database",
-    Details:data,
-    
-  })
-
-
- }catch(err){
-  res.status(500).json({
-    success:false,
-    message:"Something went wrong and product cannot be added to the site",
-    error:err.message
-  })
- }
-  
-}
 
 
 //showing up a particular products details
@@ -126,7 +151,7 @@ const DeleteOne=async(req,res)=>{
 const GetAllProducts=async (req,res,next)=>{
   //adding the filter functionality
   try{
-    const productPerPage=3;
+    const productPerPage=10;
   const ApiFilterFinder=new ApiFilter(ProductsModel.find(),req.query).search().filter();
   const ApiCopy=ApiFilterFinder.query.clone();
 

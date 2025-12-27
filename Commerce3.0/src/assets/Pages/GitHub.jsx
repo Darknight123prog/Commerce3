@@ -5,7 +5,7 @@ function GitHub() {
   const handleGithubLogin = () => {
     // Redirect to backend GitHub OAuth
     window.location.href =
-      "http://localhost:8568/api/v1/auth/github";
+      "http://localhost:5173/api/v1/auth/github";
   };
   return (
    <button  type='button' onClick={handleGithubLogin}><FaGithub /></button>

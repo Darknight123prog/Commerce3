@@ -1,5 +1,5 @@
 const express=require('express');
-const { createUser,UserSignIn,UserLogOut ,ForgetPassword,resetPassword,AddReviewAndUpdate} = require('../Controllers/UserController');
+const { createUser,UserSignIn,UserLogOut ,ForgetPassword,resetPassword,AddReviewAndUpdate,AddToCart,GetCartProductList,RemoveFromCart} = require('../Controllers/UserController');
 const {auth} = require('../Utils/Authetication');
 
 const Router_User=express.Router();
@@ -10,6 +10,9 @@ Router_User.route('/api/v1/forgot/password').post(ForgetPassword);
 
 
 Router_User.route('/api/v1/add/Reviews').post(auth,AddReviewAndUpdate);
+Router_User.route('/api/v1/add/AddtoCart').post(auth,AddToCart);
+Router_User.route('/api/v1/RemoveFromCart').delete(auth,RemoveFromCart);
+Router_User.route('/api/v1/add/GetCartList').get(auth,GetCartProductList);
 
 Router_User.route('/api/v1/resetPassword/:token').post(resetPassword);
 

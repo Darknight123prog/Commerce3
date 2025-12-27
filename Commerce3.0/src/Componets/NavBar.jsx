@@ -24,6 +24,7 @@ function NavBar() {
       );
 
       setUser(null);
+      setMenu(false);
       showSuccess("Logged out successfully");
       navigate("/");
     } catch (err) {
@@ -33,6 +34,7 @@ function NavBar() {
 
   const handleLogin = () => {
     showSuccess("Redirecting to SignUp / Login");
+    setMenu(false);
     navigate("/register");
   };
 
@@ -86,24 +88,19 @@ function NavBar() {
               About
             </Link>
             <Link
+              to="/auth/admin"
+              className="text-gray-700 hover:text-purple-700"
+            >
+              Admin Pannel
+            </Link>
+            <Link
               to="/devloperInfo"
               className="text-gray-700 hover:text-purple-700"
             >
               Developer Info
             </Link>
 
-            {user && (
-              <Link to="/Userauth/profile">
-                <img
-                  className="rounded-full h-10 w-10 object-cover"
-                  src={
-                    user?.avator?.url ||
-                    "https://res.cloudinary.com/djgboajkm/image/upload/f_auto/7ae28c97-cb1f-4d1d-b74c-4db76b2081ad_w1kalp"
-                  }
-                  alt="profile"
-                />
-              </Link>
-            )}
+            
 
             {user ? (
               <button type="button" onClick={handleLogout}>
@@ -115,6 +112,20 @@ function NavBar() {
               </button>
             )}
           </nav>
+          <div  >
+          {user && (
+              <Link to="/Userauth/profile">
+                <img
+                  className="rounded-full h-10 w-10 object-cover"
+                  src={
+                    user?.avator?.url ||
+                    "https://res.cloudinary.com/djgboajkm/image/upload/f_auto/7ae28c97-cb1f-4d1d-b74c-4db76b2081ad_w1kalp"
+                  }
+                  alt="profile"
+                />
+              </Link>
+            )}
+            </div>
 
           {/* Mobile Icon */}
           <div className="md:hidden text-2xl">
@@ -144,6 +155,11 @@ function NavBar() {
           </li>
           <li>
             <Link to="/about" onClick={() => setMenu(false)}>About</Link>
+          </li>
+          <li>
+            <Link to="/auth/admin" onClick={() => setMenu(false)}>
+             Admin Pannel
+            </Link>
           </li>
           <li>
             <Link to="/devloperInfo" onClick={() => setMenu(false)}>

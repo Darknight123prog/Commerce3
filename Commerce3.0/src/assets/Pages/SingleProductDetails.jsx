@@ -9,6 +9,7 @@ import Rating from "../../Componets/Rating";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import Cart from "../../Componets/Cart";
 
 function SingleProductDetails() {
   const { id } = useParams();
@@ -78,9 +79,7 @@ function SingleProductDetails() {
 
             {/* ACTION BUTTONS */}
             <div className="flex flex-col sm:flex-row gap-4 mt-5">
-              <button className="w-full border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition">
-                Add to Cart
-              </button>
+              <Cart Product={id} />
 
               <button className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
                 Buy Now
