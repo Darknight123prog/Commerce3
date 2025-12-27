@@ -5,6 +5,7 @@ const toastOptions = {
   autoClose: 3000,
   pauseOnHover: true,
   closeOnClick: true,
+  theme: "dark"
 };
 
 export const showSuccess = (message) =>
