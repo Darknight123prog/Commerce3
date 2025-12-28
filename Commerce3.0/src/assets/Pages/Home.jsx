@@ -54,10 +54,10 @@ function Home() {
       <div>
         <div className="flex flex-wrap items-center gap-2 px-3 py-4 bg-black">
           <span className="
-            text-4xl
-            sm:text-5xl
-            md:text-6xl
-            lg:text-7xl
+            text-3xl
+            sm:text-4xl
+            md:text-5xl
+            lg:text-6xl
             font-medium
             text-white
           ">
@@ -67,7 +67,7 @@ function Home() {
           <RotatingText
             texts={["Click,", " Cart,", " Celebrate!"]}
             mainClassName="
-              text-2xl
+              text-4xl
               sm:text-3xl
               md:text-4xl
               font-extrabold
@@ -78,7 +78,7 @@ function Home() {
               rounded-xl
               overflow-hidden
             "
-            rotationInterval={2000}
+            rotationInterval={1500}
           />
         </div>
 
@@ -92,7 +92,7 @@ function Home() {
             loop
             className="
               w-full
-              h-[35vh]
+              h-[33vh]
               sm:h-[45vh]
               md:h-[55vh]
               lg:h-[65vh]

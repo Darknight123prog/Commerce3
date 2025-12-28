@@ -17,6 +17,8 @@ import Admin from './assets/Pages/Admin'
 import MainAdminPannel from './assets/Pages/MainAdminPannel'
 import PageNotFound from './assets/Pages/PageNotFound'
 import MainCart from './assets/Pages/MainCart'
+import ProceedToCheckOut from './assets/Pages/ProceedToCheckOut'
+import OrderSummary from './assets/Pages/OrderSummary'
 
 
 function App() {
@@ -30,6 +32,9 @@ function App() {
         <Routes>
          
         <Route path='/' element={<Home/>} />
+        /cart/proceedToCheckOut/OrderSummary
+         <Route path='/cart/ProceedToCheckOut' element={<ProceedToCheckOut/>} />
+           <Route path='/cart/proceedToCheckOut/OrderSummary' element={<OrderSummary/>} />
         <Route path='/Cart/details' element={<MainCart/>} />
         <Route path='/login' element={<LogIn/>} />
         <Route path='/about' element={<About/>}/>

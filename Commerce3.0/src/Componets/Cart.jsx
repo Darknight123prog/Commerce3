@@ -22,10 +22,12 @@ function Cart({ Product }) {
           
         }
       );
+
       setCart(nCart.data.details);
+      console.log(nCart.data.details);
       showSuccess("Removed from Cart");
     } catch (err) {
-      showError("Cannot remove from Cart");
+      showError("Cannot remove from Cart",err.message);
     }
   };
 
@@ -36,6 +38,7 @@ function Cart({ Product }) {
         { Product_id: Product },
         { withCredentials: true }
       );
+      console.log(nCart.data.details);
       setCart(nCart.data.details);
       showSuccess("Added to Cart");
     } catch (err) {
@@ -56,7 +59,7 @@ function Cart({ Product }) {
     );
   }
 
-  if (user && cart.includes(Product)) {
+  if (user && cart.find(item => String(item.product_id)===String(Product))) {
     return (
       <button
         onClick={HandleRemoveCart}
@@ -67,7 +70,7 @@ function Cart({ Product }) {
     );
   }
 
-  if (user && !cart.includes(Product)) {
+  if (user && !cart.find(item => String(item.product_id)===String(Product))) {
     return (
       <button
         onClick={HandleAddCart}
