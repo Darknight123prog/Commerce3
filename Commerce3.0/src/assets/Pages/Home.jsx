@@ -4,8 +4,10 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import TrueFocus from '../../components/TrueFocus';
 import axios from "axios";
 import Product from '../../Componets/Product';
+import RotatingText from '../../components/RotatingText'
 import { HashLoader } from "react-spinners";
 
 function Home() {
@@ -25,7 +27,6 @@ function Home() {
       }
     };
 
-    // fetch call for the product data (public)
     const fetchProduct = async () => {
       try {
         const product_data = await axios.get("http://localhost:8568/api/v1/products");
@@ -39,7 +40,6 @@ function Home() {
     fetchData();
   }, []);
 
-  /* 🔴 UI fix: return loading JSX */
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
@@ -50,8 +50,39 @@ function Home() {
 
   return (
     <>
-      {/* Slider */}
+      {/* Hero Section */}
       <div>
+        <div className="flex flex-wrap items-center gap-2 px-3 py-4 bg-black">
+          <span className="
+            text-4xl
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
+            font-medium
+            text-white
+          ">
+            Commerce3.0
+          </span>
+
+          <RotatingText
+            texts={["Click,", " Cart,", " Celebrate!"]}
+            mainClassName="
+              text-2xl
+              sm:text-3xl
+              md:text-4xl
+              font-extrabold
+              bg-[#2E2EFF]
+              text-white
+              px-3
+              py-2
+              rounded-xl
+              overflow-hidden
+            "
+            rotationInterval={2000}
+          />
+        </div>
+
+        {/* Slider */}
         {url.length > 0 ? (
           <Swiper
             modules={[Autoplay, Pagination, Navigation]}
@@ -59,13 +90,17 @@ function Home() {
             pagination={{ clickable: true }}
             navigation
             loop
-            className="w-full h-[30vh] sm:h-[45vh] md:h-[55vh] lg:h-[65vh]"
+            className="
+              w-full
+              h-[35vh]
+              sm:h-[45vh]
+              md:h-[55vh]
+              lg:h-[65vh]
+              bg-black
+            "
           >
             {url.map((m, index) => (
-              <SwiperSlide
-                key={index}
-                className="flex justify-center items-center w-full h-full"
-              >
+              <SwiperSlide key={index} className="w-full h-full">
                 <img
                   src={m.url}
                   alt={`banner-${index}`}
@@ -83,32 +118,33 @@ function Home() {
 
       {/* Products Section */}
       <div className="px-3 sm:px-5 py-4">
-        {/* Heading */}
-        <div className="h-10 bg-[#D1D0CE] w-full flex items-center justify-center rounded-md mb-4">
-          <h2 className="font-serif font-medium text-sm sm:text-base md:text-lg">
-            Trending Now
-          </h2>
+        <div className="h-24 sm:h-28 bg-white w-full flex items-center justify-center rounded-md mb-4">
+          <TrueFocus
+            sentence="Trending Products"
+            manualMode={false}
+            blurAmount={5}
+            borderColor="red"
+            animationDuration={1.5}
+            pauseBetweenAnimations={1}
+          />
         </div>
 
-        {/* Responsive Products Grid */}
-        <div
-          className="
-            grid
-            grid-cols-1
-            sm:grid-cols-2
-            md:grid-cols-3
-            lg:grid-cols-4
-            xl:grid-cols-5
-            gap-9
-            bg-amber-50
-            p-4
-            rounded-lg m-2
-          "
-        >
-          {product.length > 0 &&
-            product.map((prod) => (
-              <Product  key={prod._id} product={prod} />
-            ))}
+        {/* Product Grid */}
+        <div className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          md:grid-cols-3
+          lg:grid-cols-4
+          xl:grid-cols-5
+          gap-6
+          bg-amber-50
+          p-4
+          rounded-lg
+        ">
+          {product.map((prod) => (
+            <Product key={prod._id} product={prod} />
+          ))}
         </div>
       </div>
     </>

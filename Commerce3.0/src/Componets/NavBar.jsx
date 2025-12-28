@@ -4,16 +4,20 @@ import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { useAuth } from "../Context/AuthContext";
-
 import { showSuccess, showError } from "../Utils/Toast";
 import axios from "axios";
+import { MdOutlineShoppingCart } from "react-icons/md";
+
+
 
 function NavBar() {
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState("");
+ 
 
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
+  const { user, setUser,cart ,setCart } = useAuth();
+   
 
   const handleLogout = async () => {
     try {
@@ -67,12 +71,12 @@ function NavBar() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border-2 rounded-md p-1 hover:border-cyan-600"
+              className="border-2  sm:w-[5rem] md:w-[8rem] lg:w-[15rem] rounded-md p-1 hover:border-cyan-600"
               placeholder="Search..."
               type="text"
             />
             <button type="submit">
-              <IoMdSearch className="mt-1 ml-2" size={22} />
+              <IoMdSearch  className="mt-1 ml-1" size={20} />
             </button>
           </form>
 
@@ -114,9 +118,10 @@ function NavBar() {
           </nav>
           <div  >
           {user && (
+            <div className="flex items-center ml-3.5 md:gap-1 lg:gap-3 " >
               <Link to="/Userauth/profile">
                 <img
-                  className="rounded-full h-10 w-10 object-cover"
+                  className="rounded-full  h-8 w-8 object-cover"
                   src={
                     user?.avator?.url ||
                     "https://res.cloudinary.com/djgboajkm/image/upload/f_auto/7ae28c97-cb1f-4d1d-b74c-4db76b2081ad_w1kalp"
@@ -124,6 +129,17 @@ function NavBar() {
                   alt="profile"
                 />
               </Link>
+                <Link to='/Cart/details'>
+              <div className="relative inline-block">
+                
+             <MdOutlineShoppingCart  size={20}  />
+             <div className="absolute -top-2 -right-2 h-4 w-4 border-2 border-black bg-white rounded-full flex items-center justify-center text-black text-sm font-bold">{cart.length}</div>
+             </div>
+
+              </Link>
+
+              </div>
+              
             )}
             </div>
 
@@ -132,7 +148,7 @@ function NavBar() {
             {menu ? (
               <IoClose onClick={() => setMenu(false)} />
             ) : (
-              <GiHamburgerMenu onClick={() => setMenu(true)} />
+              <GiHamburgerMenu size={15} onClick={() => setMenu(true)} />
             )}
           </div>
         </div>

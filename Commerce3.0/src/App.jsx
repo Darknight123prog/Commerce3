@@ -16,6 +16,7 @@ import LogIn from './assets/Pages/LogIn'
 import Admin from './assets/Pages/Admin'
 import MainAdminPannel from './assets/Pages/MainAdminPannel'
 import PageNotFound from './assets/Pages/PageNotFound'
+import MainCart from './assets/Pages/MainCart'
 
 
 function App() {
@@ -27,8 +28,9 @@ function App() {
       <NavBar/>
      
         <Routes>
-          
+         
         <Route path='/' element={<Home/>} />
+        <Route path='/Cart/details' element={<MainCart/>} />
         <Route path='/login' element={<LogIn/>} />
         <Route path='/about' element={<About/>}/>
          <Route path='/logout' element={<LogOut/>}/>
