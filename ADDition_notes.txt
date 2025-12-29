@@ -1,1 +1,18 @@
 for better UI -> add the catogory section at the top with pictures and name of the catogary also with scrool down on hover
+
+catogory:{
+  women wear
+  Men wear -> ok
+  electronics 
+  mobile 
+  appliances
+  shoes -> ok
+  watches -> 
+
+}
+
+//propties to be work on 
+cart->remove from cart 
+->total bill of cart
+->quatity
+->checout button->shipping {user will add its shipping details} ->billing

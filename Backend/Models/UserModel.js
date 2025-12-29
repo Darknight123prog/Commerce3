@@ -24,8 +24,13 @@ const UserSchema = new mongoose.Schema({
   }
 },
 cart:[{
-  type:mongoose.Schema.ObjectId,
-  ref:"ProductModel"
+  product_id:{type:mongoose.Schema.ObjectId,
+          ref:"ProductModel"},
+    quantity:{
+      type:Number,
+      default:1
+    }
+
 }],
   authType: {
     type: String,

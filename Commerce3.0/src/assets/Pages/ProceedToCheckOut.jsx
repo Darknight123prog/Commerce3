@@ -2,8 +2,8 @@ import Tracker from '@/Componets/Tracker';
 import React, { useEffect, useState } from 'react';
 import { Select } from "antd";
 import { Country, State, City } from "country-state-city";
-import { Phone } from 'lucide-react';
-import { showError } from '@/Utils/Toast';
+import { Landmark, Phone } from 'lucide-react';
+import { showError, showSuccess } from '@/Utils/Toast';
 import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
@@ -20,20 +20,36 @@ function ProceedToCheckOut() {
   const [address, setAddress] = useState({});
   const [price, setPrice] = useState({});
   const [name,setName]=useState('');
+  const[nearestLandmark,setNearestLandmark]=useState('');
   const[phone,setPhone]=useState('');
   const navigate=useNavigate();
+  const handleBack=()=>{
+    try{
+    navigate('/Cart/details');
+    showSuccess('back to cart');
+    }catch(err){
+      showError(`Cannot go back : ${err}`);
+    }
+  }
   const handleSubmit=(e)=>{
     e.preventDefault();
+
+    if(!name ||!phone || !address){
+      showError("Enter all fields correctly");
+      navigate('/cart/ProceedToCheckOut');
+    }
     if(phone.length<10){
       showError('phone number is invalid');
     }
     if (cityName) {
-      const addr = { country: countryCode, state: stateCode, city: cityName ,name:name,phone:phone };
+      const addr = { country: countryCode, state: stateCode, city: cityName ,name:name,phone:phone,Landmark:nearestLandmark };
       setAddress(addr);
       sessionStorage.setItem('address', JSON.stringify(addr));
+      navigate('/cart/proceedToCheckOut/OrderSummary')
     }
-    console.log( sessionStorage.getItem('address'))
-    navigate('/cart/proceedToCheckOut/OrderSummary')
+    // console.log( sessionStorage.getItem('address'))
+    // console.log( sessionStorage.getItem('price'))
+    
 
 
   }
@@ -64,14 +80,15 @@ function ProceedToCheckOut() {
   }, [stateCode, countryCode]);
 
   return (
-    <div className="min-h-screen p-4 bg-gray-100 flex flex-col items-center">
+    <div    className="min-h-screen p-4 bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/f_auto/ship2_lfgeq4')] bg-cover bg-center bg-gray-100 flex flex-col items-center">
       {/* Tracker */}
      <div className="w-full max-w-4xl mb-6 px-2">
   <Tracker st1="finish" st2="process" st3="wait" st4="wait" st5="wait" />
 </div>
 
       {/* Shipping Form */}
-      <div className="w-full max-w-4xl bg-white rounded-2xl p-6 shadow-md flex flex-col md:flex-row gap-6">
+      <div  className="w-full backdrop-blur-md bg-white/20   max-w-5xl  rounded-2xl p-6 shadow-md flex flex-col md:flex-row gap-6">
+      <div className="w-full     max-w-2xl  rounded-2xl p-6  flex flex-col md:flex-row gap-6" >
         {/* Form Section */}
         <form onSubmit={handleSubmit} >
         <div className="flex-1 space-y-4">
@@ -91,7 +108,7 @@ function ProceedToCheckOut() {
           />
 
           {/* Location Selects */}
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col gap-1.5">
             <Select
               placeholder="Select Country"
               value={countryCode}
@@ -147,6 +164,12 @@ function ProceedToCheckOut() {
                 </Option>
               ))}
             </Select>
+            <input
+            placeholder="Nearest Landmark"
+            name="NearestLandmark"
+            onChange={(e)=>setNearestLandmark(e.target.value)}
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
+          />
           </div>
 
           {/* Display selected */}
@@ -155,10 +178,24 @@ function ProceedToCheckOut() {
               Selected: {countryCode} / {stateCode} / {cityName}
             </div>
           )} */}
-          <button type='submit'>Submit & Proceed</button>
+          <div className='flex  gap-2'>
+            <button onClick={handleBack} className='px-6 py-2 max-w-40 rounded-lg bg-[#1d1427] text-white font-semibold 
+                   hover:bg-blue-700 active:scale-95 transition-all duration-200
+                   shadow-md hover:shadow-lg' type='button' >Back to Cart</button>
+          <button className='px-6 py-2 max-h-15 max-w-40 rounded-lg bg-[#a27bc9] text-white font-semibold 
+                   hover:bg-blue-700 active:scale-95 transition-all duration-200
+                   shadow-md hover:shadow-lg' type='submit'>Submit & Proceed</button>
+                    
+                   </div>
 
         </div>
         </form>
+        </div>
+        <div className="w-full backdrop-blur-md bg-white/20 p-0   max-w-5xl  rounded-2xl  shadow-md flex flex-col md:flex-row gap-6">
+        <img className='w-full backdrop-blur-md bg-white/20 p-0   max-w-5xl  rounded-2xl  shadow-md flex flex-col md:flex-row gap-6'  src='https://res.cloudinary.com/djgboajkm/image/upload/f_auto/bg_qwikhe'></img>
+          
+
+        </div>
 
         
         

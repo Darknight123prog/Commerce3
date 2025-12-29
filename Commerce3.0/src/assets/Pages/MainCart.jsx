@@ -1,17 +1,47 @@
-import { showError } from '@/Utils/Toast';
+import { showError, showSuccess } from '@/Utils/Toast';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { InputNumber } from "antd";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
+import Cart from '@/Componets/Cart';
+import { useAuth } from '@/Context/AuthContext';
 
 function MainCart() {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [price,setprice]=useState(0);
   const [gst,setGst]=useState(0);
- 
+  const {cart,setCart}=useAuth();
+  
+  const handleClick=async(val)=>{
+    try{
+   if(product &&cart){
+    console.log('cart ',cart);
+    console.log('product ',product);
+    const nCart = await axios.delete(
+            "http://localhost:8568/api/v1/RemoveFromCart",
+            {
+              data: { Product_id: val },
+              withCredentials: true,
+              
+            })
+    setProduct(product.filter((p)=>p._id!==val));
+console.log('inside the Main cart',nCart.data.details)
+     setCart(nCart.data.details);
+     showSuccess(`Item removed successfully`);
+   }
+  }catch(err){
+    showError(`cannot remove the item : ${err.message}`)
+  }
+  }
+  //  console.log("here is the cart",cart);
+
+  // useEffect(()=>{
+  //   setCart(pr)
+  // },[product])
+//  console.log(cart);
   const[totalPrice,setTotalPrice]=useState(0);
    const [save,setSave]=useState({
     price:0,
@@ -32,6 +62,7 @@ navigate('/cart/ProceedToCheckOut');
           { withCredentials: true }
         );
         setProduct(res.data.details || []);
+        // console.log("here is the product ",res.data.details);
       } catch (err) {
         showError(`Error occurred: ${err.message}`);
       } finally {
@@ -95,6 +126,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
                   <th className="p-3 border">Product</th>
                   <th className="p-3 border">Price</th>
                   <th className="p-3 border">Quantity</th>
+                  <th className="p-3 border">Remove</th>
                 </tr>
               </thead>
 
@@ -121,6 +153,8 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
             );
           }}
         /></td>
+        {/* <h1>{e._id}</h1> */}
+         <td className="p-3 border"><button type='button' onClick={()=>handleClick(e._id)}  >Remove</button></td>
                   </tr>
                 ))}
               </tbody>

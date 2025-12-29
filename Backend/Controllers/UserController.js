@@ -276,14 +276,16 @@ const AddToCart=async(req,res)=>{
     })
   }
   const Product_id=req.body.Product_id;
- if(user.cart.includes(Product_id)){
+  console.log(user.cart);
+  console.log(String(Product_id))
+ if(user.cart.find(item => String(item.product_id)===String(Product_id))){
   return res.status(400).json({
     success:false,
     message:"Alredy added to cart"
   })
  }
  else{
-  user.cart.push(Product_id);
+  user.cart.push({product_id:Product_id,quantity:1});
   await user.save();
  }
   
@@ -310,18 +312,23 @@ const GetCartProductList=async(req,res)=>{
 
   
   const user=await UserModel.findOne({_id:req.RequestName._id});
-  const data=user.cart;
-  if(!data){
+  
+  if(!user){
     return res.status(404).json({
       success:false,
       message:"User not exist"
     })
   }
   else{
+    const data=user.cart;
+    console.log(data);
+    const ids=data.map((itm)=>itm.product_id);
+    console.log("ids are :",ids)
+   let product= await ProductsModel.find({_id:{$in:ids}});
     return res.status(200).json({
       success:true,
       message:"fetched all the data",
-      details:data
+      details:product
     })
   }
 }
@@ -343,7 +350,7 @@ const RemoveFromCart=async(req,res)=>{
     })
   }
   let cart=user.cart;
-  const index=cart.findIndex((cart)=>cart.toString()===Product_id.toString());
+  const index=cart.findIndex((cart)=>cart.product_id.toString()===Product_id.toString());
   
   if(index===-1){
     return res.status(404).json({

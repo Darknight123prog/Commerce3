@@ -1,42 +1,76 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cart from './Cart';
+import { useAuth } from '@/Context/AuthContext';
+import { showWarning } from '@/Utils/Toast';
 
 function Product({ product }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleBuy = () => {
+    if (!user) {
+      showWarning('Need to log in first');
+      navigate('/login');
+    } else {
+      const prod = {
+        imgUrl: product.image[0].public_url,
+        _id: product._id,
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity || 1,
+      };
+      sessionStorage.setItem('product_id', JSON.stringify(prod));
+      navigate('/cart/buyNow');
+    }
+  };
+
   return (
-    <div className="flex flex-col ml-3 w-64 items-center bg-white rounded-2xl shadow-md p-5 m-3 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-
-      <Link to={`/ProductDetails/${product._id}`} className="w-full">
-        <div className="w-full flex flex-col gap-y-3">
-
-          {/* Product Image */}
-          <div
-            className="w-full h-48 bg-gray-50 border border-gray-100
-            rounded-xl flex items-center justify-center"
-          >
-            <img
-              src={product.image[0].public_url}
-              alt={product.name}
-              className="h-full max-h-44 w-auto object-contain p-3"
-            />
-          </div>
-
-          {/* Product Name */}
-          <h5 className="text-sm font-semibold text-gray-900 line-clamp-2">
-            {product.name}
-          </h5>
-
-          {/* Product Price */}
-          <p className="text-lg font-bold text-emerald-600 mb-2">
-            ₹{product.price}
-          </p>
+    <div className="w-full min-w-0 rounded-xl bg-white p-3 shadow hover:shadow-lg transition flex flex-col">
+      <Link to={`/ProductDetails/${product._id}`} className="w-full flex flex-col">
+        {/* Product Image */}
+        <div className="w-full h-48 sm:h-44 md:h-40 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center">
+          <img
+            src={product.image[0].public_url}
+            alt={product.name}
+            className="h-full max-h-44 w-auto object-contain p-2 sm:p-3"
+          />
         </div>
+
+        {/* Product Name */}
+        <h5 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 mt-2">
+          {product.name}
+        </h5>
+
+        {/* Product Price */}
+        <p className="text-base sm:text-lg font-bold text-emerald-600 mt-1">
+          ₹{product.price}
+        </p>
       </Link>
 
-      {/* Cart Button */}
-      <div className="mt-4 w-full flex justify-center gap-4">
-        <Cart Product={product._id} />
-        <Cart Product={product._id} />
+      
+      <div className="mt-4 w-full flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <Cart Product={product._id} className="flex-1" />
+        <button
+          type="button"
+          onClick={handleBuy}
+          className="
+            flex-1
+            relative overflow-hidden
+            px-4 sm:px-6 py-2 sm:py-3
+            rounded-xl
+            
+            bg-gradient-to-r from-amber-500 to-orange-500
+            text-white font-semibold text-base sm:text-lg
+            shadow-lg
+           
+            transition-all
+            hover:scale-105 hover:shadow-2xl
+            active:scale-95
+          "
+        >
+          Buy
+        </button>
       </div>
     </div>
   );

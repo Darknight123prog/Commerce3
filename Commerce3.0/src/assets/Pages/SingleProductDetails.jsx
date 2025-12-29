@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import axios from "axios";
@@ -10,13 +10,35 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Cart from "../../Componets/Cart";
+import { useAuth } from "@/Context/AuthContext";
+import { showWarning } from "@/Utils/Toast";
 
 function SingleProductDetails() {
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const navigate=useNavigate();
+  const {user}=useAuth();
+  const handleBuy=()=>{
+      if(!user){
+        showWarning('Need to log In first')
+  navigate('/login');
+      }
+      else{
+       
+        const prod={
+          imgUrl:product.image[0].public_url,
+          _id:product._id,
+          name:product.name,
+          price:product.price,
+          quanitity:product.quanitity||1
+        }
+        sessionStorage.setItem('product_id',JSON.stringify(prod));
+        navigate('/cart/buyNow');
+        
+      }
+    }
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -81,7 +103,7 @@ function SingleProductDetails() {
             <div className="flex flex-col sm:flex-row gap-4 mt-5">
               <Cart Product={id} />
 
-              <button className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
+              <button  onClick={handleBuy} className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
                 Buy Now
               </button>
             </div>

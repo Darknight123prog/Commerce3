@@ -42,7 +42,7 @@ function Cart({ Product }) {
       setCart(nCart.data.details);
       showSuccess("Added to Cart");
     } catch (err) {
-      showError("Cannot add to Cart :");
+      showError(`Cannot add to Cart :${err.message}`);
     }
   };
 
@@ -52,7 +52,7 @@ function Cart({ Product }) {
     return (
       <button
         onClick={handleNotSignIn}
-        className="w-auto border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
+        className="w-full/2 border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
       >
         <h6 className='flex gap-1 items-center p-1' > Add to {<FaShoppingCart />}</h6>
       </button>
@@ -63,9 +63,9 @@ function Cart({ Product }) {
     return (
       <button
         onClick={HandleRemoveCart}
-        className="w-full border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
+        className="w-full/2 border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
       >
-        <h6 className='flex gap-1 items-center justify-center-safe  p-1' > Remove from {<FaShoppingCart />}</h6>
+        <h6 className='flex gap-1 items-center justify-center-safe  p-1' > Remove {<FaShoppingCart />}</h6>
       </button>
     );
   }
@@ -74,7 +74,7 @@ function Cart({ Product }) {
     return (
       <button
         onClick={HandleAddCart}
-        className="w-full border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
+        className="w-full/2 border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
       >
        <h6 className='flex gap-1 justify-center-safe items-center p-1' > Add to {<FaShoppingCart  />}</h6>
       </button>
