@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { HashLoader } from "react-spinners";
 import Product from '../../Componets/Product';
-import { useLocation } from 'react-router-dom';
+import {  useLocation, useNavigate } from 'react-router-dom';
 import Pagination from '../../Componets/Pagination';
 
 
@@ -18,36 +18,38 @@ function ProductMainPage() {
 
   const { search } = useLocation();
  
- 
+ const navigate=useNavigate();
   const query = new URLSearchParams(search).get("keyword");
-  
 
+const handleBack=()=>{
+navigate('/');
+
+}
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(`http://localhost:8568/api/v1/products`, {
-          params: {
-            keyword: query || undefined,
-            catogary:catogary || undefined,
-            page
-          }
-        });
-       console.log(res.data);
-        setProducts(res.data.details);
-        setPage(res.data.page);
-        setTotalPage(res.data.total_page);
-        setTotalProducts(res.data.No_of_products);
-       
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      
+      const res = await axios.get("http://localhost:8568/api/v1/products", {
+        params: {
+          keyword: query || undefined,
+          catogary: catogary || undefined,
+          page
+        }
+      });
 
-    fetchProducts();
-  }, [query,page,catogary,totalPage,totalProducts]);
+      setProducts(res.data.details);
+      setTotalPage(res.data.total_page);
+      setTotalProducts(res.data.No_of_products);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, [query, page, catogary,setProducts]);
 
   if (loading) {
     return (
@@ -62,6 +64,7 @@ function ProductMainPage() {
       <>
       
       <div className='bg-white h-screen w-full flex flex-col justify-center items-center'>
+        <button type='button' onClick={handleBack}>Back</button>
         
         <h1 className='text-xl mb-4 text-center'>Sorry, Product Not Found 😔</h1>
         <img
@@ -84,11 +87,11 @@ function ProductMainPage() {
 
       <ul className="flex flex-col gap-2">
         {[
-          "Electronics",
-          "Clothes",
-          "Headphones",
+          "electronics",
+          "shoes",
+          "watches",
           "Mobile Phones",
-          "Furniture",
+          "women wear",
         ].map((item) => (
           <li key={item}>
             <button
@@ -113,7 +116,7 @@ function ProductMainPage() {
         <h5 className="text-lg font-semibold">Best Sellers</h5>
         {query && (
           <span className="text-sm text-gray-600">
-            Total Products: {totalProducts}
+           
           </span>
         )}
       </div>

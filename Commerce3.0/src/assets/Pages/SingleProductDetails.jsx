@@ -100,8 +100,8 @@ function SingleProductDetails() {
             </Swiper>
 
             {/* ACTION BUTTONS */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-5">
-              <Cart Product={id} />
+            <div className="flex w-auto flex-col sm:flex-row gap-4 mt-5">
+              <Cart  Product={id} />
 
               <button  onClick={handleBuy} className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
                 Buy Now

@@ -156,8 +156,11 @@ const GetAllProducts=async (req,res,next)=>{
   const ApiCopy=ApiFilterFinder.query.clone();
 
   const page=Number(req.query.page)||1;
-  const docCount=await ApiCopy.estimatedDocumentCount();
-  const total_page=Math.ceil(docCount/productPerPage);
+  const docCount=await ApiCopy.countDocuments();
+let total_page=0;
+if(docCount>0){
+  total_page=Math.ceil(docCount/productPerPage);}
+  
 
   if(page>total_page && docCount>0){
       res.status(404).json({
@@ -181,7 +184,7 @@ const GetAllProducts=async (req,res,next)=>{
     details:data,
     page:page,
     total_page:total_page,
-    No_of_products:page
+    No_of_products:docCount
   })
 }catch(err){
  return res.status(500).json({

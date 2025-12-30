@@ -10,6 +10,12 @@ class ApiFilter{
     this.query = this.query.find({
       $or: [
         {
+          catogary: {
+            $regex: this.queryStr.keyword,
+            $options: "i",
+          },
+        },
+        {
           name: {
             $regex: this.queryStr.keyword,
             $options: "i",

@@ -61,29 +61,92 @@ function CreateProductPage() {
     }
   };
 
+
   return (
-    <div className="max-w-md mx-auto p-4 space-y-4">
+  <div className="min-h-screen bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/2941039_zahofy')] bg-contain w-full bg-stone-900 flex items-center justify-center px-4">
+    <div className="flex flex-col md:flex-row gap-6 max-w-5xl w-full">
+      
+      {/* Image Upload Panel */}
       <div
         {...getRootProps()}
-        className="border-2 border-dashed p-6 text-center cursor-pointer"
+        className="border-2 border-dashed border-amber-500 rounded-xl p-6 text-center cursor-pointer
+                   hover:bg-stone-700 transition flex-1 flex flex-col items-center justify-center"
       >
-        <input {...getInputProps()} />
-        {images.length > 0
-          ? `${images.length} image(s) selected`
-          : "Drag & drop images here"}
+        <input  {...getInputProps()} />
+        <p className="text-gray-300 mb-4">
+          {images.length > 0
+            ? `${images.length} image(s) selected`
+            : "Drag & drop images here, or click to browse"}
+        </p>
+
+        {/* Preview selected images */}
+        <div className="flex flex-wrap gap-2 overflow-y-auto max-h-96">
+          {images.map((file, index) => (
+            <img
+              key={index}
+              src={URL.createObjectURL(file)}
+              alt="preview"
+              className="w-24 h-24 object-cover rounded-lg"
+            />
+          ))}
+        </div>
       </div>
 
-      <input name="name" placeholder="Product Name" className="w-full border p-2" onChange={handleChange} />
-      <input name="price" placeholder="Price" type="number" className="w-full border p-2" onChange={handleChange} />
-      <input name="stock" placeholder="Stock" type="number" className="w-full border p-2" onChange={handleChange} />
-      <input name="catogary" placeholder="Category" className="w-full border p-2" onChange={handleChange} />
-      <textarea name="description" placeholder="Description" className="w-full border p-2" onChange={handleChange} />
+      {/* Form */}
+      <div className="flex-1 backdrop-blur-sm bg-black/20 rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+        <h1 className="text-2xl  font-semibold text-white text-center">
+          Create New Product
+        </h1>
 
-      <button onClick={handleSubmit} className="w-full bg-black text-white py-2">
-        Upload
-      </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            name="name"
+
+            placeholder="Product Name"
+            onChange={handleChange}
+            className="input bg-amber-50 rounded-md p-2 "
+          />
+          <input
+            name="price"
+            placeholder="Price"
+            type="number"
+            onChange={handleChange}
+            className="input  bg-amber-50 rounded-md p-2"
+          />
+          <input
+            name="stock"
+            placeholder="Stock"
+            type="number"
+            onChange={handleChange}
+            className="input  bg-amber-50 rounded-md p-2"
+          />
+          <input
+            name="catogary"
+            placeholder="Category"
+            onChange={handleChange}
+            className="input  bg-amber-50 rounded-md p-2"
+          />
+        </div>
+
+        <textarea
+          name="description"
+          placeholder="Product Description"
+          onChange={handleChange}
+          className="input  bg-amber-50 rounded-md p-2 resize-none h-28"
+        />
+
+        <button
+          onClick={handleSubmit}
+          className="w-full bg-amber-600 hover:bg-amber-500 text-black font-semibold py-3 rounded-xl transition"
+        >
+          Upload Product
+        </button>
+      </div>
     </div>
-  );
+  </div>
+);
+
+
 }
 
 export default CreateProductPage;

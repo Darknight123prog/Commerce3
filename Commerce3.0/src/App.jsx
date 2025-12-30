@@ -20,6 +20,9 @@ import MainCart from './assets/Pages/MainCart'
 import ProceedToCheckOut from './assets/Pages/ProceedToCheckOut'
 import OrderSummary from './assets/Pages/OrderSummary'
 import BuyNow from './assets/Pages/BuyNow'
+import CreateProductPage from './assets/Pages/CreateProductPage'
+import UpdateProductAdmin from './assets/Pages/UpdateProductAdmin'
+
 
 
 function App() {
@@ -35,6 +38,8 @@ function App() {
         <Route path='/' element={<Home/>} />
          <Route path='/cart/buyNow' element={<BuyNow/>} />
         /cart/proceedToCheckOut/OrderSummary
+        /auth/admin/MainAdmin/updateProduct
+         <Route path='/auth/admin/MainAdmin/updateProduct' element={<UpdateProductAdmin/>} />
          <Route path='/cart/ProceedToCheckOut' element={<ProceedToCheckOut/>} />
            <Route path='/cart/proceedToCheckOut/OrderSummary' element={<OrderSummary/>} />
         <Route path='/Cart/details' element={<MainCart/>} />
@@ -46,7 +51,9 @@ function App() {
         <Route path='/product'element={<ProductMainPage/>}/>
         <Route path='/devloperInfo' element={<Devloper/>}/>
          <Route path='/auth/admin'element={<Admin/>}/>
-         <Route path='/auth/admin'element={<MainAdminPannel/>}/>
+         {/* <Route path='/auth/admin/MainAdmin'element={<MainAdminPannel/>}/> */}
+          <Route path='/auth/admin/MainAdmin/AddNewProduct'element={<CreateProductPage/>}/>
+
         <Route path='/ProductDetails/:id'  element={<SingleProductDetails/>} />
         <Route path='*' element={<PageNotFound/>} />
         </Routes>

@@ -9,6 +9,7 @@ import axios from "axios";
 import Product from '../../Componets/Product';
 import RotatingText from '../../components/RotatingText';
 import { HashLoader } from "react-spinners";
+import Catogory from '@/Componets/Catogory';
 
 function Home() {
   const [url, setUrl] = useState([]);
@@ -51,7 +52,7 @@ function Home() {
   return (
     <div className='overflow-x-hidden'>
       {/* Hero Section */}
-      <div className="flex flex-col sm:flex-row flex-wrap items-center gap-2 px-3 py-4 bg-black">
+      <div className="flex flex-col sm:flex-row flex-wrap items-start gap-2 px-3 py-4 bg-black">
         <span className="
           text-2xl
           sm:text-3xl
@@ -81,6 +82,7 @@ function Home() {
           "
           rotationInterval={1500}
         />
+       <Catogory/>
       </div>
 
       {/* Slider */}

@@ -8,11 +8,34 @@ catogory:{
   appliances
   shoes -> ok
   watches -> 
+  fridges
+  kurta->
+  Western Wear ->for men
+}
 
+catogary->{
+  menWesternWear -> done
+  menFormal -> done
+  menSherwani -> done
+  mobilePhones
+  fridge
+  washingMachine
+  watches
+  womenKurta
+  saree
+  lehengas
+  Womenoversized
+  kidsClothing
+  kidsToys
+  babyCare
+  kitchen
+  Furniture ->
+  menKurta ->done
 }
 
 //propties to be work on 
 cart->remove from cart 
 ->total bill of cart
 ->quatity
+
 ->checout button->shipping {user will add its shipping details} ->billing

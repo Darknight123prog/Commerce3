@@ -43,7 +43,7 @@ useEffect(()=>{
       if (userData.role === 'admin') {
         
        showSuccess('Redirecting to admin dashboard...')
-    return <div className="text-center mt-20 text-gray-700">{<MainAdminPannel/>}</div>;
+    return <div className="text-center  text-gray-700">{<MainAdminPannel/>}</div>;
       } else {
         showWarning('You are not an admin. Only Admin can access this panel.');
       }
@@ -62,7 +62,7 @@ useEffect(()=>{
   if (user && user.role === 'admin') {
    
     showSuccess('Redirecting to admin dashboard...')
-    return <div className="text-center mt-20 text-gray-700">{<MainAdminPannel/>}</div>;
+    return <div className="text-center  text-gray-700">{<MainAdminPannel/>}</div>;
   }
 
   return (

@@ -65,7 +65,7 @@ router.get(
 
 
 router.get("/me", auth, (req, res) => {
-  console.log('after auth data user',req.RequestName);
+  // console.log('after auth data user',req.RequestName);
   res.json({ user: req.RequestName });
 });
 
