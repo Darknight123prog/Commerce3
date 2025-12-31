@@ -2,11 +2,21 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cart from './Cart';
 import { useAuth } from '@/Context/AuthContext';
-import { showWarning } from '@/Utils/Toast';
+import { showInfo, showSuccess, showWarning } from '@/Utils/Toast';
+import Button from '@/Componets/Button';
 
-function Product({ product }) {
+
+
+function Product({ product,isUpdate }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const update=isUpdate||false;
+  const handleUpdate=(_id)=>{
+  sessionStorage.setItem('update_id',JSON.stringify(_id));
+  console.log(JSON.parse(sessionStorage.getItem('update_id')))
+  showInfo('redirecting to Update Prouct Form');
+  navigate('/auth/admin/MainAdmin/updateProduct/UpdateForm')
+}
 
   const handleBuy = () => {
     if (!user) {
@@ -48,7 +58,7 @@ function Product({ product }) {
         </p>
       </Link>
 
-      
+      {!update?(
       <div className="mt-4 w-full flex flex-col sm:flex-row gap-2 sm:gap-4">
         <Cart Product={product._id} className="flex-1" />
         <button
@@ -72,6 +82,12 @@ function Product({ product }) {
           Buy
         </button>
       </div>
+      ):(<div>
+        <div onClick={()=>handleUpdate(product._id)}>
+          <Button  text='Update Product'  />
+
+        </div>
+      </div>)}
     </div>
   );
 }

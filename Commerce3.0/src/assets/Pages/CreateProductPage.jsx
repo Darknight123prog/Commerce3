@@ -1,9 +1,19 @@
 import { useDropzone } from "react-dropzone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { showError, showSuccess } from "../../Utils/Toast";
+import { showError, showSuccess, showWarning } from "../../Utils/Toast";
+import { useAuth } from "@/Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function CreateProductPage() {
+const {user}=useAuth();
+const navigate=useNavigate();
+  useEffect(()=>{
+    if(!user || user.role!=='admin'){
+      showWarning('unauthorize access');
+      navigate('/auth/admin');
+    }
+  },[user])
   const [images, setImages] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -12,6 +22,7 @@ function CreateProductPage() {
     catogary: "",
     stock: ""
   });
+
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },

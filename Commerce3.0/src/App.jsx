@@ -22,6 +22,10 @@ import OrderSummary from './assets/Pages/OrderSummary'
 import BuyNow from './assets/Pages/BuyNow'
 import CreateProductPage from './assets/Pages/CreateProductPage'
 import UpdateProductAdmin from './assets/Pages/UpdateProductAdmin'
+import UpdateSingleProduct from './assets/Pages/UpdateSingleProduct'
+import AllUserData from './assets/Pages/AllUserData'
+import DeleteAnyProduct from './assets/Pages/DeleteAnyProduct'
+import AllAdminsInfo from './assets/Pages/AllAdminsInfo'
 
 
 
@@ -39,7 +43,12 @@ function App() {
          <Route path='/cart/buyNow' element={<BuyNow/>} />
         /cart/proceedToCheckOut/OrderSummary
         /auth/admin/MainAdmin/updateProduct
+        /auth/admin/MainAdmin/updateProduct/UpdateForm
          <Route path='/auth/admin/MainAdmin/updateProduct' element={<UpdateProductAdmin/>} />
+         <Route path='/auth/admin/MainAdmin/DeleteAnyProduct' element={<DeleteAnyProduct/>} />
+          <Route path='/auth/admin/MainAdmin/GetAllUserInfo' element={<AllUserData/>} />
+          <Route path='/auth/admin/MainAdmin/GetAllAdminInfo' element={<AllAdminsInfo/>} />
+         <Route path='/auth/admin/MainAdmin/updateProduct/UpdateForm' element={<UpdateSingleProduct/>} />
          <Route path='/cart/ProceedToCheckOut' element={<ProceedToCheckOut/>} />
            <Route path='/cart/proceedToCheckOut/OrderSummary' element={<OrderSummary/>} />
         <Route path='/Cart/details' element={<MainCart/>} />

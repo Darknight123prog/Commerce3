@@ -1,18 +1,23 @@
 import Button from '@/Componets/Button';
 import { useAuth } from '@/Context/AuthContext'
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import UpdateProductAdmin from './UpdateProductAdmin';
+import AllUserData from './AllUserData';
 
 function MainAdminPannel() {
   const { user } = useAuth();
   const navigate=useNavigate();
+  
   const handleUpdateProduct=()=>{
     navigate('/auth/admin/MainAdmin/updateProduct');
   }
   const handleNewProuct=()=>{
     navigate('/auth/admin/MainAdmin/AddNewProduct');
 
+  }
+  const handleUsers=()=>{
+    navigate('/auth/admin/MainAdmin/GetAllUserInfo');
   }
 
 
@@ -35,16 +40,16 @@ function MainAdminPannel() {
       <div className="flex mt-4 flex-col xl:flex-row gap-4 flex-1">
 
         {/* Product Controller */}
-        <div className="bg-[#242424] h-[35rem] rounded-2xl p-4 flex-1">
+        <div className="bg-[rgb(36,36,36)] h-[35rem] rounded-2xl p-4 flex-1">
           <h1 className="text-white text-lg mb-4">Control the flow</h1>
 
           <div className="flex flex-col items-center-safe gap-2">
-            <button type='button' className='flex flex-col items-center'  onClick={handleNewProuct}><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe '  text="Add new Product"/></button>
-            <button type='button' onClick={handleUpdateProduct} className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Update Product"/></button>
-          <button type='button' className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Delete one Product"/></button>
-            <button type='button' className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Get All Product"/></button>
-            <button type='button' className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Add new Banner"/></button>
-            <button type='button' className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Delete Banner"/></button>
+            <div  className='flex flex-col items-center'  onClick={handleNewProuct}><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe '  text="Add new Product"/></div>
+            <div onClick={handleUpdateProduct} className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Update Product"/></div>
+          <div onClick={()=>navigate('/auth/admin/MainAdmin/DeleteAnyProduct')} className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Delete  Products"/></div>
+            <div className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Get All Product"/></div>
+            <div  className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Add new Banner"/></div>
+            <div  className="w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe"><Button className='w-2xs md:w-3xs lg:w-2xl flex flex-col items-center-safe ' text="Delete Banner"/></div>
           </div>
         </div>
 
@@ -53,9 +58,9 @@ function MainAdminPannel() {
           <h1 className="text-amber-300 text-lg mb-4">User Controller</h1>
 
           <div className="flex flex-col gap-2">
-            <button className="btn"><Button className='w-2xs flex flex-col items-center-safe ' text="Delete User from  DataBase"/></button>
-            <button className="btn"><Button className='w-2xs flex flex-col items-center-safe ' text="Get All users info from DataBase"/></button>
-            <button className="btn"><Button className='w-2xs flex flex-col items-center-safe ' text="Get All Admin info from Database"/></button>
+            
+            <div  onClick={handleUsers} className="btn"><Button className='w-2xs flex flex-col items-center-safe ' text="Get All users info from DataBase"/></div>
+            <div onClick={()=>navigate('/auth/admin/MainAdmin/GetAllAdminInfo')} ><Button className='w-2xs flex flex-col items-center-safe ' text="Get All Admin info from Database"/></div>
           </div>
         </div>
 
