@@ -1,7 +1,7 @@
 import Product from "@/Componets/Product";
 import Pagination from "@/Componets/Pagination";
 import { useAuth } from "@/Context/AuthContext";
-import { showError } from "@/Utils/Toast";
+import { showError, showSuccess } from "@/Utils/Toast";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
@@ -12,7 +12,18 @@ function UpdateProductAdmin() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { search } = useLocation();
-
+  
+  const handleDelete=async(id)=>{
+    try{
+        await axios.delete(`http://localhost:8568/api/v1/admin/products/${id}`,{withCredentials:true});
+       const delt=  products.filter((prod)=>prod._id!==id);
+       setProducts(delt);
+       showSuccess('Product is delted successfully');
+    }
+    catch(err){
+      showError(`something went wrong ${err}`);
+    }
+  }
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -55,6 +66,7 @@ function UpdateProductAdmin() {
         setLoading(false);
       }
     };
+    
 
     fetchProducts();
   }, [search, page]);
@@ -68,7 +80,7 @@ function UpdateProductAdmin() {
     );
   }
 
-  // 🚫 UNAUTHORIZED VIEW
+  //  UNAUTHORIZED VIEW
   if (!user || user.role !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center text-xl">
@@ -96,11 +108,14 @@ function UpdateProductAdmin() {
         "
       >
         {products.map((prod) => (
+          <div>
           <Product
             key={prod._id}
             product={prod}
             isUpdate={true}
           />
+          <button name="button" onClick={()=>handleDelete(prod._id)} >Delete</button>
+          </div>
         ))}
       </div>
 

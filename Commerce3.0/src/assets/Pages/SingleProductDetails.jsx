@@ -5,21 +5,55 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import axios from "axios";
 import { HashLoader } from "react-spinners";
 import Rating from "../../Componets/Rating";
+import { Rate } from "antd";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Cart from "../../Componets/Cart";
 import { useAuth } from "@/Context/AuthContext";
-import { showWarning } from "@/Utils/Toast";
+import { showError, showInfo, showSuccess, showWarning } from "@/Utils/Toast";
+import SuggestedProducts from "@/Componets/SuggestedProducts";
 
 function SingleProductDetails() {
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
+  const[prodArray,setProdArray]=useState([]);
+  const [review,setReview]=useState('');
   const [loading, setLoading] = useState(true);
+  const [rating, setRating] = useState(0);
+  const [showReview,setShowReview]=useState(true);
+  const handleSubmit=async(e)=>{
+
+  if(!user){
+    showInfo('need to log in first to add the review');
+    navigate('/login');
+
+return
+  }
+  try{
+  e.preventDefault();
+ const prod= await axios.post(`http://localhost:8568/api/v1/add/Reviews?Product_id=${id}`,{
+    review,
+    rating
+  },{withCredentials:true});
+  console.log(prod.data);
+  setProduct(prod.data.product_details);
+ 
+  showSuccess('Review Added Successfully');
+}catch(err){
+  showError(`cannot ad your review ${err}`);
+}
+
+}
+
+  const ratingChanged = (newRating) => {
+    setRating(newRating); 
+  };
   const navigate=useNavigate();
   const {user}=useAuth();
+
   const handleBuy=()=>{
       if(!user){
         showWarning('Need to log In first')
@@ -46,6 +80,20 @@ function SingleProductDetails() {
           `http://localhost:8568/api/v1/products/${id}`
         );
         setProduct(res.data.Details);
+
+        const arr=await axios.get('http://localhost:8568/api/v1/products',{
+          withCredentials:true
+        })
+        setProdArray(arr.data.details)
+        console.log(arr.data.details)
+       
+        if(user){
+       const check= res.data.Details.reviews.some((rev)=>rev.user===user._id);
+       if(check){
+        setShowReview(false);
+       }
+        }
+       
       } catch (err) {
         console.error(err);
       } finally {
@@ -54,7 +102,8 @@ function SingleProductDetails() {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [id,review]);
+  console.log(product)
 
   if (loading) {
     return (
@@ -62,6 +111,11 @@ function SingleProductDetails() {
         <HashLoader color="#77e56e" />
       </div>
     );
+  }
+  const handleDelte=async()=>{
+   const dt= await axios.delete(`http://localhost:8568/api/v1/deleteReview?id=${id}`,{withCredentials:true});
+   showSuccess('review is deleted successfully');
+   setProduct(dt.data.updatedreviws);
   }
 
   return (
@@ -71,7 +125,7 @@ function SingleProductDetails() {
     <div className="w-full min-h-screen bg-amber-100">
 
       {/* PRODUCT SECTION */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl max mx-auto px-4 py-6">
         <div className="bg-white rounded-2xl shadow-lg p-5 grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* IMAGE SWIPER */}
@@ -135,38 +189,118 @@ function SingleProductDetails() {
           </div>
         </div>
       </div>
+        
+     {/* REVIEWS SECTION */}
+<div className="w-full flex flex-col lg:flex-row items-center justify-center py-6 px-4 lg:px-12 gap-6 ">
+  {/* Left: Reviews */}
+  <div className="flex-1 w-full max-w-lg lg:max-w-2xl bg-white rounded-2xl shadow-md p-6">
+    <h3 className="text-2xl font-semibold mb-6 text-gray-800">Product Reviews</h3>
 
-      {/* REVIEWS SECTION */}
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        <h3 className="text-xl font-semibold mb-4">Product Reviews</h3>
+    {/* Add / Update Review Form */}
+    <div className="bg-gray-50 p-5 rounded-2xl mb-6 shadow-sm">
+      {!user ? (
+        <p className="text-gray-500">
+          Please <span className="font-semibold">login</span> or <span className="font-semibold">sign up</span> to add a review.
+        </p>
+      ) : showReview ? (
+        <div className="space-y-4">
+          <p className="font-medium text-gray-700">Add Your Review</p>
+          <Rate value={rating} onChange={ratingChanged} className="text-yellow-500" />
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <textarea
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+              className="w-full h-24 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
+              placeholder="Write your review here..."
+              draggable={false}
+            />
+            <button
+              type="submit"
+              className="bg-yellow-500 text-white px-5 py-2 rounded-xl hover:bg-yellow-600 transition"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <p className="font-medium text-gray-700">Update Your Review</p>
+          <Rate value={rating} onChange={ratingChanged} className="text-yellow-500" />
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <textarea
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+              className="w-full h-24 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
+              placeholder="Update your review here..."
+              draggable={false}
+            />
+            <button
+              type="submit"
+              className="bg-yellow-500 text-white px-5 py-2 rounded-xl hover:bg-yellow-600 transition"
+            >
+              Update
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
 
-        {product.reviews?.length > 0 ? (
-          <div className="space-y-4">
-            {product.reviews.map((rev, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl shadow-md p-4"
-              >
-                <Rating rating={rev.rating} />
-
-                <p className="text-gray-700 mt-2">
-                  {rev.review}
-                </p>
-
-                <p className="text-sm text-gray-500 mt-2">
-                  ✔ Verified Buyer: {rev.user_name}
-                </p>
+    {/* Reviews List */}
+    {product.reviews?.length > 0 ? (
+      <div className="space-y-4">
+        {product.reviews.map((rev, idx) => (
+          <div key={idx} className="bg-white rounded-2xl shadow p-5 border border-gray-100">
+            <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+              <Rating rating={rev.rating} />
+              <span className="text-sm text-gray-400">✔ Verified Buyer</span>
+            </div>
+            <p className="text-gray-700">{rev.review}</p>
+            <p className="text-sm text-gray-500 mt-2 font-medium">{rev.user_name}</p>
+            {user && user._id === rev.user && (
+              <div className="mt-3">
+                <button
+                  onClick={handleDelte}
+                  className="border border-black p-1 text-white rounded-md bg-black hover:bg-red-500 hover:shadow-lg transition h-8"
+                >
+                  Delete
+                </button>
               </div>
-            ))}
+            )}
           </div>
-        ) : (
-          <div className="bg-white rounded-xl shadow p-6 text-center">
-            <h4 className="text-gray-600">
-              Be the first to review this product ⭐
-            </h4>
-          </div>
-        )}
+        ))}
       </div>
+    ) : (
+      <div className="bg-white rounded-2xl shadow p-6 text-center border border-gray-100">
+        <h4 className="text-gray-500">
+          Be the first to review this product ⭐
+        </h4>
+      </div>
+    )}
+  </div>
+
+  {/* Right: Product Preview */}
+  <div className="flex-1 flex flex-col items-center justify-start w-full max-w-sm lg:max-w-md bg-white rounded-2xl shadow-md p-5">
+    <h3 className="text-lg font-semibold mb-2">Product Preview</h3>
+    {product?.image?.[0] && (
+      <img
+        src={product.image[1].public_url}
+        alt={product.name}
+        className="w-full h-64 object-contain rounded-lg shadow mb-4"
+      />
+    )}
+    <p className="font-medium text-gray-700 text-center">{product.name}</p>
+  </div>
+</div>
+
+{/* extra segment */}
+<div>
+  
+  {prodArray.length>0?(<SuggestedProducts products={prodArray} />):( <div className="min-h-screen flex items-center justify-center">
+        <HashLoader color="#77e56e" />
+      </div>)}
+  
+</div>
+
     </div>
 );
 

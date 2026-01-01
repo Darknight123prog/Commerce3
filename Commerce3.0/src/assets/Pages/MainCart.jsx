@@ -62,6 +62,7 @@ navigate('/cart/ProceedToCheckOut');
           { withCredentials: true }
         );
         setProduct(res.data.details || []);
+        
         // console.log("here is the product ",res.data.details);
       } catch (err) {
         showError(`Error occurred: ${err.message}`);
@@ -95,6 +96,7 @@ setSave({
 sessionStorage.setItem('price',JSON.stringify(save));
 
 console.log(JSON.parse(sessionStorage.getItem('price')));
+
 
  },[product,setGst,gst,price,totalPrice])
 

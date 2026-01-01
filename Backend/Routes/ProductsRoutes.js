@@ -1,5 +1,5 @@
 const express=require('express');
-const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews,DeleteOwnReview} = require('../Controllers/ProductsController');
+const { GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile ,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews,DeleteOwnReview,getAllOnly_Admins,addReview} = require('../Controllers/ProductsController');
 const{ auth,roleBasedAccess} = require('../Utils/Authetication');
 const upload = require('../middleware/uploads');
 
@@ -19,6 +19,7 @@ router.route('/api/v1/admin/profileInfo').get(auth,roleBasedAccess('admin'),getP
 router.route('/api/v1/admin/updatePassword').post(auth,roleBasedAccess('admin'),UpdatePassword);
 router.route('/api/v1/admin/updateProfileInfo').post(auth,roleBasedAccess('admin'),UpdateUserProfile);
 router.route('/api/v1/admin/accesss_to_all_users_admins').get(auth,roleBasedAccess('admin'),getAllUser_Admins);
+router.route('/api/v1/admin/AllAdmins').get(auth,roleBasedAccess('admin'),getAllOnly_Admins);
 router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBasedAccess('admin'),get_single_user_and_admin).put(auth,roleBasedAccess('admin'),Change_the_role).delete(auth,roleBasedAccess('admin'),DeleteUser);
 
 
@@ -27,7 +28,7 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 
 
 //user routes
- router.route('/api/v1/reviews').get(viewReviews)
+ router.route('/api/v1/reviews').get(viewReviews).post(auth,addReview);
  
   router.route('/api/v1/products').get(GetAllProducts)
    router.route('/api/v1/deleteReview').delete(auth,DeleteOwnReview)

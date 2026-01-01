@@ -151,7 +151,8 @@ const DeleteOne=async(req,res)=>{
 const GetAllProducts=async (req,res,next)=>{
   //adding the filter functionality
   try{
-    const productPerPage=10;
+    
+    const productPerPage=  15  ;
   const ApiFilterFinder=new ApiFilter(ProductsModel.find(),req.query).search().filter();
   const ApiCopy=ApiFilterFinder.query.clone();
 
@@ -279,7 +280,23 @@ const UpdateUserProfile=async(req,res)=>{
 //adding the get all users and admins details for the admin controls
 const getAllUser_Admins=async(req,res)=>{
   try{
-  const All_users_and_admins=await UserModel.find();
+  const All_users_and_admins=await UserModel.find({role:'User'});
+  res.status(200).json({
+    success:true,
+    message:"All users and admins data is fetched successfully",
+    details:All_users_and_admins
+  })
+}
+catch(err){
+  return res.status(500).json({
+    success:false,
+    message:err.message
+  })
+}
+}
+const getAllOnly_Admins=async(req,res)=>{
+  try{
+  const All_users_and_admins=await UserModel.find({role:'admin'});
   res.status(200).json({
     success:true,
     message:"All users and admins data is fetched successfully",
@@ -388,6 +405,39 @@ html
 }
 }
 
+const addReview=async(req,res)=>{
+  const {product_id,user_id,review,rating}=req.body;
+  const user=await UserModel.findOne({_id:user_id});
+  if(!user){
+    return res.status(404).json({
+      success:false,
+      message:"User not found"
+    })
+  }
+  else{
+    let rev=await ProductsModel.findOne({_id:product_id});
+    if(!rev){
+       return res.status(404).json({
+      success:false,
+      message:"Product not found"
+    })
+    }
+    else{
+      rev.reviews.push({
+        user:user_id,
+        user_name:user.name,
+        rating,
+        review
+      })
+      await rev.save();
+      return res.status(200).json({
+        success:true,
+        message:"review Added successfully"
+      })
+    }
+  }
+}
+
 const viewReviews=async(req,res)=>{
  const product_id=req.query.id;
  const product=await ProductsModel.findOne({_id:product_id});
@@ -422,10 +472,10 @@ const DeleteOwnReview=async(req,res)=>{
   else{
   //reviews array is fetched
   const reviews=product.reviews;
-  console.log(reviews)
-console.log(user._id);
+//   console.log(reviews)
+// console.log(user._id);
 
-  const finder=reviews.findIndex(rev=>String(rev.user)===String(user._id))
+  const finder=reviews.findIndex((rev)=>rev.user.toString()===user._id.toString())
   if(finder===-1){
     return res.status(403).json({
      success:false,
@@ -436,7 +486,11 @@ console.log(user._id);
     reviews.splice(finder,1);
     let rate=0;
     reviews.forEach(rev=>{rate+=rev.rating});
-    rate=(rate/reviews.length).toFixed(3);
+    if(reviews.length>0){
+    rate=(rate/reviews.length).toFixed(3);}
+    else{
+      rating=0;
+    }
     const number_of_review=reviews.length;
    const updatedrev= await ProductsModel.findOneAndUpdate({_id:DeleteProductId},{reviews,number_of_review,rating:rate},{new:true});
     return res.status(200).json({
@@ -452,4 +506,4 @@ console.log(user._id);
 
 
 
-module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews,DeleteOwnReview};
+module.exports={GetAllProducts,CreateProducts,GetOneProduct,UpdatetheProducts,DeleteOne,getProfileInfo,UpdatePassword,UpdateUserProfile,getAllUser_Admins,get_single_user_and_admin,Change_the_role,DeleteUser,viewReviews,DeleteOwnReview,getAllOnly_Admins,addReview};
