@@ -18,6 +18,7 @@ import SuggestedProducts from "@/Componets/SuggestedProducts";
 function SingleProductDetails() {
   const { id } = useParams();
 
+
   const [product, setProduct] = useState(null);
   const[prodArray,setProdArray]=useState([]);
   const [review,setReview]=useState('');
@@ -54,6 +55,7 @@ return
   const navigate=useNavigate();
   const {user}=useAuth();
 
+
   const handleBuy=()=>{
       if(!user){
         showWarning('Need to log In first')
@@ -79,9 +81,14 @@ return
         const res = await axios.get(
           `http://localhost:8568/api/v1/products/${id}`
         );
+        if(user){
+          await axios.post('http://localhost:8568/api/v1/add/keywords/searched',{
+            keyword:res.data.Details.catogary
+          },{withCredentials:true});
+        }
         setProduct(res.data.Details);
 
-        const arr=await axios.get('http://localhost:8568/api/v1/products',{
+        const arr=await axios.get(`http://localhost:8568/api/v1/products?catogary=${res.data.Details.catogary}`,{
           withCredentials:true
         })
         setProdArray(arr.data.details)
@@ -153,14 +160,20 @@ return
               ))}
             </Swiper>
 
-            {/* ACTION BUTTONS */}
-            <div className="flex w-auto flex-col sm:flex-row gap-4 mt-5">
-              <Cart  Product={id} />
+          {/* ACTION BUTTONS */}
+<div className="flex flex-col items-center-safe justify-items-end-safe sm:flex-row gap-4 mt-5 w-full lg:w-auto">
+  {/* Add to Cart Button */}
+  <Cart Product={id} className="flex-1  p-2.5 sm:flex-none w-full sm:w-auto" />
 
-              <button  onClick={handleBuy} className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
-                Buy Now
-              </button>
-            </div>
+  {/* Buy Now Button */}
+  <button
+    onClick={handleBuy}
+    className="flex-1 p-2.5  sm:flex-none w-full sm:w-auto bg-gradient-to-r from-black to-gray-800 text-white font-semibold py-3 rounded-lg shadow-lg hover:from-gray-800 hover:to-black transition-all duration-300"
+  >
+    Buy Now
+  </button>
+</div>
+
           </div>
 
           {/* PRODUCT DETAILS */}
@@ -168,8 +181,9 @@ return
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
               {product.name}
             </h2>
-
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                 <h2 className="text-2xl">Product Description </h2>
+            <p className="text-gray-600 h-64 w-full border rounded-2xl overflow-auto p-4 whitespace-pre-line text-sm sm:text-base leading-relaxed">
+             
               {product.description}
             </p>
 
@@ -279,7 +293,7 @@ return
   </div>
 
   {/* Right: Product Preview */}
-  <div className="flex-1 flex flex-col items-center justify-start w-full max-w-sm lg:max-w-md bg-white rounded-2xl shadow-md p-5">
+  <div className="flex-1 flex border flex-col items-center justify-start w-full max-w-sm lg:max-w-md bg-white rounded-2xl shadow-md p-5">
     <h3 className="text-lg font-semibold mb-2">Product Preview</h3>
     {product?.image?.[0] && (
       <img
@@ -293,12 +307,16 @@ return
 </div>
 
 {/* extra segment */}
-<div>
+<div className="bg-white h-auto w-full">
   
-  {prodArray.length>0?(<SuggestedProducts products={prodArray} />):( <div className="min-h-screen flex items-center justify-center">
+  {prodArray.length>0?(<SuggestedProducts title={'Suggested Products'} products={prodArray} />):( <div className="min-h-screen flex items-center justify-center">
         <HashLoader color="#77e56e" />
       </div>)}
   
+</div>
+<div>
+
+  Banner Section
 </div>
 
     </div>

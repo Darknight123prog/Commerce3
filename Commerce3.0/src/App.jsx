@@ -26,6 +26,7 @@ import UpdateSingleProduct from './assets/Pages/UpdateSingleProduct'
 import AllUserData from './assets/Pages/AllUserData'
 import DeleteAnyProduct from './assets/Pages/DeleteAnyProduct'
 import AllAdminsInfo from './assets/Pages/AllAdminsInfo'
+import BlackFridaySale from './assets/Pages/BlackFridaySale'
 
 
 
@@ -53,6 +54,7 @@ function App() {
            <Route path='/cart/proceedToCheckOut/OrderSummary' element={<OrderSummary/>} />
         <Route path='/Cart/details' element={<MainCart/>} />
         <Route path='/login' element={<LogIn/>} />
+         <Route path='/Blackfriday/sale' element={<BlackFridaySale/>} />
         <Route path='/about' element={<About/>}/>
          <Route path='/logout' element={<LogOut/>}/>
          <Route path='/Userauth/profile' element={<Profile/>}/>

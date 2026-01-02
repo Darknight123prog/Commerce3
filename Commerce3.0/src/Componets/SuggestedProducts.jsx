@@ -6,19 +6,19 @@ import "swiper/css/navigation";
 import Rating from "../Componets/Rating"; // your rating component
 import { useNavigate } from "react-router-dom";
 
-function SuggestedProducts({ products }) {
+function SuggestedProducts({ products,title }) {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full py-8 px-4 bg-amber-100 rounded-2xl">
+    <div className="w-full py-8 px-4 bg-white rounded-2xl">
       <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-        You Might Also Like
+       {title}
       </h2>
 
       <Swiper
         modules={[Navigation, Autoplay]}
         navigation
-        autoplay={{ delay: 4000, disableOnInteraction: true }}
+        autoplay={{ delay: 2000, disableOnInteraction: true }}
         spaceBetween={20}
         breakpoints={{
           320: { slidesPerView: 1 },

@@ -10,17 +10,32 @@ import Product from '../../Componets/Product';
 import RotatingText from '../../components/RotatingText';
 import { HashLoader } from "react-spinners";
 import Catogory from '@/Componets/Catogory';
+import { useAuth } from '@/Context/AuthContext';
+import SuggestedProducts from '@/Componets/SuggestedProducts';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const [url, setUrl] = useState([]);
+  const title='Suggested Product'
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
+  const[searchedLoaded,setSearchedLoaded]=useState(true);
+  const[searchedArray,setSearchedArray]=useState([]);
+  const[TreandyWearArray,setTreandyWearArray]=useState([]);
+   const[GadgetsArray,setGadgetsArray]=useState([]);
+  const {user}=useAuth();
+ 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:8568/api/v1/getBannerUrl");
         setUrl(res.data.url);
+        const trend=await axios.get(`http://localhost:8568/api/v1/products?catogary=menSherwani`)
+        setTreandyWearArray(trend.data.details);
+         const gadget=await axios.get(`http://localhost:8568/api/v1/products?catogary=electronics`)
+        setGadgetsArray(gadget.data.details);
+       
       } catch (error) {
         console.error(error);
       } finally {
@@ -32,6 +47,16 @@ function Home() {
       try {
         const product_data = await axios.get("http://localhost:8568/api/v1/products");
         setProduct(product_data.data.details);
+        if(user){
+          const recentSearch=await axios.get('http://localhost:8568/api/v1/add/keywords/searched',{withCredentials:true});
+          setSearchedArray(recentSearch.data.details)
+          setSearchedLoaded(false);
+         console.log("here is searched",recentSearch.data.details);
+
+        }
+        else{
+          setSearchedArray(false);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -41,7 +66,7 @@ function Home() {
     fetchData();
   }, []);
 
-  if (loading) {
+  if (loading && searchedLoaded) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
         <HashLoader color="#77e56e" />
@@ -87,6 +112,7 @@ function Home() {
 
       {/* Slider */}
       {url.length > 0 ? (
+        <Link to={'/Blackfriday/sale'} >
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -114,11 +140,15 @@ function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
+        </Link>
       ) : (
         <div className="flex items-center justify-center h-[200px] sm:h-[300px]">
           <HashLoader color="#77e56e" />
         </div>
       )}
+
+
+      
 
       {/* Products Section */}
       <div className="px-3 sm:px-5 py-4">
@@ -131,7 +161,23 @@ function Home() {
     animationDuration={1.5}
     pauseBetweenAnimations={1}
   />
+
+  
 </div>
+{user  && searchedArray.length>0 ?(<div>
+        
+        <SuggestedProducts title={'Based on recently Searched'} products={searchedArray} />
+      </div>):('')}
+
+
+     {TreandyWearArray.length>0&& <div>
+      <SuggestedProducts title={'Treandy Wedding wear'} products={TreandyWearArray} />
+       
+      </div>}
+      {GadgetsArray.length>0&& <div>
+      <SuggestedProducts title={'Gadgets treandy'} products={GadgetsArray} />
+       
+      </div>}
 
         {/* Product Grid */}
         <div className="
@@ -148,11 +194,16 @@ function Home() {
     overflow-x-hidden
           
         ">
+
+
           {product.map((prod) => (
             <Product key={prod._id} className="w-full min-w-0" product={prod} />
           ))}
         </div>
       </div>
+
+
+     
     </div>
   );
 }

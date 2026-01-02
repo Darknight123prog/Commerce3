@@ -40,9 +40,12 @@ function NavBar() {
   const submitHandler = (e) => {
     e.preventDefault();
     if (search.trim()) {
+      
       navigate(`/product?keyword=${encodeURIComponent(search)}`);
+      return;
     } else {
       navigate("/product");
+      return;
     }
   };
 
