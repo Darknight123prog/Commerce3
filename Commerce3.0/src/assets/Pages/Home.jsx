@@ -133,7 +133,9 @@ function Home() {
           {url.map((m, index) => (
             <SwiperSlide key={index} className="w-full h-full">
               <img
+              loading="lazy"  
                 src={m.url}
+               
                 alt={`banner-${index}`}
                 className="w-full h-full object-cover rounded-md"
               />

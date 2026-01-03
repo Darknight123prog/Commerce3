@@ -7,6 +7,7 @@ import Pagination from '../../Componets/Pagination';
 
 
 function ProductMainPage() {
+ 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const[page,setPage]=useState(1);
@@ -37,6 +38,7 @@ navigate('/');
           page
         }
       });
+      
 
       setProducts(res.data.details);
       setTotalPage(res.data.total_page);
@@ -67,7 +69,7 @@ navigate('/');
         <button type='button' onClick={handleBack}>Back</button>
         
         <h1 className='text-xl mb-4 text-center'>Sorry, Product Not Found 😔</h1>
-        <img
+        <img loading="lazy"  
           src='https://res.cloudinary.com/djgboajkm/image/upload/f_auto/9318688_iwlwvb'
           className='object-contain max-h-[70vh]'
           alt="No Product"

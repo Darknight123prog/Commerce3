@@ -192,7 +192,7 @@ function ProceedToCheckOut() {
         </form>
         </div>
         <div className="w-full backdrop-blur-md bg-white/20 p-0   max-w-5xl  rounded-2xl  shadow-md flex flex-col md:flex-row gap-6">
-        <img className='w-full backdrop-blur-md bg-white/20 p-0   max-w-5xl  rounded-2xl  shadow-md flex flex-col md:flex-row gap-6'  src='https://res.cloudinary.com/djgboajkm/image/upload/f_auto/bg_qwikhe'></img>
+        <img loading="lazy"   className='w-full backdrop-blur-md bg-white/20 p-0   max-w-5xl  rounded-2xl  shadow-md flex flex-col md:flex-row gap-6'  src='https://res.cloudinary.com/djgboajkm/image/upload/f_auto/bg_qwikhe'></img>
           
 
         </div>

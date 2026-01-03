@@ -66,10 +66,10 @@ function OrderSummary() {
           </thead>
           <tbody>
             <tr className="text-center hover:bg-gray-50">
-              <td className="px-2 py-1">₹{price.price.toFixed(2)}</td>
-              <td className="px-2 py-1">₹{price.gst.toFixed(2)}</td>
-              <td className="px-2 py-1">₹{price.other_price.toFixed(2)}</td>
-              <td className="px-2 py-1 font-semibold">₹{price.totalPrice.toFixed(2)}</td>
+              <td className="px-2 py-1">₹{price.price.toLocaleString("en-IN")}</td>
+              <td className="px-2 py-1">₹{price.gst.toLocaleString("en-IN")}</td>
+              <td className="px-2 py-1">₹{price.other_price.toLocaleString("en-IN")}</td>
+              <td className="px-2 py-1 font-semibold">₹{price.totalPrice.toLocaleString("en-IN")}</td>
             </tr>
           </tbody>
         </table>
@@ -109,9 +109,9 @@ function OrderSummary() {
       <div className="fixed bottom-0 left-0 w-full border-t p-2 sm:p-4 backdrop-blur-md bg-white/20">
         <button
           type="button"
-          className="w-full max-w-3xl mx-auto block bg-amber-500 text-white py-2 sm:py-3 rounded-xl font-semibold hover:bg-blue-500 hover:shadow-md   transition text-xs sm:text-sm md:text-base lg:text-lg"
+          className="w-full max-w-3xl mx-auto block bg-amber-500 text-black py-2 sm:py-3 rounded-xl font-semibold hover:bg-blue-500 hover:shadow-md   transition text-xs sm:text-sm md:text-base lg:text-lg"
         >
-          Pay Now : ₹ {price.totalPrice.toFixed(2)}
+          Pay Now : ₹ {price.totalPrice.toLocaleString("en-IN")}
         </button>
         
       </div>

@@ -41,20 +41,22 @@ function Product({ product,isUpdate }) {
         {/* Product Image */}
         <div className="w-full h-48 sm:h-44 md:h-40 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center">
           <img
+         
             src={product.image[0].public_url}
             alt={product.name}
+            loading="lazy"  
             className="h-full max-h-44 w-auto object-contain p-2 sm:p-3"
           />
         </div>
 
         {/* Product Name */}
-        <h5 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 mt-2">
+        <h5 className="text-base sm:text-base font-semibold text-gray-900 line-clamp-2 mt-2">
           {product.name}
         </h5>
 
         {/* Product Price */}
-        <p className="text-base sm:text-lg font-bold text-emerald-600 mt-1">
-          ₹{product.price}
+        <p className="text-base sm:text-sm font-bold text-emerald-600 mt-1">
+          ₹{product.price.toLocaleString("en-IN")}
         </p>
       </Link>
 

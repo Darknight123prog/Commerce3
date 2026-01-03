@@ -37,13 +37,14 @@ function SuggestedProducts({ products,title }) {
               <img
                 src={product.image?.[0]?.public_url}
                 alt={product.name}
+                loading="lazy"  
                 className="w-full h-36 object-contain rounded-lg mb-3"
               />
               <p className="font-medium text-gray-700 text-center text-sm md:text-base">
                 {product.name}
               </p>
               <p className="text-green-600 font-semibold mt-1 text-sm md:text-base">
-                ₹{product.price}
+                ₹{product.price.toLocaleString("en-IN")}
               </p>
               <div className="mt-2">
                 <Rating rating={product.rating} />

@@ -50,7 +50,7 @@ const Profile = () => {
 
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 text-center transition-transform duration-300 hover:scale-105">
         
-        <img
+        <img loading="lazy"  
           src={
             user.avator?.url ||
             "https://res.cloudinary.com/djgboajkm/image/upload/f_auto/7ae28c97-cb1f-4d1d-b74c-4db76b2081ad_w1kalp"

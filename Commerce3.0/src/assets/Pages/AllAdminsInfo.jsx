@@ -1,11 +1,12 @@
-
-import Profile from '@/Componets/Profile';
+import React, { lazy, Suspense, useEffect, useState } from 'react'
+const Profile=lazy(()=>import('@/Componets/Profile'))
 import { useAuth } from '@/Context/AuthContext';
 import { showError, showWarning } from '@/Utils/Toast';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+
 import { useNavigate } from 'react-router-dom';
 import { HashLoader } from 'react-spinners';
+import Spiner from '@/Componets/Spiner';
 function AllAdminsInfo() {
   const [allUser,setAllUser]=useState([]);
     const [loading,setLoading]=useState(true);
@@ -47,6 +48,7 @@ function AllAdminsInfo() {
       }
     
   return (
+    <Suspense fallback={<Spiner/>} >
   <div className="w-full min-h-screen bg-[#aaaaaa] px-3 sm:px-6 py-4">
     {/* Page Title */}
     <div className="mb-6 max-w-7xl mx-auto">
@@ -94,6 +96,7 @@ function AllAdminsInfo() {
       )}
     </div>
   </div>
+  </Suspense>
 );
 
 }

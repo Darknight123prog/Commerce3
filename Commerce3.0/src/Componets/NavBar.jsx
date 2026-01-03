@@ -57,6 +57,7 @@ function NavBar() {
           {/* Logo */}
           <Link to="/">
             <img
+            loading="lazy"  
               src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
               alt="GE Logo"
               className="w-20 sm:w-24 h-auto"
@@ -97,6 +98,7 @@ function NavBar() {
             <div className=" flex items-center  ml-3 gap-3">
               <Link to="/Userauth/profile">
                 <img
+                loading="lazy"  
                   className="rounded-full h-8 w-8 object-cover"
                   src={user?.avator?.url || "https://res.cloudinary.com/djgboajkm/image/upload/f_auto/7ae28c97-cb1f-4d1d-b74c-4db76b2081ad_w1kalp"}
                   alt="profile"

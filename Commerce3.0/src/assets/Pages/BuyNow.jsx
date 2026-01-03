@@ -67,6 +67,7 @@ function BuyNow() {
             <tr className="text-center hover:bg-gray-50">
               <td className="p-3 border">
                 <img
+                loading="lazy"  
                   src={product.imgUrl}
                   alt={product.name}
                   className="h-20 w-20 object-contain mx-auto"

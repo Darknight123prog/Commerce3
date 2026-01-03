@@ -94,6 +94,7 @@ const navigate=useNavigate();
         <div className="flex flex-wrap gap-2 overflow-y-auto max-h-96">
           {images.map((file, index) => (
             <img
+            loading="lazy"  
               key={index}
               src={URL.createObjectURL(file)}
               alt="preview"

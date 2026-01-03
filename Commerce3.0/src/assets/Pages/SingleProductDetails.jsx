@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import axios from "axios";
@@ -18,7 +18,7 @@ import SuggestedProducts from "@/Componets/SuggestedProducts";
 function SingleProductDetails() {
   const { id } = useParams();
 
-
+const [url, setUrl] = useState([]);
   const [product, setProduct] = useState(null);
   const[prodArray,setProdArray]=useState([]);
   const [review,setReview]=useState('');
@@ -86,6 +86,8 @@ return
             keyword:res.data.Details.catogary
           },{withCredentials:true});
         }
+        const dataurl = await axios.get("http://localhost:8568/api/v1/getBannerUrl");
+              setUrl(dataurl.data.url);
         setProduct(res.data.Details);
 
         const arr=await axios.get(`http://localhost:8568/api/v1/products?catogary=${res.data.Details.catogary}`,{
@@ -152,6 +154,7 @@ return
               {product?.image?.map((img, index) => (
                 <SwiperSlide key={index}>
                   <img
+                  loading="lazy"  
                     src={img.public_url}
                     alt={product.name}
                     className="w-full h-[260px] sm:h-[320px] md:h-[380px] object-contain rounded-xl"
@@ -188,7 +191,7 @@ return
             </p>
 
             <p className="text-2xl font-semibold text-green-700">
-              ₹{product.price}
+              ₹{product.price.toLocaleString("en-IN")}
             </p>
 
             <Rating rating={product.rating} />
@@ -293,14 +296,19 @@ return
   </div>
 
   {/* Right: Product Preview */}
-  <div className="flex-1 flex border flex-col items-center justify-start w-full max-w-sm lg:max-w-md bg-white rounded-2xl shadow-md p-5">
+  <div className="flex-1 flex border flex-col items-center justify-start w-[28rem] max-w-sm lg:max-w-md bg-white rounded-2xl shadow-md p-5">
+    <h1 className="text-4xl">Sale is live</h1>
     <h3 className="text-lg font-semibold mb-2">Product Preview</h3>
     {product?.image?.[0] && (
+      <div>
+        
       <img
+      loading="lazy"  
         src={product.image[1].public_url}
         alt={product.name}
         className="w-full h-64 object-contain rounded-lg shadow mb-4"
       />
+      </div>
     )}
     <p className="font-medium text-gray-700 text-center">{product.name}</p>
   </div>
@@ -316,7 +324,45 @@ return
 </div>
 <div>
 
-  Banner Section
+  {/* Sponsered segment Section */}
+  {url.length > 0 ? (
+        <Link to={'/Blackfriday/sale'} >
+        <Swiper
+          modules={[Autoplay, Pagination, Navigation]}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          navigation
+          loop
+          className="
+            w-full
+            overflow-x-hidden
+            h-[30vh]
+            sm:h-[40vh]
+            md:h-[50vh]
+            lg:h-[60vh]
+            xl:h-[70vh]
+            bg-black
+          "
+        >
+          {url.map((m, index) => (
+            <SwiperSlide key={index} className="w-full h-full">
+              <img
+              loading="lazy"  
+                src={m.url}
+               
+                alt={`banner-${index}`}
+                className="w-full h-full object-cover rounded-md"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        </Link>
+      ) : (
+        <div className="flex items-center justify-center h-[200px] sm:h-[300px]">
+          <HashLoader color="#77e56e" />
+        </div>
+      )}
+
 </div>
 
     </div>

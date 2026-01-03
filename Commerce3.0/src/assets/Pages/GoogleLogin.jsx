@@ -17,7 +17,7 @@ const GoogleLogin = () => {
                  hover:bg-gray-100 transition
                  focus:outline-none focus:ring-2 focus:ring-indigo-500"
     >
-      <img src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/google_zbcycw" className=" text-xl h-8"  ></img>
+      <img loading="lazy"   src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/google_zbcycw" className=" text-xl h-8"  ></img>
       <span>Continue with Google</span>
     </button>
   );

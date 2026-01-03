@@ -37,6 +37,7 @@ navigate('/');
         {/* Header */}
         <div className="flex flex-col items-center mb-6">
           <img
+          loading="lazy"  
             className="h-16 w-16 sm:h-20 sm:w-20 rounded-full  border-b-cyan-300 shadow-2xl border-2  mb-3"
             src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
             alt="Logo"

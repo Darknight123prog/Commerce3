@@ -118,6 +118,7 @@ function UpdateSingleProduct() {
         {product.image.map((img, index) => (
           <SwiperSlide key={index}>
             <img
+            loading="lazy"  
               src={img.public_url}
               alt={product.name}
               className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-contain rounded-xl"
@@ -199,6 +200,7 @@ function UpdateSingleProduct() {
         <h3 className="text-lg font-semibold mb-2">Product Preview</h3>
         {product?.image?.[0] && (
           <img
+          loading="lazy"  
             src={product.image[0].public_url}
             alt={product.name}
             className="w-full max-w-xs h-64 object-contain rounded-lg shadow"

@@ -28,7 +28,7 @@ function MainAdminPannel() {
       {/* Sidebar */}
       <div className="w-full  lg:w-[20rem] bg-stone-950 flex flex-col  items-center py-6 ">
         <div className="h-40 p-0   w-40 bg-amber-950 rounded-full mb-4">
-          <img  className='h-40 m-0   w-40 rounded-full' src={user.avator.url?(user.avator.url):('https://res.cloudinary.com/djgboajkm/image/upload/6425483_fnvhfh')}></img>
+          <img  loading="lazy"   className='h-40 m-0   w-40 rounded-full' src={user.avator.url?(user.avator.url):('https://res.cloudinary.com/djgboajkm/image/upload/6425483_fnvhfh')}></img>
         </div>
 
         <h1 className="text-white text-lg font-semibold">Admin Info</h1>

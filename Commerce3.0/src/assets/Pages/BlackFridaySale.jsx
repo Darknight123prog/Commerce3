@@ -1,9 +1,11 @@
-import SuggestedProducts from '@/Componets/SuggestedProducts';
+import React, { lazy, Suspense, useEffect, useState } from 'react'
+const SuggestedProducts=lazy(()=>import('@/Componets/SuggestedProducts'))
+import Spiner from '@/Componets/Spiner';
 import { showError } from '@/Utils/Toast';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+
+
 import { Link } from 'react-router-dom';
-import { HashLoader } from 'react-spinners';
 import { Autoplay, Navigation,Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -32,9 +34,9 @@ function BlackFridaySale() {
     showError('somethingg went wrong');
   }
   }
-  if(new Date().getDay()===6){
+  
      FetchData();
-  }
+  
   },[])
 
 //   if (new Date().getDay() !== 5) {
@@ -55,6 +57,7 @@ function BlackFridaySale() {
 
  
   return (
+    <Suspense fallback={<Spiner/>} >
   <div className="px-4 py-6">
     <div className="flex flex-col lg:flex-row gap-6 mb-8">
       {/* Left: Swiper */}
@@ -73,6 +76,7 @@ function BlackFridaySale() {
               <img
                 src={m.image[2]?.public_url || '/'}
                 alt={`banner-${index}`}
+                loading="lazy"  
                 className="w-full h-full object-contain rounded-md"
               />
               </Link>
@@ -85,6 +89,7 @@ function BlackFridaySale() {
       <div className="lg:w-1/3 w-full flex flex-col justify-center text-center lg:text-left">
        <h2 className="text-2xl font-bold mb-4">Commerce3.0</h2>
         <h2 className="text-2xl font-bold mb-4">Welcome to Blackfriday Sale</h2>
+        <img loading='lazy' className='' src='https://res.cloudinary.com/djgboajkm/image/upload/f_auto/18196971_rc6ekf' ></img>
         <p className="text-gray-700 mb-4">Get Upto 25% off</p>
          <p className="text-gray-700 mb-4">Premium Fashion</p>
          <p  className="text-gray-700 mb-4">Shop here</p>
@@ -100,6 +105,7 @@ function BlackFridaySale() {
     <SuggestedProducts products={women} />
     </div>
   </div>
+  </Suspense>
 );
 
 }

@@ -137,13 +137,14 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
                   <tr key={e._id} className="hover:bg-gray-50 text-center">
                     <td className="p-3 border">
                       <img
+                      loading="lazy"  
                         src={e.image?.[0].public_url}
                         alt={e.name}
                         className="h-18 w-15 object-contain  mx-auto "
                       />
                     </td>
                     <td className="p-3 border">{e.name}</td>
-                    <td className="p-3 border">₹{e.price}</td>
+                    <td className="p-3 border">₹{e.price.toLocaleString("en-IN")}</td>
                     <td className="p-3 border"><InputNumber
           min={1}
           value={e.quantity || 1} 
@@ -183,7 +184,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
       <div className="flex justify-between items-center">
         <span>Price:</span>
         <span className="font-semibold flex items-center gap-1">
-          <FaIndianRupeeSign /> {price.toFixed(2)}
+          <FaIndianRupeeSign /> {price.toLocaleString("en-IN")}
         </span>
       </div>
 
@@ -197,7 +198,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
       <div className="flex justify-between items-center">
         <span>GST (18%):</span>
         <span className="font-semibold flex items-center gap-1">
-          <FaIndianRupeeSign /> {gst.toFixed(2)}
+          <FaIndianRupeeSign /> {gst.toLocaleString("en-IN")}
         </span>
       </div>
 
@@ -213,7 +214,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
       <div className="flex justify-between items-center text-lg font-bold">
         <span>Total Price:</span>
         <span className="flex items-center gap-1 text-[#555555]">
-          <FaIndianRupeeSign /> {totalPrice.toFixed(2)}
+          <FaIndianRupeeSign /> {totalPrice.toLocaleString("en-IN")}
         </span>
       </div>
     </div>
