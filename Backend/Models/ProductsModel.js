@@ -17,6 +17,9 @@ const ProductScheme=new mongoose.Schema({
     required:[true,"Price should be mentioned"],
 
   },
+  discount:{
+    type:Number
+  },
   rating:{
     type:Number,
     default:2,

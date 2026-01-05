@@ -62,13 +62,17 @@ return
   navigate('/login');
       }
       else{
-       
+        let discount=0;
+       if(product.discount){
+        discount=product.discount;
+       }
         const prod={
           imgUrl:product.image[0].public_url,
           _id:product._id,
           name:product.name,
           price:product.price,
-          quanitity:product.quanitity||1
+          quanitity:product.quanitity||1,
+          discount:discount
         }
         sessionStorage.setItem('product_id',JSON.stringify(prod));
         navigate('/cart/buyNow');
@@ -131,7 +135,7 @@ return
     
    
     
-    <div className="w-full min-h-screen bg-amber-100">
+    <div className="w-full min-h-screen bg-white">
 
       {/* PRODUCT SECTION */}
       <div className="max-w-7xl max mx-auto px-4 py-6">
@@ -164,18 +168,26 @@ return
             </Swiper>
 
           {/* ACTION BUTTONS */}
-<div className="flex flex-col items-center-safe justify-items-end-safe sm:flex-row gap-4 mt-5 w-full lg:w-auto">
+<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-5 w-full">
   {/* Add to Cart Button */}
-  <Cart Product={id} className="flex-1  p-2.5 sm:flex-none w-full sm:w-auto" />
+  <Cart
+    Product={id}
+    className="w-full sm:w-auto px-4 py-3"
+  />
 
   {/* Buy Now Button */}
   <button
     onClick={handleBuy}
-    className="flex-1 p-2.5  sm:flex-none w-full sm:w-auto bg-gradient-to-r from-black to-gray-800 text-white font-semibold py-3 rounded-lg shadow-lg hover:from-gray-800 hover:to-black transition-all duration-300"
+    className="w-full sm:w-auto px-4 py-3
+               bg-gradient-to-r from-black to-gray-800
+               text-white font-semibold rounded-lg shadow-lg
+               hover:from-gray-800 hover:to-black
+               transition-all duration-300"
   >
     Buy Now
   </button>
 </div>
+
 
           </div>
 
@@ -189,10 +201,18 @@ return
              
               {product.description}
             </p>
-
+              {product.discount?(
+                <div>
+                   <p className="text-[1.3rem]  font-semibold text-amber-500">{product.discount}% off</p>
+                <p className="text-[1.3rem] line-through font-semibold text-stone-600">
+              ₹{product.price.toLocaleString("en-IN")} </p>
+               <p className="text-[1.3rem]  font-semibold text-black">{(product.price-product.discount*0.01*product.price).toLocaleString("en-IN")}</p>
+           
+            </div>):(
             <p className="text-2xl font-semibold text-green-700">
               ₹{product.price.toLocaleString("en-IN")}
-            </p>
+            </p>)
+              }
 
             <Rating rating={product.rating} />
 
@@ -203,6 +223,17 @@ return
             >
               Status: {product.stock > 0 ? "Available" : "Out of Stock"}
             </p>
+            {product.stock>0 &&product.stock<50 &&<p  className="text-orange-500">
+                only {product.stock} are left
+            </p>}
+            <div>
+      {product.discount && product.discount<20 &&<div className='h-7 text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-17 rounded-md text-green-950 font-bold bg-green-400'>
+          Hot Deal
+        </div>} 
+       {product.discount && product.discount>20 &&<div className='h-7 text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-20 rounded-md text-red-950 font-bold bg-red-500'>
+          Super Hot Deal
+        </div>} 
+        </div>
           </div>
         </div>
       </div>
@@ -297,7 +328,7 @@ return
 
   {/* Right: Product Preview */}
   <div className="flex-1 flex border flex-col items-center justify-start w-[28rem] max-w-sm lg:max-w-md bg-white rounded-2xl shadow-md p-5">
-    <h1 className="text-4xl">Sale is live</h1>
+   
     <h3 className="text-lg font-semibold mb-2">Product Preview</h3>
     {product?.image?.[0] && (
       <div>
@@ -315,6 +346,7 @@ return
 </div>
 
 {/* extra segment */}
+
 <div className="bg-white h-auto w-full">
   
   {prodArray.length>0?(<SuggestedProducts title={'Suggested Products'} products={prodArray} />):( <div className="min-h-screen flex items-center justify-center">
@@ -323,6 +355,11 @@ return
   
 </div>
 <div>
+  <h1 className="text-3xl p-3.5 w-44 text-shadow-accent-foreground text-shadow-2xs rounded-2xl  shadow-sidebar-accent-foreground shadow-2xl ml-6 m-3 font-bold animate-pulse text-red-600">
+    {/* <span className="h-33 w-33 bg-red-600 rounded-full" ></span> */}
+  Sale is live
+</h1>
+
 
   {/* Sponsered segment Section */}
   {url.length > 0 ? (
@@ -334,13 +371,18 @@ return
           navigation
           loop
           className="
-            w-full
+            w-[78rem]
+            shadow-2xl
+            shadow-sidebar-accent-foreground
+            p-4
+            mb-6
+            rounded-3xl
             overflow-x-hidden
-            h-[30vh]
+            h-[40vh]
             sm:h-[40vh]
-            md:h-[50vh]
-            lg:h-[60vh]
-            xl:h-[70vh]
+            md:h-[40vh]
+            lg:h-[50vh]
+            xl:h-[60vh]
             bg-black
           "
         >

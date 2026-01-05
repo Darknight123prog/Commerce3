@@ -20,7 +20,8 @@ const navigate=useNavigate();
     price: "",
     description: "",
     catogary: "",
-    stock: ""
+    stock: "",
+    discount:""
   });
 
 
@@ -121,6 +122,13 @@ const navigate=useNavigate();
           <input
             name="price"
             placeholder="Price"
+            type="number"
+            onChange={handleChange}
+            className="input  bg-amber-50 rounded-md p-2"
+          />
+          <input
+            name="discount"
+            placeholder="discount"
             type="number"
             onChange={handleChange}
             className="input  bg-amber-50 rounded-md p-2"

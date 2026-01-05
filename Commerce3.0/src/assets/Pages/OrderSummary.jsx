@@ -18,6 +18,7 @@ function OrderSummary() {
     gst: 0,
     other_price: 0,
     totalPrice: 0,
+    discount_price:0
     
   })
   const [address, setAddress] = useState({})
@@ -26,6 +27,7 @@ function OrderSummary() {
     const storedPrice = JSON.parse(sessionStorage.getItem('price')) || price
     const storedAddress = JSON.parse(sessionStorage.getItem('address')) || address
     setPrice(storedPrice)
+    console.log(JSON.parse(sessionStorage.getItem('price')))
     setAddress(storedAddress)
   }, [])
 
@@ -58,7 +60,9 @@ function OrderSummary() {
         <table className="w-full table-auto text-xs sm:text-sm md:text-base">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-2 py-1">Price</th>
+              <th className="px-2 py-1">Subtotal</th>
+               <th className="px-2 py-1">Discount Price</th>
+              
               <th className="px-2 py-1">GST (18%)</th>
               <th className="px-2 py-1">Other</th>
               <th className="px-2 py-1">Total</th>
@@ -67,6 +71,7 @@ function OrderSummary() {
           <tbody>
             <tr className="text-center hover:bg-gray-50">
               <td className="px-2 py-1">₹{price.price.toLocaleString("en-IN")}</td>
+              <td className="px-2 py-1">₹{price.discount_price}</td>
               <td className="px-2 py-1">₹{price.gst.toLocaleString("en-IN")}</td>
               <td className="px-2 py-1">₹{price.other_price.toLocaleString("en-IN")}</td>
               <td className="px-2 py-1 font-semibold">₹{price.totalPrice.toLocaleString("en-IN")}</td>

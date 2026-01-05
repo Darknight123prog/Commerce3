@@ -369,9 +369,92 @@ const RemoveFromCart=async(req,res)=>{
   }
 
 }
+//adding the search query storing feature
+const addSearch=async(req,res)=>{
+  const keyword=req.body.keyword;
+  const user=req.RequestName._id;;
+  const userData=await UserModel.findOne({_id:user});
+  if(!userData){
+    return res.status(404).json({
+      success:false,
+      message:"no user found"
+    })
+  }
+  else{
+    
+    const check=userData.recentSearch.some((keword)=>keword==keyword);
+    if(check){
+    return res.status(200).json({
+      success:true,
+      message:"alredy searched"
+    })
+  }
+  else{
+  userData.recentSearch.push(keyword);
+  await userData.save();
+  return res.status(200).json({
+      success:true,
+      message:"search added successfuly",
+      userData:userData.recentSearch
+    })
+
+}
+}
+
+}
+const getAllSearchedKeyWord=async(req,res)=>{
+  try{
+ 
+    const user=await UserModel.findOne({_id:req.RequestName._id});
+    if(!user){
+      return res.status(404).json({
+    success:false,
+    message:"user not exists",
+  })
+  }
+  else{
+    if(user.recentSearch){
+      if(user.recentSearch.length===0){
+        return res.status(200).json({
+    success:true,
+    details:[],
+  })
+      }
+      else{
+      
+        const searchARR=user.recentSearch
+        const Prod=await ProductsModel.find({
+          $or:[{
+  catogary: { $in: searchARR },
+}]
+      })
+return res.status(200).json({
+  success:true,
+  message:"successfully data",
+  details:Prod
+})
+      }
+    }else{
+      return res.status(200).json({
+    success:true,
+    details:[],
+  })
+    }
+  }
+
+}
+catch(err){
+  return res.status(500).json({
+    success:false,
+    message:"Something went wrong",
+    error:err.message
+  })
+}
+
+}
 
 
 
 
 
-module.exports={createUser,UserSignIn,UserLogOut,ForgetPassword,resetPassword,AddReviewAndUpdate,AddToCart,GetCartProductList,RemoveFromCart}
+module.exports={createUser,UserSignIn,UserLogOut,ForgetPassword,resetPassword,AddReviewAndUpdate,AddToCart,GetCartProductList,RemoveFromCart,addSearch,getAllSearchedKeyWord}

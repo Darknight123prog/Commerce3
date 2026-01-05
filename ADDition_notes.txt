@@ -21,10 +21,14 @@ catogary->{
   fridge
   washingMachine
   watches
+  electronics->add fancy products
   womenKurta
-  saree
+  saree->
   lehengas
   Womenoversized
+
+  westernWomen -sale
+  westernMen -sale
   kidsClothing
   kidsToys
   babyCare

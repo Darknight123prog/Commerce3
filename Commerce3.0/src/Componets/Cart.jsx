@@ -52,7 +52,7 @@ function Cart({ Product }) {
     return (
       <button
         onClick={handleNotSignIn}
-        className="w-full/2 border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
+        className="w-full/2 border-2 h-14 shadow-2xs hover:shadow-2xl hover:shadow-card-foreground flex flex-col items-center-safe justify-center-safe hover:scale-3d border-black py-2 p-3 rounded-lg hover:bg-black hover:text-white transition"
       >
         <h6 className='flex gap-1 items-center p-1' > Add to {<FaShoppingCart />}</h6>
       </button>
@@ -63,7 +63,7 @@ function Cart({ Product }) {
     return (
       <button
         onClick={HandleRemoveCart}
-        className="w-full/2 border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
+        className="w-full/2 border-2 h-14 shadow-2xs hover:shadow-2xl hover:shadow-card-foreground flex flex-col items-center-safe justify-center-safe hover:scale-3d border-black py-2 p-3 rounded-lg hover:bg-black hover:text-white transition"
       >
         <h6 className='flex gap-1 items-center justify-center-safe  p-1' > Remove {<FaShoppingCart />}</h6>
       </button>
@@ -74,9 +74,9 @@ function Cart({ Product }) {
     return (
       <button
         onClick={HandleAddCart}
-        className="w-full/2 border-2 border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
+        className="w-full/2 border-2 h-14 shadow-2xs hover:shadow-2xl hover:shadow-card-foreground flex flex-col items-center-safe justify-center-safe hover:scale-3d border-black py-2 p-3 rounded-lg hover:bg-black hover:text-white transition"
       >
-       <h6 className='flex gap-1 justify-center-safe items-center p-1' > Add to {<FaShoppingCart  />}</h6>
+       <h6 className='flex gap-1  justify-center-safe items-center p-1' > Add to {<FaShoppingCart  />}</h6>
       </button>
     );
   }

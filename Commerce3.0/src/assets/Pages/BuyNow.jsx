@@ -21,12 +21,14 @@ function BuyNow() {
     return <h2 className="text-center mt-10 text-xl">No Product added to cart</h2>;
   }
 
-  // ✅ Derived values (AUTO UPDATE)
+  
   const basePrice = product.price * quantity;
-  const gst = basePrice * 0.18;
+  const discount=product.discount;
+  const DiscountedPrice=basePrice*0.01*discount;
+  const gst = (basePrice-DiscountedPrice) * 0.18;
   const shipping = basePrice > 500 ? 0 : 23;
   const promisePrice = 12;
-  const totalPrice = basePrice + gst + shipping + promisePrice;
+  const totalPrice = basePrice + gst + shipping + promisePrice-DiscountedPrice;
 
   // Quantity handler
   const handleQuantityChange = (val) => {
@@ -42,6 +44,7 @@ function BuyNow() {
       other_price:promisePrice,
       quantity,
       totalPrice,
+      discount_price:DiscountedPrice
     };
 
     sessionStorage.setItem("price", JSON.stringify(priceData));
@@ -59,7 +62,8 @@ function BuyNow() {
             <tr>
               <th className="p-3 border">Image</th>
               <th className="p-3 border">Product</th>
-              <th className="p-3 border">Price</th>
+                <th className="p-3 border">Discount</th>
+              <th className="p-3 border">Orginial Price</th>
               <th className="p-3 border">Quantity</th>
             </tr>
           </thead>
@@ -74,7 +78,8 @@ function BuyNow() {
                 />
               </td>
               <td className="p-3 border">{product.name}</td>
-              <td className="p-3 border">₹{product.price}</td>
+               <td className="p-3 border">{discount}%</td>
+              <td className="p-3 border">₹{product.price.toLocaleString('en-IN')}</td>
               <td className="p-3 border">
                 <InputNumber
                   min={1}
@@ -100,9 +105,15 @@ function BuyNow() {
           </div>
 
           <div className="flex justify-between">
-            <span>Base Price:</span>
+            <span>Orginial Price:</span>
             <span className="flex items-center gap-1 font-semibold">
-              <FaIndianRupeeSign /> {basePrice.toFixed(2)}
+              <FaIndianRupeeSign /> {basePrice.toLocaleString('en-IN')}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Discount:</span>
+            <span className="flex items-center gap-1 font-semibold">
+              <FaIndianRupeeSign /> {discount}%
             </span>
           </div>
 
@@ -120,7 +131,7 @@ function BuyNow() {
           <div className="flex justify-between">
             <span>GST (18%):</span>
             <span className="flex items-center gap-1 font-semibold">
-              <FaIndianRupeeSign /> {gst.toFixed(2)}
+              <FaIndianRupeeSign /> {gst.toLocaleString('en-IN')}
             </span>
           </div>
 
@@ -136,7 +147,7 @@ function BuyNow() {
           <div className="flex justify-between text-lg font-bold">
             <span>Total Price:</span>
             <span className="flex items-center gap-1">
-              <FaIndianRupeeSign /> {totalPrice.toFixed(2)}
+              <FaIndianRupeeSign /> {totalPrice.toLocaleString('en-IN')}
             </span>
           </div>
         </div>

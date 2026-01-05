@@ -43,9 +43,16 @@ function SuggestedProducts({ products,title }) {
               <p className="font-medium text-gray-700 text-center text-sm md:text-base">
                 {product.name}
               </p>
-              <p className="text-green-600 font-semibold mt-1 text-sm md:text-base">
-                ₹{product.price.toLocaleString("en-IN")}
-              </p>
+             {!product.discount || product.discount==0?(<p className="text-base sm:text-sm font-bold text-emerald-600 mt-1">
+          ₹{product.price.toLocaleString("en-IN")}
+        </p>):(
+          <div>
+           <p className="text-stone-700 line-through font-semibold">₹ {product.price.toLocaleString("en-IN")}</p>
+             <p className="text-amber-500  font-semibold">{product.discount}% off</p>
+               <p className="text-black  font-semibold">₹ {(product.price -product.price*0.01*product.discount).toLocaleString("en-IN")}</p>
+
+          </div>
+        )}
               <div className="mt-2">
                 <Rating rating={product.rating} />
               </div>

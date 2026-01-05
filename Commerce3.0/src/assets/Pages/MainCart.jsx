@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { InputNumber } from "antd";
 import { FaIndianRupeeSign } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cart from '@/Componets/Cart';
 import { useAuth } from '@/Context/AuthContext';
 
@@ -12,6 +12,7 @@ function MainCart() {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [price,setprice]=useState(0);
+  const[orgPrice,setOrgPrice]=useState(0);
   const [gst,setGst]=useState(0);
   const {cart,setCart}=useAuth();
   
@@ -47,7 +48,8 @@ console.log('inside the Main cart',nCart.data.details)
     price:0,
     gst:0,
     totalPrice:0,
-    other_charges:0
+    other_charges:0,
+    discount_price:0
    });
   const navigate=useNavigate()
 
@@ -76,21 +78,27 @@ navigate('/cart/ProceedToCheckOut');
 
  useEffect(()=>{
   let slow=0;
+  
 product.forEach((e)=>slow+=(e.price)*(e.quantity||1))
-setprice(slow)
+setOrgPrice(slow);
 
-setGst(0.18*price);
+let discount_price=0;
+product.forEach((e)=>discount_price+=(e.price)*(e.quantity||1)*0.01*(e.discount||0))
+setprice(slow-discount_price);
+
+setGst(0.18*(slow-discount_price));
 if(price<500){
-setTotalPrice(slow+12+gst+23)
+setTotalPrice(slow-discount_price+12+gst+23)
 
 }
 else{
-  setTotalPrice(slow+12+gst);
+  setTotalPrice(slow-discount_price+12+gst);
 }
 setSave({
   price:price,
   gst:gst,
   totalPrice:totalPrice,
+  discount_price:discount_price,
   other_price:price>500?(12):(35)
 })
 sessionStorage.setItem('price',JSON.stringify(save));
@@ -126,7 +134,8 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
                 <tr>
                   <th className="p-3 border">Image</th>
                   <th className="p-3 border">Product</th>
-                  <th className="p-3 border">Price</th>
+                  <th className="p-3 border">Original Price</th>
+                  <th className="p-3 border">Discount Price</th>
                   <th className="p-3 border">Quantity</th>
                   <th className="p-3 border">Remove</th>
                 </tr>
@@ -134,7 +143,8 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
 
               <tbody>
                 {product.map((e) => (
-                  <tr key={e._id} className="hover:bg-gray-50 text-center">
+                 
+                  <tr onClick={()=>navigate(`/ProductDetails/${e._id}`)} key={e._id} className="hover:bg-gray-50 text-center">
                     <td className="p-3 border">
                       <img
                       loading="lazy"  
@@ -145,6 +155,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
                     </td>
                     <td className="p-3 border">{e.name}</td>
                     <td className="p-3 border">₹{e.price.toLocaleString("en-IN")}</td>
+                    <td className="p-3 border">₹{(e.discount||0)*0.01*e.price}</td>
                     <td className="p-3 border"><InputNumber
           min={1}
           value={e.quantity || 1} 
@@ -159,6 +170,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
         {/* <h1>{e._id}</h1> */}
          <td className="p-3 border"><button type='button' onClick={()=>handleClick(e._id)}  >Remove</button></td>
                   </tr>
+                
                 ))}
               </tbody>
             </table>
@@ -182,9 +194,15 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
       </div>
 
       <div className="flex justify-between items-center">
-        <span>Price:</span>
+        <span>Original Price:</span>
         <span className="font-semibold flex items-center gap-1">
-          <FaIndianRupeeSign /> {price.toLocaleString("en-IN")}
+          <FaIndianRupeeSign /> {orgPrice.toLocaleString("en-IN")}
+        </span>
+      </div>
+      <div className="flex justify-between items-center">
+        <span>Discount Price:</span>
+        <span className="font-semibold flex items-center gap-1">
+          <FaIndianRupeeSign /> {(price-orgPrice).toLocaleString("en-IN")}
         </span>
       </div>
 

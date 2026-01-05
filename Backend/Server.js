@@ -31,7 +31,10 @@ app.use(cors({
   origin:process.env.frontend_url,
     credentials: true,
 }))
-
+app.use(express.static('public', {
+  maxAge: '1y',     // cache for 1 year
+  etag: false
+}));
 app.use(
   session({
     secret: "passport_secret",

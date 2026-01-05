@@ -37,6 +37,9 @@ cart:[{
     enum: ["local", "google","github"],
     default: "local"
   },
+  recentSearch:[{
+type:String,
+  }],
   avator: {
     public_id: { type: String, default: '' },
     url: { type: String, default: '' }

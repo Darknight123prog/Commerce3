@@ -11,7 +11,7 @@ const fs = require("fs");
 //creating the products controller
 const CreateProducts = async (req, res) => {
   try {
-    const { name, description, price, catogary, stock } = req.body;
+    const { name, description, price, catogary, stock ,discount} = req.body;
     const user = req.RequestName._id;
 
     if (!req.files || req.files.length === 0) {
@@ -21,7 +21,7 @@ const CreateProducts = async (req, res) => {
       });
     }
 
-    // ✅ Upload all images to cloudinary
+    // Upload all images to cloudinary
     const uploads = req.files.map((file) =>
       cloudinary.uploader.upload(file.path, {
         folder: "products",
@@ -30,7 +30,7 @@ const CreateProducts = async (req, res) => {
 
     const results = await Promise.all(uploads);
 
-    // ✅ Remove local files after upload
+    // 
     req.files.forEach((file) => fs.unlinkSync(file.path));
 
     const images = results.map((img) => ({
@@ -46,6 +46,7 @@ const CreateProducts = async (req, res) => {
       catogary,
       stock,
       user,
+      discount,
       rating: 2,
       image: images,
     });

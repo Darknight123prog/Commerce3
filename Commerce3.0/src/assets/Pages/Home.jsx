@@ -16,7 +16,6 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   const [url, setUrl] = useState([]);
-  const title='Suggested Product'
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const[searchedLoaded,setSearchedLoaded]=useState(true);
@@ -191,7 +190,8 @@ function Home() {
     lg:grid-cols-1
     xl:grid-cols-5
     gap-3 sm:gap-4 md:gap-5
-    bg-amber-50
+    bg-white
+    shadow-2xs
     p-2 sm:p-4
     overflow-x-hidden
           

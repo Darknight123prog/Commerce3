@@ -1,18 +1,38 @@
 import CountUp from "react-countup";
 import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
+import LiquidEther from "@/components/LiquidEther";
+
 
 function About() {
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden flex flex-col items-center">
-      
+      <div className="absolute inset-0 z-0 pointer-events-none">
+             <LiquidEther
+               colors={['#5227FF', '#FF9FFC', '#B19EEF']}
+               mouseForce={20}
+               cursorSize={100}
+               isViscous={false}
+               viscous={30}
+               iterationsViscous={32}
+               iterationsPoisson={32}
+               resolution={0.5}
+               isBounce={false}
+               autoDemo
+               autoSpeed={0.5}
+               autoIntensity={2.2}
+               takeoverDuration={0.25}
+               autoResumeDelay={3000}
+               autoRampDuration={0.6}
+             />
+           </div>
       {/* Glowing light spots (scaled per screen) */}
-      <div className="absolute top-1/4 left-1/4 w-52 h-52 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-[#4f46e5]/30 rounded-full blur-3xl animate-pulse"></div>
+      {/* <div className="absolute top-1/4 left-1/4 w-52 h-52 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-[#4f46e5]/30 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute top-1/3 right-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 bg-[#8b5cf6]/25 rounded-full blur-2xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 left-1/3 w-40 h-40 sm:w-56 sm:h-56 lg:w-72 lg:h-72 bg-[#ec4899]/20 rounded-full blur-2xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 left-1/3 w-40 h-40 sm:w-56 sm:h-56 lg:w-72 lg:h-72 bg-[#ec4899]/20 rounded-full blur-2xl animate-pulse"></div> */}
 
       {/* Header Section */}
-      <div className="w-full backdrop-blur-2xl bg-white rounded-b-[3rem] sm:rounded-b-[6rem] lg:rounded-b-[10rem] 
+      <div className="w-full  backdrop-blur-2xl bg-white rounded-b-[3rem] sm:rounded-b-[6rem] lg:rounded-b-[10rem] 
                       flex flex-col items-center py-4 sm:py-6 lg:py-10">
         <h2 className="text-xs sm:text-sm">About Us</h2>
 

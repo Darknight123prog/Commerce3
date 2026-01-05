@@ -19,6 +19,7 @@ function UpdateSingleProduct() {
       const [stock,setStock]=useState(null);
         const [catogary,setCatogary]=useState('');
         const[id,setId]=useState(null);
+        const [discount,setDiscount]=useState(0);
   const navigate=useNavigate();
   
   const [description,setDescription]=useState('');
@@ -80,7 +81,8 @@ function UpdateSingleProduct() {
           description,
           stock,
           price,
-          catogary
+          catogary,
+          discount
         }
         ,{withCredentials:true}
       )
@@ -169,6 +171,14 @@ function UpdateSingleProduct() {
           onChange={(e) => setStock(e.target.value)}
           className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
         />
+        <input
+          type="number"
+          name="discount"
+          placeholder="discount"
+          value={discount}
+          onChange={(e) => setDiscount(e.target.value)}
+          className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
 
         <textarea
           name="description"
@@ -207,7 +217,15 @@ function UpdateSingleProduct() {
           />
         )}
         <p className="mt-4 font-medium">{name}</p>
-        <p className="text-green-600 font-semibold">₹ {price}</p>
+        {discount==0?( <p className="text-black font-semibold">₹ {price}</p>):(
+          <div>
+           <p className="text-stone-700 line-through font-semibold">₹ {product.price}</p>
+             <p className="text-amber-500  font-semibold">{discount}% off</p>
+               <p className="text-black  font-semibold">₹ {price -price*0.01*discount}</p>
+
+          </div>
+        )}
+       
       </div>
     </div>
   </div>

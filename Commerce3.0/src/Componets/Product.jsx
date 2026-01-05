@@ -36,10 +36,10 @@ function Product({ product,isUpdate }) {
   };
 
   return (
-    <div className="w-full min-w-0 rounded-xl bg-white p-3 shadow hover:shadow-lg transition flex flex-col">
+    <div className="w-full min-w-0 rounded-xl bg-white p-3 shadow-accent-foreground hover:shadow-lg transition flex flex-col">
       <Link to={`/ProductDetails/${product._id}`} className="w-full flex flex-col">
         {/* Product Image */}
-        <div className="w-full h-48 sm:h-44 md:h-40 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center">
+        <div className="w-full h-48 sm:h-44 md:h-40 bg-white   rounded-xl flex items-center justify-center">
           <img
          
             src={product.image[0].public_url}
@@ -55,9 +55,26 @@ function Product({ product,isUpdate }) {
         </h5>
 
         {/* Product Price */}
-        <p className="text-base sm:text-sm font-bold text-emerald-600 mt-1">
+        {!product.discount || product.discount==0?(<p className="text-base sm:text-sm font-bold text-emerald-600 mt-1">
           ₹{product.price.toLocaleString("en-IN")}
-        </p>
+        </p>):(
+          <div>
+           <p className="text-stone-700 line-through font-semibold">₹ {product.price.toLocaleString("en-IN")}</p>
+             <p className="text-amber-500  font-semibold">{product.discount}% off</p>
+               <p className="text-black  font-semibold">₹ {(product.price -product.price*0.01*product.discount).toLocaleString("en-IN")}</p>
+
+          </div>
+        )}
+        <div>
+      {product.discount && product.discount<20 &&<div className='h-7 text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-17 rounded-md text-green-950 font-bold bg-green-400'>
+          Hot Deal
+        </div>} 
+       {product.discount && product.discount>20 &&<div className='h-7 text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-20 rounded-md text-red-950 font-bold bg-red-500'>
+          Super Hot Deal
+        </div>} 
+        </div>
+       
+        
       </Link>
 
       {!update?(
@@ -90,6 +107,7 @@ function Product({ product,isUpdate }) {
 
         </div>
       </div>)}
+      
     </div>
   );
 }
