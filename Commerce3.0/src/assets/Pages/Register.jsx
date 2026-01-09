@@ -25,7 +25,7 @@ const handleSubmit=(e)=>{
   e.preventDefault();
   const signup=async()=>{
     try{
-   const Muser= await axios.post(`${backendUrl}/api/v1/register`,form);
+   const Muser= await axios.post(`${backendUrl}/api/v1/register`,form,{withCredentials:true});
   
    setUser(Muser.data.details);
    navigate('/');

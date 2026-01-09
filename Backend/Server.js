@@ -27,7 +27,7 @@ Db_Connect()
 
 
 
-app.use("/api/payment", paymentRoutes);
+
 //allowing only limited number of users to access the backend
 app.use(cors({
   origin:process.env.frontend_url,
@@ -46,7 +46,7 @@ app.use(
 );
 
 
-
+app.use("/api/payment", paymentRoutes);
 app.use(passport.initialize());
 app.use(passport.session());
 

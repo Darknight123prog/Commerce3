@@ -22,7 +22,7 @@ const {setUser,setLoading}=useAuth()
   e.preventDefault();
  
   try{
-const logedIn=await axios.post(`${backendUrl}/api/v1/signin`,form);
+const logedIn=await axios.post(`${backendUrl}/api/v1/signin`,form,{withCredentials:true});
 setUser(logedIn.data.details)
 setLoading(false);
 navigate('/');
