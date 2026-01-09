@@ -24,15 +24,16 @@ function Home() {
    const[GadgetsArray,setGadgetsArray]=useState([]);
   const {user}=useAuth();
  
-
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     const fetchData = async () => {
+     
       try {
-        const res = await axios.get("http://localhost:8568/api/v1/getBannerUrl");
+        const res = await axios.get(`${backendUrl}/api/v1/getBannerUrl`);
         setUrl(res.data.url);
-        const trend=await axios.get(`http://localhost:8568/api/v1/products?catogary=menSherwani`)
+        const trend=await axios.get(`${backendUrl}/api/v1/products?catogary=menSherwani`)
         setTreandyWearArray(trend.data.details);
-         const gadget=await axios.get(`http://localhost:8568/api/v1/products?catogary=electronics`)
+         const gadget=await axios.get(`${backendUrl}/api/v1/products?catogary=electronics`)
         setGadgetsArray(gadget.data.details);
        
       } catch (error) {
@@ -44,13 +45,13 @@ function Home() {
 
     const fetchProduct = async () => {
       try {
-        const product_data = await axios.get("http://localhost:8568/api/v1/products");
+        const product_data = await axios.get(`${backendUrl}/api/v1/products`);
         setProduct(product_data.data.details);
         if(user){
-          const recentSearch=await axios.get('http://localhost:8568/api/v1/add/keywords/searched',{withCredentials:true});
+          const recentSearch=await axios.get(`${backendUrl}/api/v1/add/keywords/searched`,{withCredentials:true});
           setSearchedArray(recentSearch.data.details)
           setSearchedLoaded(false);
-         console.log("here is searched",recentSearch.data.details);
+       
 
         }
         else{
@@ -77,17 +78,10 @@ function Home() {
     <div className='overflow-x-hidden'>
       {/* Hero Section */}
       <div className="flex flex-col sm:flex-row flex-wrap items-start gap-2 px-3 py-4 bg-black">
-        <span className="
-          text-2xl
-          sm:text-3xl
-          md:text-4xl
-          lg:text-5xl
-          xl:text-5xl
-          font-medium
-          text-white
-        ">
-          Commerce3.0
-        </span>
+        <span className="text-5xl tracking-[0.08em] text-white uppercase font-['Bodoni_Moda',serif]">
+  Achora
+</span>
+
 
         <RotatingText
           texts={["Click,", " Cart,", " Celebrate!"]}

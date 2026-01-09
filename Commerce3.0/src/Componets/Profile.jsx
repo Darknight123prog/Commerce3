@@ -3,11 +3,12 @@ import { Card, CardContent, Avatar, Typography, Button } from "@mui/material";
 import axios from 'axios';
 import { showError, showSuccess } from '@/Utils/Toast';
 function Profile({profile }) {
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
   
 
   const handleDelete=async()=>{
     try{
-    await axios.delete(`http://localhost:8568/api/v1/admin/accesss_to_all_users_admins/${profile._id}`,{withCredentials:true})
+    await axios.delete(`${backendUrl}/api/v1/admin/accesss_to_all_users_admins/${profile._id}`,{withCredentials:true})
     showSuccess('Deleted User Data');
     }
     catch(err){

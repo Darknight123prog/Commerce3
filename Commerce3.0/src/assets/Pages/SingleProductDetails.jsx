@@ -17,6 +17,8 @@ import SuggestedProducts from "@/Componets/SuggestedProducts";
 
 function SingleProductDetails() {
   const { id } = useParams();
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
 
 const [url, setUrl] = useState([]);
   const [product, setProduct] = useState(null);
@@ -35,11 +37,11 @@ return
   }
   try{
   e.preventDefault();
- const prod= await axios.post(`http://localhost:8568/api/v1/add/Reviews?Product_id=${id}`,{
+ const prod= await axios.post(`${backendUrl}/api/v1/add/Reviews?Product_id=${id}`,{
     review,
     rating
   },{withCredentials:true});
-  console.log(prod.data);
+  
   setProduct(prod.data.product_details);
  
   showSuccess('Review Added Successfully');
@@ -53,8 +55,14 @@ return
     setRating(newRating); 
   };
   const navigate=useNavigate();
+  const [indexed,setIndex]=useState(null)
+  const[size,setSize]=useState(null);
   const {user}=useAuth();
+const handleSize=(index,label)=>{
+setIndex(index);
+setSize(label);
 
+}
 
   const handleBuy=()=>{
       if(!user){
@@ -72,7 +80,9 @@ return
           name:product.name,
           price:product.price,
           quanitity:product.quanitity||1,
-          discount:discount
+          discount:discount,
+          isSize:product.isSize ||false,
+          size:size || ''
         }
         sessionStorage.setItem('product_id',JSON.stringify(prod));
         navigate('/cart/buyNow');
@@ -83,22 +93,22 @@ return
     const fetchProduct = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8568/api/v1/products/${id}`
+          `${backendUrl}/api/v1/products/${id}`
         );
         if(user){
-          await axios.post('http://localhost:8568/api/v1/add/keywords/searched',{
+          await axios.post(`${backendUrl}/api/v1/add/keywords/searched`,{
             keyword:res.data.Details.catogary
           },{withCredentials:true});
         }
-        const dataurl = await axios.get("http://localhost:8568/api/v1/getBannerUrl");
+        const dataurl = await axios.get(`${backendUrl}/api/v1/getBannerUrl`);
               setUrl(dataurl.data.url);
         setProduct(res.data.Details);
 
-        const arr=await axios.get(`http://localhost:8568/api/v1/products?catogary=${res.data.Details.catogary}`,{
+        const arr=await axios.get(`${backendUrl}/api/v1/products?catogary=${res.data.Details.catogary}`,{
           withCredentials:true
         })
         setProdArray(arr.data.details)
-        console.log(arr.data.details)
+   
        
         if(user){
        const check= res.data.Details.reviews.some((rev)=>rev.user===user._id);
@@ -116,7 +126,7 @@ return
 
     fetchProduct();
   }, [id,review]);
-  console.log(product)
+ 
 
   if (loading) {
     return (
@@ -126,7 +136,7 @@ return
     );
   }
   const handleDelte=async()=>{
-   const dt= await axios.delete(`http://localhost:8568/api/v1/deleteReview?id=${id}`,{withCredentials:true});
+   const dt= await axios.delete(`${backendUrl}/api/v1/deleteReview?id=${id}`,{withCredentials:true});
    showSuccess('review is deleted successfully');
    setProduct(dt.data.updatedreviws);
   }
@@ -172,6 +182,7 @@ return
   {/* Add to Cart Button */}
   <Cart
     Product={id}
+    size={size}
     className="w-full sm:w-auto px-4 py-3"
   />
 
@@ -179,8 +190,8 @@ return
   <button
     onClick={handleBuy}
     className="w-full sm:w-auto px-4 py-3
-               bg-gradient-to-r from-black to-gray-800
-               text-white font-semibold rounded-lg shadow-lg
+               hover:shadow-2xl hover:shadow-accent-foreground border-2 border-black bg-black text-amber-50 hover:text-amber-300 hover:scale-3d from-black to-gray-800
+               font-semibold rounded-lg shadow-lg
                hover:from-gray-800 hover:to-black
                transition-all duration-300"
   >
@@ -201,6 +212,14 @@ return
              
               {product.description}
             </p>
+            {product.isSize && <div>
+              <p>Sizes Available</p>
+              <div className="flex  items-center w-full h-22 gap-3">
+                {product.sizes.map((label,index)=>(<button onClick={()=>handleSize(index,label)} className={`border  font-bold h-12 w-12 hover:bg-black hover:text-amber-100 ${indexed===index?(`bg-black text-amber-100`):('bg-white text-black')} rounded-2xl border-black`} type="button">
+                  {label}
+                </button>))}
+              </div>
+              </div>}
               {product.discount?(
                 <div>
                    <p className="text-[1.3rem]  font-semibold text-amber-500">{product.discount}% off</p>
@@ -230,7 +249,7 @@ return
       {product.discount && product.discount<20 &&<div className='h-7 text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-17 rounded-md text-green-950 font-bold bg-green-400'>
           Hot Deal
         </div>} 
-       {product.discount && product.discount>20 &&<div className='h-7 text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-20 rounded-md text-red-950 font-bold bg-red-500'>
+       {product.discount && product.discount>20 &&<div className='h-10 shadow-card-foreground text-[0.5rem] flex flex-col shadow-2xl p-1  items-center-safe justify-center-safe mt-6 w-20 rounded-md text-red-950 font-bold bg-red-500'>
           Super Hot Deal
         </div>} 
         </div>

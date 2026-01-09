@@ -47,9 +47,7 @@ function ProceedToCheckOut() {
       sessionStorage.setItem('address', JSON.stringify(addr));
       navigate('/cart/proceedToCheckOut/OrderSummary')
     }
-    // console.log( sessionStorage.getItem('address'))
-    // console.log( sessionStorage.getItem('price'))
-    
+  
 
 
   }

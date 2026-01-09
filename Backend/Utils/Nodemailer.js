@@ -18,7 +18,6 @@ const mailOptions={
 };
 
 await transpotor.sendMail(mailOptions);
-console.log("mail is sent successfully");
   }catch(err){
     console.log("Something went wrong while sending the mail",err);
   }

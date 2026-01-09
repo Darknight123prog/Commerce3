@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { auth } = require("../Utils/Authetication");
 
 const router = express.Router();
+  const FRONTEND_URL=process.env.FRONTEND_URL
 
 router.get(
   "/auth/google",
@@ -14,7 +15,6 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
-    console.log(req.user);
     const token = jwt.sign(
       { email: req.user.email },
       process.env.JWT_Secrete,
@@ -27,7 +27,7 @@ router.get(
       sameSite: "lax"
     });
 
-    res.redirect("http://localhost:5173");
+    res.redirect(`${FRONTEND_URL}`);
   }
 );
 
@@ -43,7 +43,7 @@ router.get(
   "/auth/github/callback",
   passport.authenticate("github", {
     session: false,
-    failureRedirect: "http://localhost:5173",
+    failureRedirect: `${FRONTEND_URL}`,
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -58,14 +58,13 @@ router.get(
 });
 
     res.redirect(
-      `http://localhost:5173`
+      `${FRONTEND_URL}`
     );
   }
 );
 
 
 router.get("/me", auth, (req, res) => {
-  // console.log('after auth data user',req.RequestName);
   res.json({ user: req.RequestName });
 });
 

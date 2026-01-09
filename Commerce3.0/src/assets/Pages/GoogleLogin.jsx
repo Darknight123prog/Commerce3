@@ -1,9 +1,11 @@
 import { FaGoogle } from "react-icons/fa";
 
 const GoogleLogin = () => {
+    const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
   const loginWithGoogle = () => {
     window.open(
-      "http://localhost:8568/api/v1/auth/google",
+      `${backendUrl}/api/v1/auth/google`,
       "_self"
     );
   };

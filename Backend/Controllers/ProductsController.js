@@ -11,7 +11,7 @@ const fs = require("fs");
 //creating the products controller
 const CreateProducts = async (req, res) => {
   try {
-    const { name, description, price, catogary, stock ,discount} = req.body;
+    const { name, description, price,isSize,sizes, catogary, stock ,discount} = req.body;
     const user = req.RequestName._id;
 
     if (!req.files || req.files.length === 0) {
@@ -46,6 +46,8 @@ const CreateProducts = async (req, res) => {
       catogary,
       stock,
       user,
+      isSize:isSize || false,
+      sizes:sizes ||'',
       discount,
       rating: 2,
       image: images,
@@ -473,8 +475,7 @@ const DeleteOwnReview=async(req,res)=>{
   else{
   //reviews array is fetched
   const reviews=product.reviews;
-//   console.log(reviews)
-// console.log(user._id);
+
 
   const finder=reviews.findIndex((rev)=>rev.user.toString()===user._id.toString())
   if(finder===-1){

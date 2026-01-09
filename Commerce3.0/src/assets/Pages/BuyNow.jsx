@@ -44,7 +44,10 @@ function BuyNow() {
       other_price:promisePrice,
       quantity,
       totalPrice,
-      discount_price:DiscountedPrice
+      discount_price:DiscountedPrice,
+       isSize:product.isSize ||false,
+       size:product.size || ''
+      
     };
 
     sessionStorage.setItem("price", JSON.stringify(priceData));
@@ -65,6 +68,7 @@ function BuyNow() {
                 <th className="p-3 border">Discount</th>
               <th className="p-3 border">Orginial Price</th>
               <th className="p-3 border">Quantity</th>
+              <th className="p-3 border">Size (if requied)</th>
             </tr>
           </thead>
           <tbody>
@@ -87,6 +91,7 @@ function BuyNow() {
                   onChange={handleQuantityChange}
                 />
               </td>
+               <td className="p-3 border">{product.size}</td>
             </tr>
           </tbody>
         </table>

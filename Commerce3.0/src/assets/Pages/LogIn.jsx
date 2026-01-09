@@ -4,8 +4,11 @@ import { Link ,useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../../Context/AuthContext'
 import GitHub from './GitHub'
+import LiquidEther from '@/components/LiquidEther'
 
 function LogIn() {
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
   const navigate=useNavigate();
 const {setUser,setLoading}=useAuth()
   const [form,setForm]=useState({
@@ -17,9 +20,9 @@ const {setUser,setLoading}=useAuth()
  }
  const handleSubmit=async(e)=>{
   e.preventDefault();
-  console.log("form datta",form);
+ 
   try{
-const logedIn=await axios.post('http://localhost:8568/api/v1/signin',form);
+const logedIn=await axios.post(`${backendUrl}/api/v1/signin`,form);
 setUser(logedIn.data.details)
 setLoading(false);
 navigate('/');
@@ -30,16 +33,35 @@ navigate('/');
 
  }
   return (
-    <div className="min-h-screen flex items-center  justify-center bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/f_auto/log_c1i9j1')] bg-cover bg-center px-4 sm:px-6">
+    <div className="min-h-screen flex items-center  justify-center bg-black px-4 sm:px-6">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+                         <LiquidEther
+                           colors={['#5227F', '#FF9FFC', '#B19EEF']}
+                           mouseForce={20}
+                           cursorSize={100}
+                           isViscous={false}
+                           viscous={30}
+                           iterationsViscous={32}
+                           iterationsPoisson={32}
+                           resolution={0.5}
+                           isBounce={false}
+                           autoDemo
+                           autoSpeed={0.5}
+                           autoIntensity={2.2}
+                           takeoverDuration={0.25}
+                           autoResumeDelay={3000}
+                           autoRampDuration={0.6}
+                         />
+                       </div>
       
-      <div className="w-full max-w-sm sm:max-w-md bg-[white]/20  backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8">
+      <div className="w-full max-w-sm sm:max-w-md bg-[white] backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8">
         
         {/* Header */}
         <div className="flex flex-col items-center mb-6">
           <img
           loading="lazy"  
-            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full  border-b-cyan-300 shadow-2xl border-2  mb-3"
-            src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
+            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full shadow-emerald-500 shadow-card-foreground  border-b-cyan-300 shadow-2xl border-2  mb-3"
+            src="https://res.cloudinary.com/djgboajkm/image/upload/q_auto,f_auto/v1767896712/Achora_vgxybh.png"
             alt="Logo"
           />
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">

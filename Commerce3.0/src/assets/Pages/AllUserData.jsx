@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { HashLoader } from 'react-spinners';
 
 function AllUserData() {
+    const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
+
   const [allUser,setAllUser]=useState([]);
   const [loading,setLoading]=useState(true);
   const navigate=useNavigate();
@@ -26,8 +29,7 @@ function AllUserData() {
   
     const FetchUsers= async()=>{
       try{
-      const users=await axios.get('http://localhost:8568/api/v1/admin/accesss_to_all_users_admins',{withCredentials:true});
-       console.log(users.data.details);
+      const users=await axios.get(`${backendUrl}/api/v1/admin/accesss_to_all_users_admins`,{withCredentials:true});
       setAllUser(users.data.details);
      
      

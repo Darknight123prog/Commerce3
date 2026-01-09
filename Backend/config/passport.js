@@ -4,9 +4,11 @@ const User = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
 const GitHubStrategy = require("passport-github2").Strategy;
 
+  const FRONTEND_URL=process.env.FRONTEND_URL
 
 
 passport.use(
+
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -14,7 +16,7 @@ passport.use(
       callbackURL: "/api/v1/auth/google/callback"
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log("h1 testing");
+     
         
       try {
         let user = await User.findOne({ email: profile.emails[0].value });
@@ -45,12 +47,11 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:5173/auth/github/callback",
+      callbackURL: `${FRONTEND_URL}/auth/github/callback`,
       scope: ["user:email"]
     },
     async (accessToken, refreshToken, profile, done) => {
-       console.log("ACCESS TOKEN:", accessToken);
-        console.log("PROFILE:", profile);
+
       if (!accessToken) {
         return done(new Error("Access token not generated"));
       }

@@ -13,7 +13,7 @@ function Product({ product,isUpdate }) {
   const update=isUpdate||false;
   const handleUpdate=(_id)=>{
   sessionStorage.setItem('update_id',JSON.stringify(_id));
-  console.log(JSON.parse(sessionStorage.getItem('update_id')))
+
   showInfo('redirecting to Update Prouct Form');
   navigate('/auth/admin/MainAdmin/updateProduct/UpdateForm')
 }

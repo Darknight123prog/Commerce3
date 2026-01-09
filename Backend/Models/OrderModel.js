@@ -13,10 +13,6 @@ const OrderSchema=new mongoose.Schema({
       type:String,
       required:true,
     },
-    pinCode:{
-      type:Number,
-      required:true,
-    },
   },
   OrderInfo:[{
     name:{
@@ -46,7 +42,6 @@ const OrderSchema=new mongoose.Schema({
   },
   OrderStatus:{
     type:String,
-    required:true,
     default:"processing"
   },
   paymentInfo:{
@@ -54,7 +49,7 @@ const OrderSchema=new mongoose.Schema({
       type:String,
     }
   },
-  StatusInfo:{
+  status:{
     type:String,
     default:"pending"
   },

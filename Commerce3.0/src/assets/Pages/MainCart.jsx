@@ -9,27 +9,35 @@ import Cart from '@/Componets/Cart';
 import { useAuth } from '@/Context/AuthContext';
 
 function MainCart() {
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [price,setprice]=useState(0);
   const[orgPrice,setOrgPrice]=useState(0);
   const [gst,setGst]=useState(0);
   const {cart,setCart}=useAuth();
+  const [User,setUser]=useState(null);
+  const[OrderInfo,setOrderInfo]=useState([{
+    name:"",
+    price:null,
+    quantity:null,
+    Product_id:null,
+    image:""
+  }])
+  
   
   const handleClick=async(val)=>{
     try{
    if(product &&cart){
-    console.log('cart ',cart);
-    console.log('product ',product);
     const nCart = await axios.delete(
-            "http://localhost:8568/api/v1/RemoveFromCart",
+            `${backendUrl}/api/v1/RemoveFromCart`,
             {
               data: { Product_id: val },
               withCredentials: true,
               
             })
     setProduct(product.filter((p)=>p._id!==val));
-console.log('inside the Main cart',nCart.data.details)
      setCart(nCart.data.details);
      showSuccess(`Item removed successfully`);
    }
@@ -37,12 +45,12 @@ console.log('inside the Main cart',nCart.data.details)
     showError(`cannot remove the item : ${err.message}`)
   }
   }
-  //  console.log("here is the cart",cart);
+
 
   // useEffect(()=>{
   //   setCart(pr)
   // },[product])
-//  console.log(cart);
+
   const[totalPrice,setTotalPrice]=useState(0);
    const [save,setSave]=useState({
     price:0,
@@ -54,18 +62,30 @@ console.log('inside the Main cart',nCart.data.details)
   const navigate=useNavigate()
 
   const handleCheckOut=()=>{
+    let productAdded=product.map(prod=>({
+      name:prod.name,
+      price:prod.price,
+      quantity:prod.quantity||1,
+      Product_id:prod._id,
+      image:prod.image[0].public_url,
+  }))
+  setOrderInfo(productAdded);
+
+  sessionStorage.setItem('productArray',JSON.stringify(productAdded));
+    
 navigate('/cart/ProceedToCheckOut');
   }
   useEffect(() => {
     const getCartProduct = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8568/api/v1/add/GetCartList',
+          `${backendUrl}/api/v1/add/GetCartList`,
           { withCredentials: true }
         );
+       const Daata=await axios.get(`${backendUrl}/api/v1/profileInfo`,{withCredentials:true});
+       setUser(Daata.data.user_details);
         setProduct(res.data.details || []);
         
-        // console.log("here is the product ",res.data.details);
       } catch (err) {
         showError(`Error occurred: ${err.message}`);
       } finally {
@@ -78,7 +98,6 @@ navigate('/cart/ProceedToCheckOut');
 
  useEffect(()=>{
   let slow=0;
-  
 product.forEach((e)=>slow+=(e.price)*(e.quantity||1))
 setOrgPrice(slow);
 
@@ -101,9 +120,7 @@ setSave({
   discount_price:discount_price,
   other_price:price>500?(12):(35)
 })
-sessionStorage.setItem('price',JSON.stringify(save));
-
-console.log(JSON.parse(sessionStorage.getItem('price')));
+sessionStorage.setItem('price',JSON.stringify(save))
 
 
  },[product,setGst,gst,price,totalPrice])
@@ -137,6 +154,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
                   <th className="p-3 border">Original Price</th>
                   <th className="p-3 border">Discount Price</th>
                   <th className="p-3 border">Quantity</th>
+                  <th className="p-3 border">Size (if required)</th>
                   <th className="p-3 border">Remove</th>
                 </tr>
               </thead>
@@ -167,6 +185,8 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
             );
           }}
         /></td>
+                    <td className="p-3 border">{User.cart?.find((obj)=>obj.product_id==e._id)?.size}</td>
+
         {/* <h1>{e._id}</h1> */}
          <td className="p-3 border"><button type='button' onClick={()=>handleClick(e._id)}  >Remove</button></td>
                   </tr>
@@ -202,7 +222,7 @@ console.log(JSON.parse(sessionStorage.getItem('price')));
       <div className="flex justify-between items-center">
         <span>Discount Price:</span>
         <span className="font-semibold flex items-center gap-1">
-          <FaIndianRupeeSign /> {(price-orgPrice).toLocaleString("en-IN")}
+          <FaIndianRupeeSign /> {(price.toFixed(2)-orgPrice.toFixed(2)).toLocaleString("en-IN")}
         </span>
       </div>
 

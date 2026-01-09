@@ -1,9 +1,15 @@
 import Tracker from '@/Componets/Tracker'
+import { useAuth } from '@/Context/AuthContext';
 import { showError, showSuccess } from '@/Utils/Toast';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function OrderSummary() {
+  const {user}=useAuth();
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
+  
   const navigate=useNavigate();
   const handleBack=()=>{
       try{
@@ -13,21 +19,55 @@ function OrderSummary() {
         showError(`Cannot go back : ${err}`);
       }
     }
+    const [OrderInfo,setOrderInfo]=useState([]);
   const [price, setPrice] = useState({
     price: 0,
     gst: 0,
     other_price: 0,
     totalPrice: 0,
-    discount_price:0
+    discount_price:0,
+    isSize:false,
+    size:''
     
   })
   const [address, setAddress] = useState({})
 
+  //for the paymet 
+  const [shiping_info,setShiping_info]=useState({
+    address:'',
+    city:"",
+    state:""
+  })
+  const handlePayment=async()=>{
+    try{
+    await axios.post(`${backendUrl}/api/payment/pay`,{
+      amount:price.totalPrice,
+      shiping_info:shiping_info,
+      OrderInfo:OrderInfo,
+      user:user.name,
+      itemPrice:price.price,
+      shippingPrice:price.other_price,
+      totalPrice:price.totalPrice
+
+    })
+  }catch(err){
+    console.log(err);
+  }
+  }
+
   useEffect(() => {
     const storedPrice = JSON.parse(sessionStorage.getItem('price')) || price
     const storedAddress = JSON.parse(sessionStorage.getItem('address')) || address
+    const orderArray=JSON.parse(sessionStorage.getItem('productArray'))||null
     setPrice(storedPrice)
-    console.log(JSON.parse(sessionStorage.getItem('price')))
+    setShiping_info({
+      address:storedAddress.Landmark,
+      city:storedAddress.city,
+      state:storedAddress.state,
+    })
+    setOrderInfo(orderArray);
+
+
     setAddress(storedAddress)
   }, [])
 
@@ -71,7 +111,7 @@ function OrderSummary() {
           <tbody>
             <tr className="text-center hover:bg-gray-50">
               <td className="px-2 py-1">₹{price.price.toLocaleString("en-IN")}</td>
-              <td className="px-2 py-1">₹{price.discount_price}</td>
+              <td className="px-2 py-1">₹{price.discount_price.toLocaleString("en-IN")}</td>
               <td className="px-2 py-1">₹{price.gst.toLocaleString("en-IN")}</td>
               <td className="px-2 py-1">₹{price.other_price.toLocaleString("en-IN")}</td>
               <td className="px-2 py-1 font-semibold">₹{price.totalPrice.toLocaleString("en-IN")}</td>
@@ -112,7 +152,7 @@ function OrderSummary() {
 
       {/* Sticky Pay Button */}
       <div className="fixed bottom-0 left-0 w-full border-t p-2 sm:p-4 backdrop-blur-md bg-white/20">
-        <button
+        <button onClick={handlePayment}
           type="button"
           className="w-full max-w-3xl mx-auto block bg-amber-500 text-black py-2 sm:py-3 rounded-xl font-semibold hover:bg-blue-500 hover:shadow-md   transition text-xs sm:text-sm md:text-base lg:text-lg"
         >

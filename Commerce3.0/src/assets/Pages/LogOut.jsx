@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 
 function LogOut() {
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
   
   const navigate=useNavigate();
   
@@ -15,7 +17,7 @@ function LogOut() {
    
     const Logggout=async()=>{
       try{
-     await axios.post('http://localhost:8568/api/v1/signout',{},{withCredentials:true});
+     await axios.post(`${backendUrl}/api/v1/signout`,{},{withCredentials:true});
      setUser(null);
     
      navigate('/');

@@ -42,7 +42,7 @@ const createUser=async(req,res)=>{
   const html=Commerce3WelcomeEmail(name);
 
 
-  options={
+  const options={
     to:email ,
     subject:"Welcome to Commerce3.0 website",
     html
@@ -275,9 +275,8 @@ const AddToCart=async(req,res)=>{
       message:"User not found"
     })
   }
-  const Product_id=req.body.Product_id;
-  console.log(user.cart);
-  console.log(String(Product_id))
+  const {Product_id,size}=req.body;
+
  if(user.cart.find(item => String(item.product_id)===String(Product_id))){
   return res.status(400).json({
     success:false,
@@ -285,7 +284,7 @@ const AddToCart=async(req,res)=>{
   })
  }
  else{
-  user.cart.push({product_id:Product_id,quantity:1});
+  user.cart.push({product_id:Product_id,quantity:1,size:size});
   await user.save();
  }
   
@@ -321,9 +320,9 @@ const GetCartProductList=async(req,res)=>{
   }
   else{
     const data=user.cart;
-    console.log(data);
+
     const ids=data.map((itm)=>itm.product_id);
-    console.log("ids are :",ids)
+
    let product= await ProductsModel.find({_id:{$in:ids}});
     return res.status(200).json({
       success:true,
@@ -452,6 +451,7 @@ catch(err){
 }
 
 }
+
 
 
 

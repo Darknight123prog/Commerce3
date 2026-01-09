@@ -10,6 +10,7 @@ const AddBannerRouter = require("./Routes/AddBannerRoutes");
 const cors=require('cors');
 
 app.use(cookieParser());
+const paymentRoutes=require('./Routes/paymentRoutes')
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 const passport = require("passport");
@@ -26,6 +27,7 @@ Db_Connect()
 
 
 
+app.use("/api/payment", paymentRoutes);
 //allowing only limited number of users to access the backend
 app.use(cors({
   origin:process.env.frontend_url,

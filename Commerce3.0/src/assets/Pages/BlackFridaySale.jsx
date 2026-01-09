@@ -14,6 +14,7 @@ function BlackFridaySale() {
   const[men,setMen]=useState([]);
   const[loading,setLoading]=useState(true);
 
+    const backendUrl=import.meta.env.VITE_BACKEND_URL;
 
 
   useEffect(()=>{
@@ -21,13 +22,11 @@ function BlackFridaySale() {
       try{
 
       
-    const prod1=await axios.get('http://localhost:8568/api/v1/products?catogary=westernWomen',{withCredentials:true
+    const prod1=await axios.get(`${backendUrl}/api/v1/products?catogary=westernWomen`,{withCredentials:true
     })
-    const prod2=await axios.get('http://localhost:8568/api/v1/products?catogary=westernMen',{withCredentials:true});
+    const prod2=await axios.get(`${backendUrl}/api/v1/products?catogary=westernMen`,{withCredentials:true});
      setWomen(prod1.data.details);
      setMen(prod2.data.details);
-     console.log(prod1.data.details);
-      console.log(prod2.data.details);
      setLoading(false);
   }
   catch(err){

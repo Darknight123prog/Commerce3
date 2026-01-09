@@ -7,6 +7,8 @@ import Pagination from '../../Componets/Pagination';
 
 
 function ProductMainPage() {
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ navigate('/');
     setLoading(true);
     try {
       
-      const res = await axios.get("http://localhost:8568/api/v1/products", {
+      const res = await axios.get(`${backendUrl}/api/v1/products`, {
         params: {
           keyword: query || undefined,
           catogary: catogary || undefined,

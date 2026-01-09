@@ -14,11 +14,12 @@ function NavBar() {
 
   const navigate = useNavigate();
   const { user, setUser, cart } = useAuth();
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
 
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:8568/api/v1/signout",
+        `${backendUrl}/api/v1/signout`,
         {},
         { withCredentials: true }
       );
@@ -58,7 +59,7 @@ function NavBar() {
           <Link to="/">
             <img
             loading="lazy"  
-              src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
+              src="https://res.cloudinary.com/djgboajkm/image/upload/q_auto,f_auto/v1767896712/Achora_vgxybh.png"
               alt="GE Logo"
               className="w-20 sm:w-24 h-auto"
             />

@@ -12,8 +12,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { showError, showSuccess } from "@/Utils/Toast";
 import { useNavigate } from "react-router-dom";
+ 
 
 function UpdateSingleProduct() {
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
+  const[hasSize,setHasSize]=useState(false);
+  const [sizes,setSizes]=useState([]);
+  const size_option=["S", "M", "L", "XL", "XXL"];
   const [name,setName]=useState('');
     const [price,setPrice]=useState(null);
       const [stock,setStock]=useState(null);
@@ -44,7 +50,7 @@ function UpdateSingleProduct() {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8568/api/v1/admin/products/${id}`,
+          `${backendUrl}/api/v1/admin/products/${id}`,
           { withCredentials: true }
         );
 
@@ -75,14 +81,16 @@ function UpdateSingleProduct() {
     
     const updateInfo=async()=>{
 
-      const update=await axios.put(`http://localhost:8568/api/v1/admin/products/${id}`,
+      const update=await axios.put(`${backendUrl}/api/v1/admin/products/${id}`,
         {
           name,
           description,
           stock,
           price,
           catogary,
-          discount
+          discount,
+          isSize:hasSize,
+          sizes
         }
         ,{withCredentials:true}
       )
@@ -179,6 +187,39 @@ function UpdateSingleProduct() {
           onChange={(e) => setDiscount(e.target.value)}
           className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-green-400"
         />
+       
+  <label className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    checked={hasSize}
+    onChange={(e) => {
+      setHasSize(e.target.checked);
+      if (!e.target.checked) setSizes([]); // reset sizes
+    }}
+  />
+  Product has sizes
+</label>
+
+{hasSize && (
+  <div className="flex gap-2 flex-wrap">
+    {size_option.map((size) => (
+      <button
+        key={size}
+        type="button"
+        onClick={() => setSizes([...sizes,size])}
+        className={`px-4 py-2 rounded border transition
+          ${
+            sizes.includes(size)
+              ? "bg-black text-white"
+              : "bg-white text-black"
+          }`}
+      >
+        {size}
+      </button>
+    ))}
+  </div>
+)}
+
 
         <textarea
           name="description"

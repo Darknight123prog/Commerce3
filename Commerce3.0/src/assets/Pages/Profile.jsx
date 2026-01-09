@@ -6,11 +6,13 @@ import axios from "axios";
 const Profile = () => {
   const { user, loading, setUser } = useAuth();
   const navigate = useNavigate();
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
 
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:8568/api/v1/signout",
+        `${backendUrl}/api/v1/signout`,
         {},
         { withCredentials: true }
       );

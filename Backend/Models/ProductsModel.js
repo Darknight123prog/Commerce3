@@ -20,6 +20,13 @@ const ProductScheme=new mongoose.Schema({
   discount:{
     type:Number
   },
+  isSize:{
+    type:Boolean,
+    default:false
+  },
+  sizes:[{
+    type:String,
+  }],
   rating:{
     type:Number,
     default:2,

@@ -9,6 +9,7 @@ import { HashLoader } from 'react-spinners';
 import Spiner from '@/Componets/Spiner';
 function AllAdminsInfo() {
   const [allUser,setAllUser]=useState([]);
+    const backendUrl=import.meta.env.VITE_BACKEND_URL;
     const [loading,setLoading]=useState(true);
     const navigate=useNavigate();
     const {user}=useAuth();
@@ -21,8 +22,7 @@ function AllAdminsInfo() {
       
         const FetchUsers= async()=>{
           try{
-          const users=await axios.get('http://localhost:8568/api/v1/admin/AllAdmins',{withCredentials:true});
-           console.log(users.data.details);
+          const users=await axios.get(`${backendUrl}/api/v1/admin/AllAdmins`,{withCredentials:true});
           setAllUser(users.data.details);
          
          

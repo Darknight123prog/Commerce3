@@ -25,14 +25,14 @@ function Admin() {
       [e.target.name]: e.target.value,
     }));
   };
-
+  const backendUrl=import.meta.env.VITE_BACKEND_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const { data } = await axios.post(
-        'http://localhost:8568/api/v1/signin',
+        `${backendUrl}/api/v1/signin`,
         form
       );
 
@@ -79,7 +79,7 @@ function Admin() {
             <img
               loading="lazy"
               className="h-16 w-16 sm:h-20 sm:w-20 border-2 rounded-full mb-3 shadow-2xl"
-              src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
+              src="https://res.cloudinary.com/djgboajkm/image/upload/q_auto,f_auto/v1767896712/Achora_vgxybh.png"
               alt="Logo"
             />
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">

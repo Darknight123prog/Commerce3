@@ -12,10 +12,12 @@ function UpdateProductAdmin() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { search } = useLocation();
+ const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
   
   const handleDelete=async(id)=>{
     try{
-        await axios.delete(`http://localhost:8568/api/v1/admin/products/${id}`,{withCredentials:true});
+        await axios.delete(`${backendUrl}/api/v1/admin/products/${id}`,{withCredentials:true});
        const delt=  products.filter((prod)=>prod._id!==id);
        setProducts(delt);
        showSuccess('Product is delted successfully');
@@ -48,7 +50,7 @@ function UpdateProductAdmin() {
         const query = new URLSearchParams(search).get("keyword");
 
         const res = await axios.get(
-          "http://localhost:8568/api/v1/admin/allproducts",
+          `${backendUrl}/api/v1/admin/allproducts`,
           {
             params: {
               keyword: query || undefined,

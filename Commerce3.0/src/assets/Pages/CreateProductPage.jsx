@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 function CreateProductPage() {
 const {user}=useAuth();
+    const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
 const navigate=useNavigate();
   useEffect(()=>{
     if(!user || user.role!=='admin'){
@@ -21,7 +23,10 @@ const navigate=useNavigate();
     description: "",
     catogary: "",
     stock: "",
-    discount:""
+    discount:"",
+    isSize:false,
+   sizes: []
+
   });
 
 
@@ -29,13 +34,34 @@ const navigate=useNavigate();
     accept: { "image/*": [] },
     multiple: true,
     onDrop: (files) => {
-      setImages(files); // ✅ ARRAY
+      setImages(files); //
     },
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { name, type, value, checked } = e.target;
+
+  setFormData({
+    ...formData,                    
+    [name]: type === "checkbox"    
+      ? checked                    
+      : value                       
+  });
+};
+const handleSizeChange = (e) => {
+  const { value, checked } = e.target;
+  if (checked) {
+    
+    setFormData(prev => ({ ...prev, sizes: [...prev.sizes, value] }));
+  } else {
+    
+    setFormData(prev => ({
+      ...prev,
+      sizes: prev.sizes.filter(s => s !== value)
+    }));
+  }
+};
+
 
   const handleSubmit = async () => {
     try {
@@ -47,15 +73,19 @@ const navigate=useNavigate();
       const data = new FormData();
 
       images.forEach((img) => {
-        data.append("image", img); // ✅ multer.array("image")
+        data.append("image", img); // 
       });
 
       Object.entries(formData).forEach(([key, value]) => {
-        data.append(key, value);
-      });
+  if (Array.isArray(value)) {
+    value.forEach(v => data.append(key, v));
+  } else {
+    data.append(key, value);
+  }
+});
 
       await axios.post(
-  "http://localhost:8568/api/v1/admin/createProducts",
+  `${backendUrl}/api/v1/admin/createProducts`,
   data,
   {
     withCredentials: true,
@@ -64,6 +94,7 @@ const navigate=useNavigate();
     },
   }
 );
+
 
       showSuccess("Product created successfully");
 
@@ -146,7 +177,42 @@ const navigate=useNavigate();
             onChange={handleChange}
             className="input  bg-amber-50 rounded-md p-2"
           />
+          <label className="flex items-center space-x-2">
+  <input
+    type="checkbox"
+    name="isSize"
+    checked={formData.isSize}   
+    onChange={handleChange}
+    className="w-5 h-5 text-blue-600 rounded border-gray-300"
+  />
+  <span>Has Size Option</span>
+</label>
+
         </div>
+
+        {/* adding the size choosing field */}
+         {formData.isSize && (
+  <div>
+    <label>Select Available Sizes:</label>
+    <div>
+      {["S", "M", "L", "XL", "XXL"].map(size => (
+        <label key={size}>
+          <input
+            type="checkbox"
+            value={size}
+            checked={formData.sizes.includes(size)}
+            onChange={handleSizeChange}
+          />
+          {size}
+        </label>
+      ))}
+    </div>
+  </div>
+)}
+
+
+        
+       
 
         <textarea
           name="description"
