@@ -30,18 +30,27 @@ Db_Connect()
 
 //allowing only limited number of users to access the backend
 app.use(cors({
-  origin:process.env.frontend_url,
-    credentials: true,
-}))
+  origin: [process.env.frontend_url],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 app.use(express.static('public', {
   maxAge: '1y',     // cache for 1 year
   etag: false
 }));
+app.set("trust proxy", 1);
+
 app.use(
   session({
-    secret: "passport_secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+      secure: true,       // HTTPS only
+      httpOnly: true,
+      sameSite: "none",   // REQUIRED for cross-domain
+      maxAge: 24 * 60 * 60 * 1000
+    }
   })
 );
 
