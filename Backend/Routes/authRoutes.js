@@ -66,7 +66,7 @@ router.get(
 );
 
 
-router.get("/api/v1/me", auth, (req, res) => {
+router.get("/me", auth, (req, res) => {
   res.json({ user: req.RequestName });
 });
 
