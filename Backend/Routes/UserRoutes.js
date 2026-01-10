@@ -3,19 +3,19 @@ const { createUser,UserSignIn,UserLogOut ,ForgetPassword,resetPassword,AddReview
 const {auth} = require('../Utils/Authetication');
 
 const Router_User=express.Router();
-Router_User.route('/api/v1/register').post(createUser);
-Router_User.route('/api/v1/signin').post(UserSignIn);
-Router_User.route('/api/v1/signout').post(UserLogOut);
-Router_User.route('/api/v1/forgot/password').post(ForgetPassword);
+Router_User.route('/register').post(createUser);
+Router_User.route('/signin').post(UserSignIn);
+Router_User.route('/signout').post(UserLogOut);
+Router_User.route('/forgot/password').post(ForgetPassword);
 
 
-Router_User.route('/api/v1/add/Reviews').post(auth,AddReviewAndUpdate);
-Router_User.route('/api/v1/add/AddtoCart').post(auth,AddToCart)
-Router_User.route('/api/v1/add/keywords/searched').post(auth,addSearch).get(auth,getAllSearchedKeyWord);;
-Router_User.route('/api/v1/RemoveFromCart').delete(auth,RemoveFromCart);
-Router_User.route('/api/v1/add/GetCartList').get(auth,GetCartProductList);
+Router_User.route('/add/Reviews').post(auth,AddReviewAndUpdate);
+Router_User.route('/add/AddtoCart').post(auth,AddToCart)
+Router_User.route('/add/keywords/searched').post(auth,addSearch).get(auth,getAllSearchedKeyWord);;
+Router_User.route('/RemoveFromCart').delete(auth,RemoveFromCart);
+Router_User.route('/add/GetCartList').get(auth,GetCartProductList);
 
-Router_User.route('/api/v1/resetPassword/:token').post(resetPassword);
+Router_User.route('/resetPassword/:token').post(resetPassword);
 
 
 

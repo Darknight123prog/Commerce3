@@ -5,22 +5,22 @@ const upload = require('../middleware/uploads');
 
 const router=express.Router();
 //admin routes
-router.route('/api/v1/admin/allproducts').get(auth,roleBasedAccess('admin'),GetAllProducts)
+router.route('/admin/allproducts').get(auth,roleBasedAccess('admin'),GetAllProducts)
 
 
 
-router.route('/api/v1/admin/createProducts').post(auth,roleBasedAccess('admin'),upload.array("image",5),CreateProducts) 
+router.route('/admin/createProducts').post(auth,roleBasedAccess('admin'),upload.array("image",5),CreateProducts) 
 
 
 
-router.route('/api/v1/admin/products/:id').get(auth,roleBasedAccess('admin'),GetOneProduct).put(auth,roleBasedAccess('admin'),UpdatetheProducts).delete(auth,roleBasedAccess('admin'),DeleteOne);
+router.route('/admin/products/:id').get(auth,roleBasedAccess('admin'),GetOneProduct).put(auth,roleBasedAccess('admin'),UpdatetheProducts).delete(auth,roleBasedAccess('admin'),DeleteOne);
 
-router.route('/api/v1/admin/profileInfo').get(auth,roleBasedAccess('admin'),getProfileInfo);
-router.route('/api/v1/admin/updatePassword').post(auth,roleBasedAccess('admin'),UpdatePassword);
-router.route('/api/v1/admin/updateProfileInfo').post(auth,roleBasedAccess('admin'),UpdateUserProfile);
-router.route('/api/v1/admin/accesss_to_all_users_admins').get(auth,roleBasedAccess('admin'),getAllUser_Admins);
-router.route('/api/v1/admin/AllAdmins').get(auth,roleBasedAccess('admin'),getAllOnly_Admins);
-router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBasedAccess('admin'),get_single_user_and_admin).put(auth,roleBasedAccess('admin'),Change_the_role).delete(auth,roleBasedAccess('admin'),DeleteUser);
+router.route('/admin/profileInfo').get(auth,roleBasedAccess('admin'),getProfileInfo);
+router.route('/admin/updatePassword').post(auth,roleBasedAccess('admin'),UpdatePassword);
+router.route('/admin/updateProfileInfo').post(auth,roleBasedAccess('admin'),UpdateUserProfile);
+router.route('/admin/accesss_to_all_users_admins').get(auth,roleBasedAccess('admin'),getAllUser_Admins);
+router.route('/admin/AllAdmins').get(auth,roleBasedAccess('admin'),getAllOnly_Admins);
+router.route('/admin/accesss_to_all_users_admins/:id').get(auth,roleBasedAccess('admin'),get_single_user_and_admin).put(auth,roleBasedAccess('admin'),Change_the_role).delete(auth,roleBasedAccess('admin'),DeleteUser);
 
 
 
@@ -28,18 +28,18 @@ router.route('/api/v1/admin/accesss_to_all_users_admins/:id').get(auth,roleBased
 
 
 //user routes
- router.route('/api/v1/reviews').get(viewReviews).post(auth,addReview);
+ router.route('/reviews').get(viewReviews).post(auth,addReview);
  
-  router.route('/api/v1/products').get(GetAllProducts)
-   router.route('/api/v1/deleteReview').delete(auth,DeleteOwnReview)
+  router.route('/products').get(GetAllProducts)
+   router.route('/deleteReview').delete(auth,DeleteOwnReview)
 
   
 
 
-router.route('/api/v1/profileInfo').get(auth,getProfileInfo);
-router.route('/api/v1/updatePassword').post(auth,UpdatePassword);
-router.route('/api/v1/updateProfileInfo').post(auth,UpdateUserProfile);
-router.route('/api/v1/products/:id').get(GetOneProduct)
+router.route('/profileInfo').get(auth,getProfileInfo);
+router.route('/updatePassword').post(auth,UpdatePassword);
+router.route('/updateProfileInfo').post(auth,UpdateUserProfile);
+router.route('/products/:id').get(GetOneProduct)
 
 
 

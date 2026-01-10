@@ -82,7 +82,7 @@ navigate('/cart/ProceedToCheckOut');
           `${backendUrl}/api/v1/user/add/GetCartList`,
           { withCredentials: true }
         );
-       const Daata=await axios.get(`${backendUrl}/products/api/v1/profileInfo`,{withCredentials:true});
+       const Daata=await axios.get(`${backendUrl}/api/v1/products/profileInfo`,{withCredentials:true});
        setUser(Daata.data.user_details);
         setProduct(res.data.details || []);
         

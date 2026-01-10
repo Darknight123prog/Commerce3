@@ -50,7 +50,7 @@ function UpdateSingleProduct() {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(
-          `${backendUrl}/products/api/v1/admin/products/${id}`,
+          `${backendUrl}/api/v1/products/admin/products/${id}`,
           { withCredentials: true }
         );
 
@@ -81,7 +81,7 @@ function UpdateSingleProduct() {
     
     const updateInfo=async()=>{
 
-      const update=await axios.put(`${backendUrl}/products/api/v1/admin/products/${id}`,
+      const update=await axios.put(`${backendUrl}/api/v1/products/admin/products/${id}`,
         {
           name,
           description,

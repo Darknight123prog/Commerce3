@@ -52,10 +52,15 @@ app.use(passport.session());
 
 
 //routes for all the products routes
-app.use('/',router);
-app.use('/',Router_User);
+
+app.use('/api/v1/products',router);
+//need to test
+app.use('/api/v1/user',Router_User);
+//ok
 app.use('/api/v1',OrderRouter)
+//ok
 app.use('/api/v1',AddBannerRouter);
+//ok
 app.use('/api/v1', AuthRouter);
 
 

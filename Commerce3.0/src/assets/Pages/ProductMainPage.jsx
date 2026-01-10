@@ -33,7 +33,7 @@ navigate('/');
     setLoading(true);
     try {
       
-      const res = await axios.get(`${backendUrl}/products/api/v1/products`, {
+      const res = await axios.get(`${backendUrl}/api/v1/products/products`, {
         params: {
           keyword: query || undefined,
           catogary: catogary || undefined,
