@@ -22,9 +22,9 @@ function BlackFridaySale() {
       try{
 
       
-    const prod1=await axios.get(`${backendUrl}/api/v1/products?catogary=westernWomen`,{withCredentials:true
+    const prod1=await axios.get(`${backendUrl}/products/api/v1/products?catogary=westernWomen`,{withCredentials:true
     })
-    const prod2=await axios.get(`${backendUrl}/api/v1/products?catogary=westernMen`,{withCredentials:true});
+    const prod2=await axios.get(`${backendUrl}/products/api/v1/products?catogary=westernMen`,{withCredentials:true});
      setWomen(prod1.data.details);
      setMen(prod2.data.details);
      setLoading(false);

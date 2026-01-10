@@ -19,7 +19,7 @@ function NavBar() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${backendUrl}/api/v1/signout`,
+        `${backendUrl}/api/v1/user/signout`,
         {},
         { withCredentials: true }
       );

@@ -17,7 +17,7 @@ function UpdateProductAdmin() {
   
   const handleDelete=async(id)=>{
     try{
-        await axios.delete(`${backendUrl}/api/v1/admin/products/${id}`,{withCredentials:true});
+        await axios.delete(`${backendUrl}/products/api/v1/admin/products/${id}`,{withCredentials:true});
        const delt=  products.filter((prod)=>prod._id!==id);
        setProducts(delt);
        showSuccess('Product is delted successfully');
@@ -50,7 +50,7 @@ function UpdateProductAdmin() {
         const query = new URLSearchParams(search).get("keyword");
 
         const res = await axios.get(
-          `${backendUrl}/api/v1/admin/allproducts`,
+          `${backendUrl}/products/api/v1/admin/allproducts`,
           {
             params: {
               keyword: query || undefined,

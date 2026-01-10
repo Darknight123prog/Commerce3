@@ -85,7 +85,7 @@ const handleSizeChange = (e) => {
 });
 
       await axios.post(
-  `${backendUrl}/api/v1/admin/createProducts`,
+  `${backendUrl}/products/api/v1/admin/createProducts`,
   data,
   {
     withCredentials: true,

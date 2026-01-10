@@ -18,7 +18,7 @@ function Cart({ Product ,size}) {
     try {
      
       const nCart = await axios.delete(
-        `${backendUrl}/api/v1/RemoveFromCart`,
+        `${backendUrl}/api/v1/user/RemoveFromCart`,
         {
           data: { Product_id: Product },
           withCredentials: true,
@@ -38,7 +38,7 @@ function Cart({ Product ,size}) {
     try {
 
       const nCart = await axios.post(
-        `${backendUrl}/api/v1/add/AddtoCart`,
+        `${backendUrl}/api/v1/user/add/AddtoCart`,
         { Product_id: Product ,size:size||'regular'},
         { withCredentials: true }
       );

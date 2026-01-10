@@ -37,7 +37,7 @@ return
   }
   try{
   e.preventDefault();
- const prod= await axios.post(`${backendUrl}/api/v1/add/Reviews?Product_id=${id}`,{
+ const prod= await axios.post(`${backendUrl}/api/v1/user/add/Reviews?Product_id=${id}`,{
     review,
     rating
   },{withCredentials:true});
@@ -93,10 +93,10 @@ setSize(label);
     const fetchProduct = async () => {
       try {
         const res = await axios.get(
-          `${backendUrl}/api/v1/products/${id}`
+          `${backendUrl}/products/api/v1/products/${id}`
         );
         if(user){
-          await axios.post(`${backendUrl}/api/v1/add/keywords/searched`,{
+          await axios.post(`${backendUrl}/api/v1/user/add/keywords/searched`,{
             keyword:res.data.Details.catogary
           },{withCredentials:true});
         }
@@ -104,7 +104,7 @@ setSize(label);
               setUrl(dataurl.data.url);
         setProduct(res.data.Details);
 
-        const arr=await axios.get(`${backendUrl}/api/v1/products?catogary=${res.data.Details.catogary}`,{
+        const arr=await axios.get(`${backendUrl}/products/api/v1/products?catogary=${res.data.Details.catogary}`,{
           withCredentials:true
         })
         setProdArray(arr.data.details)
@@ -136,7 +136,7 @@ setSize(label);
     );
   }
   const handleDelte=async()=>{
-   const dt= await axios.delete(`${backendUrl}/api/v1/deleteReview?id=${id}`,{withCredentials:true});
+   const dt= await axios.delete(`${backendUrl}/products/api/v1/deleteReview?id=${id}`,{withCredentials:true});
    showSuccess('review is deleted successfully');
    setProduct(dt.data.updatedreviws);
   }

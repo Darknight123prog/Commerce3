@@ -32,7 +32,7 @@ function Admin() {
 
     try {
       const { data } = await axios.post(
-        `${backendUrl}/api/v1/signin`,
+        `${backendUrl}/api/v1/user/signin`,
         form
       );
 

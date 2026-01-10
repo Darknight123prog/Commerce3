@@ -29,7 +29,7 @@ function AllUserData() {
   
     const FetchUsers= async()=>{
       try{
-      const users=await axios.get(`${backendUrl}/api/v1/admin/accesss_to_all_users_admins`,{withCredentials:true});
+      const users=await axios.get(`${backendUrl}/products/api/v1/admin/accesss_to_all_users_admins`,{withCredentials:true});
       setAllUser(users.data.details);
      
      

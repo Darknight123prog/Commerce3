@@ -17,7 +17,7 @@ function LogOut() {
    
     const Logggout=async()=>{
       try{
-     await axios.post(`${backendUrl}/api/v1/signout`,{},{withCredentials:true});
+     await axios.post(`${backendUrl}/api/v1/user/signout`,{},{withCredentials:true});
      setUser(null);
     
      navigate('/');

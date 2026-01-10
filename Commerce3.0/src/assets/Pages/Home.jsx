@@ -31,9 +31,9 @@ function Home() {
       try {
         const res = await axios.get(`${backendUrl}/api/v1/getBannerUrl`);
         setUrl(res.data.url);
-        const trend=await axios.get(`${backendUrl}/api/v1/products?catogary=menSherwani`)
+        const trend=await axios.get(`${backendUrl}/products/api/v1/products?catogary=menSherwani`)
         setTreandyWearArray(trend.data.details);
-         const gadget=await axios.get(`${backendUrl}/api/v1/products?catogary=electronics`)
+         const gadget=await axios.get(`${backendUrl}/products/api/v1/products?catogary=electronics`)
         setGadgetsArray(gadget.data.details);
        
       } catch (error) {
@@ -45,10 +45,10 @@ function Home() {
 
     const fetchProduct = async () => {
       try {
-        const product_data = await axios.get(`${backendUrl}/api/v1/products`);
+        const product_data = await axios.get(`${backendUrl}/products/api/v1/products`);
         setProduct(product_data.data.details);
         if(user){
-          const recentSearch=await axios.get(`${backendUrl}/api/v1/add/keywords/searched`,{withCredentials:true});
+          const recentSearch=await axios.get(`${backendUrl}/api/v1/user/add/keywords/searched`,{withCredentials:true});
           setSearchedArray(recentSearch.data.details)
           setSearchedLoaded(false);
        

@@ -8,7 +8,7 @@ function Profile({profile }) {
 
   const handleDelete=async()=>{
     try{
-    await axios.delete(`${backendUrl}/api/v1/admin/accesss_to_all_users_admins/${profile._id}`,{withCredentials:true})
+    await axios.delete(`${backendUrl}/products/api/v1/admin/accesss_to_all_users_admins/${profile._id}`,{withCredentials:true})
     showSuccess('Deleted User Data');
     }
     catch(err){
