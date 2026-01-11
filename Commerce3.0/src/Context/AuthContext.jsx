@@ -5,34 +5,45 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cart,setCart]=useState([]);
- const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(`${backendUrl}/api/v1/me`, {
+        withCredentials: true,
+      });
+
+      setUser(res.data.user);
+      setCart(res.data.user.cart || []);
+    } catch (err) {
+      setUser(null);
+      setCart([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    
-    const fetchuser=async()=>{
-      const res=await axios
-      .get(`${backendUrl}/api/v1/me`, {
-        withCredentials: true
-      })
-
-  
-        setUser(res.data.user);
-        setCart(res.data.user.cart);
-        setLoading(false)
-    }
-    fetchuser();
-  
-  }
-  , []);
- 
+    fetchUser();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading ,setLoading,setCart,cart}}>
+    <AuthContext.Provider
+      value={{
+        user,
+        cart,
+        loading,
+        fetchUser, 
+        setUser,
+        setCart,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const  useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

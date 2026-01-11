@@ -98,7 +98,7 @@ const UserSignIn=async(req,res,next)=>{
   req.user=user;
   
   //generta the tokens
-  const token=await jwt.sign({email:email},process.env.JWT_Secrete);
+ jwt.sign({ id: user._id, email: user.email }, process.env.JWT_Secrete)
   res.cookie("token", token, {
   httpOnly: true,
   secure: true,
