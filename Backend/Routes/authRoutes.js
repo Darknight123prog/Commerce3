@@ -36,34 +36,34 @@ router.get(
 
 
 
-router.get(
-  "/auth/github/callback",
-  passport.authenticate("github", { scope: ["user:email"] })
-);
-// GitHub callback
-router.get(
-  "/auth/github/callback",
-  passport.authenticate("github", {
-    session: false,
-    failureRedirect: `${FRONTEND_URL}`,
-  }),
-  (req, res) => {
-    const token = jwt.sign(
-  { githubId: req.user.id },
-  process.env.JWT_SECRET,
-  { expiresIn: "7d" }
-);
-    res.cookie("token", token, {
-  httpOnly: true,
-  sameSite: "lax",
-  secure: process.env.NODE_ENV === "production"
-});
+// router.get(
+//   "/auth/github/callback",
+//   passport.authenticate("github", { scope: ["user:email"] })
+// );
+// // GitHub callback
+// router.get(
+//   "/auth/github/callback",
+//   passport.authenticate("github", {
+//     session: false,
+//     failureRedirect: `${FRONTEND_URL}`,
+//   }),
+//   (req, res) => {
+//     const token = jwt.sign(
+//   { githubId: req.user.id },
+//   process.env.JWT_SECRET,
+//   { expiresIn: "7d" }
+// );
+//     res.cookie("token", token, {
+//   httpOnly: true,
+//   sameSite: "lax",
+//   secure: process.env.NODE_ENV === "production"
+// });
 
-    res.redirect(
-      `${FRONTEND_URL}`
-    );
-  }
-);
+//     res.redirect(
+//       `${FRONTEND_URL}`
+//     );
+//   }
+// );
 
 
 router.get("/me", auth, (req, res) => {
