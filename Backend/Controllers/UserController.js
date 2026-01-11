@@ -79,7 +79,7 @@ const UserSignIn=async(req,res,next)=>{
   
   if(!user){
     
-    return res.status(500).json({
+    return res.status(401).json({
       success:false,
      
       message:"wrong credentails"
@@ -99,7 +99,7 @@ const UserSignIn=async(req,res,next)=>{
   req.user=user;
   
   //generta the tokens
- jwt.sign({ id: user._id, email: user.email }, process.env.JWT_Secrete)
+ const token=jwt.sign({ id: user._id, email: user.email }, process.env.JWT_Secrete)
   res.cookie("token", token, {
   httpOnly: true,
   secure: true,

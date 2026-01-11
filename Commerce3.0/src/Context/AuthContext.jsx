@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
         user,
         cart,
         loading,
+        setLoading,
         fetchUser, 
         setUser,
         setCart,
