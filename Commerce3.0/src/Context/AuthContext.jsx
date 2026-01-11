@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
+useEffect(() => {
   const fetchUser = async () => {
     try {
       const res = await axios.get(`${backendUrl}/api/v1/me`, {
@@ -27,13 +27,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const fetcher=async()=>{
-await fetchUser();
-    }
-    fetcher();
+  
     
-  }, [setUser]);
+ fetchUser();
+    
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -42,7 +40,6 @@ await fetchUser();
         cart,
         loading,
         setLoading,
-        fetchUser, 
         setUser,
         setCart,
       }}
