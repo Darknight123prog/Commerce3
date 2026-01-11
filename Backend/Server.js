@@ -42,15 +42,17 @@ app.set("trust proxy", 1);
 
 app.use(
   session({
+    name: "oauth_session",
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
-      secure: true,       // HTTPS only
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "none",   // REQUIRED for cross-domain
-      maxAge: 24 * 60 * 60 * 1000
-    }
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 10 * 60 * 1000, 
+    },
   })
 );
 
