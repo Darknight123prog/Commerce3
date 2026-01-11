@@ -31,14 +31,18 @@ const createUser=async(req,res)=>{
     avator
    })
 
-  var token = jwt.sign(email,process.env.JWT_Secrete );
-  res.cookie("token",token,{
-    httpOnly:true,
-    strict:true,
-    secure:true,
-    expires:new Date(Date.now()+1000*60*30)
-  })
+  const token = jwt.sign(
+  { id: data._id, email: data.email },
+  process.env.JWT_SECRET,
+  { expiresIn: "30m" }
+);
 
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  expires: new Date(Date.now() + 30 * 60 * 1000)
+});
   const html=Commerce3WelcomeEmail(name);
 
 
@@ -95,12 +99,12 @@ const UserSignIn=async(req,res,next)=>{
   
   //generta the tokens
   const token=await jwt.sign({email:email},process.env.JWT_Secrete);
-  res.cookie("token",token,({
-    secure: false,  
-     sameSite: "lax",
-    httpOnly:true,
-    expires:new Date(Date.now()+1000*60*30),
-  })) 
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  expires: new Date(Date.now() + 30 * 60 * 1000)
+});
  res.status(200).json({
   success:true,
   message:"log in successfully",
@@ -113,9 +117,10 @@ const UserSignIn=async(req,res,next)=>{
 //adding the log out feature
 const UserLogOut=async(req,res)=>{
  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "lax"
-  });
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+});
 
   res.status(200).json({ success: true });
 }
