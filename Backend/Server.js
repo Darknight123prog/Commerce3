@@ -30,7 +30,7 @@ Db_Connect()
 
 //allowing only limited number of users to access the backend
 app.use(cors({
-  origin: [process.env.frontend_url],
+  origin: process.env.frontend_url,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
@@ -40,26 +40,26 @@ app.use(express.static('public', {
 }));
 app.set("trust proxy", 1);
 
-app.use(
-  session({
-    name: "oauth_session",
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    proxy: true,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 10 * 60 * 1000, 
-    },
-  })
-);
+// app.use(
+//   session({
+//     name: "oauth_session",
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     proxy: true,
+//     cookie: {
+//       secure: process.env.NODE_ENV === "production",
+//       httpOnly: true,
+//       sameSite: process.env.NODE_ENV==='production'?"none":"lax" ,
+//       maxAge: 10 * 60 * 1000, 
+//     },
+//   })
+// );
 
 
 app.use("/api/payment", paymentRoutes);
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 
 //routes for all the products routes

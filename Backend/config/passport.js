@@ -13,12 +13,13 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.BACKEND_URL}/api/v1/auth/google/callback`
+      callbackURL: `/api/v1/auth/google/callback`
     },
     async (accessToken, refreshToken, profile, done) => {
      
         
       try {
+        // console.log("e mail after the google auth recived in the backend: ",profile.emails[0].value)
         let user = await User.findOne({ email: profile.emails[0].value });
        
 
@@ -35,6 +36,7 @@ passport.use(
           });
         }
 
+        console.log("here is the final user after the googlr auth : ",user);
         return done(null, user);
       } catch (err) {
         return done(err, null);

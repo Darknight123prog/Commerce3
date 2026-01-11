@@ -12,7 +12,8 @@ if(!token){
   })
 }
 //if token exist then verifi=ying the token
-const flag=jwt.verify(token,process.env.JWT_Secrete);
+const flag=jwt.verify(token,process.env.JWT_SECRET);
+// console.log("here is the result of token verifcation : ",flag);
 // const user_mail=jwt.sign('token',token,process.env.JWT_Secrete);
 
 if(!flag){
@@ -24,6 +25,7 @@ if(!flag){
 
 
 const user=await UserModel.findOne({email:flag.email});
+
 req.RequestName=user;
 next();
 }

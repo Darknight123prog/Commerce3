@@ -11,7 +11,7 @@ const ProductsModel = require('../Models/ProductsModel');
 
 const createUser=async(req,res)=>{
   try{
-  const {name,email,password,avator}=req.body;
+  const {name,email,password}=req.body;
     //checking for dublicate email
     const user=await UserModel.findOne({email:email});
     if(user){
@@ -28,21 +28,20 @@ const createUser=async(req,res)=>{
     name,
     email,
     password:hashed,
-    avator
    })
 
   const token = jwt.sign(
-  { id: data._id, email: data.email },
+  { email: data.email },
   process.env.JWT_SECRET,
   { expiresIn: "30m" }
 );
 
+  const isProd=process.env.NODE_ENV==='production';
   res.cookie("token", token, {
   httpOnly: true,
-  secure: true,
-  sameSite: "none",
-  path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
+  secure: isProd,
+  sameSite: isProd?"none":'lax',
+  expires: new Date(Date.now() + 30 * 60 * 1000)
 });
   const html=Commerce3WelcomeEmail(name);
 
@@ -87,8 +86,9 @@ const UserSignIn=async(req,res,next)=>{
   }
   //now verifying the password
   const flag=await bcrypt.compare(password,user.password);
+  console.log('the value after comparing passowrd',flag);
   if(!flag){
-    return res.status(500).json({
+    return res.status(401).json({
       success:false,
       message:"wrong credentials"
     })
@@ -96,14 +96,16 @@ const UserSignIn=async(req,res,next)=>{
   //password is verified
   //storing the value of user in req
   
-  req.user=user;
+  req.RequestName=user;
   
   //generta the tokens
- const token=jwt.sign({ id: user._id, email: user.email }, process.env.JWT_Secrete)
+ const token=jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET)
+//  console.log("here is the token",token);
+ const isProd=process.env.NODE_ENV==='production';
   res.cookie("token", token, {
   httpOnly: true,
-  secure: true,
-  sameSite: "none",
+  secure: isProd,
+  sameSite: isProd?"none":'lax',
   expires: new Date(Date.now() + 30 * 60 * 1000)
 });
  res.status(200).json({
@@ -117,10 +119,12 @@ const UserSignIn=async(req,res,next)=>{
 
 //adding the log out feature
 const UserLogOut=async(req,res)=>{
- res.clearCookie("token", {
+ const isProd = process.env.NODE_ENV === "production";
+
+res.clearCookie("token", {
   httpOnly: true,
-  secure: true,
-  sameSite: "none",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
 });
 
   res.status(200).json({ success: true });
