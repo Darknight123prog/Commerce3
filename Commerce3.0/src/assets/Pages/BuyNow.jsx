@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 function BuyNow() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  // const[productAdded,setProductAdded]=useState([{}]);
   const navigate = useNavigate();
 
   // Load product from sessionStorage
@@ -36,6 +37,7 @@ function BuyNow() {
   };
 
   // Checkout handler
+  console.log("here is the product details :",product);
   const handleCheckOut = () => {
     const priceData = {
       price: basePrice,
@@ -49,6 +51,14 @@ function BuyNow() {
        size:product.size || ''
       
     };
+    
+    const prodArray=[{name:product.name,price:totalPrice,quantity:product.quantity,Product_id:product._id,image:product.imgUrl}];
+
+    sessionStorage.setItem('productArray',JSON.stringify(prodArray));
+
+
+
+
 
     sessionStorage.setItem("price", JSON.stringify(priceData));
     navigate("/cart/ProceedToCheckOut");
