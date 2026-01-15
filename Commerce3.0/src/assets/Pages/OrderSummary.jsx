@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/Context/AuthContext';
 import axios from 'axios';
 import Tracker from '@/Componets/Tracker';
 import dropin from "braintree-web-drop-in";
-import { showError, showSuccess } from '@/Utils/Toast';
+import { showError, showInfo, showSuccess } from '@/Utils/Toast';
+import Spiner from '@/Componets/Spiner';
+import { toast } from 'react-toastify';
 
 function OrderSummary() {
+  const [count,setCount]=useState(8);
+  const[paymentSucess,setPaymentSucess]=useState(false)
+  const [PayLoading,setPayLoading]=useState(false);
+  // const [Transaction_id,setTransaction_id]=useState(null);
   const { user } = useAuth();
   const [clientToken, setClientToken] = useState(null);
   const [instance, setInstance] = useState(null);
@@ -16,6 +22,8 @@ function OrderSummary() {
   const navigate = useNavigate();
  const dropinContainer = useRef(null);
   const [OrderInfo, setOrderInfo] = useState([]);
+
+
   const [price, setPrice] = useState({
     price: 0,
     gst: 0,
@@ -24,6 +32,27 @@ function OrderSummary() {
     discount_price: 0
   });
   const [address, setAddress] = useState({});
+
+useEffect(() => {
+  if (!paymentSucess) return; // only run after payment success
+
+  setPayLoading(false); 
+
+  const timer = setInterval(() => {
+    setCount((prev) => {
+      if (prev <= 1) {
+        clearInterval(timer);            
+        navigate('/success/secure/OrderList'); // redirect
+        return 0;                        
+      }
+      return prev - 1;                  
+    });
+  }, 1000);
+
+  return () => clearInterval(timer);      
+}, [paymentSucess, navigate]);
+
+
   // const [shippingInfo, setShippingInfo] = useState({});
   useEffect(() => {
     axios.get(`${backendUrl}/api/v1/payment/paypal/pay/getToken`,{withCredentials:true}).then((res) => {
@@ -51,6 +80,7 @@ function OrderSummary() {
     }
   }, [clientToken]);
 
+
   useEffect(() => {
     const storedPrice = JSON.parse(sessionStorage.getItem('price')) || price;
     const storedAddress = JSON.parse(sessionStorage.getItem('address')) || {};
@@ -68,7 +98,7 @@ function OrderSummary() {
 
   // -------------------- PAY NOW HANDLER --------------------
   const handlePayNow = async () => {
-    try {
+   
 if (!instance) return alert("Payment UI not ready");
  setLoading(true);
  const { nonce } = await instance.requestPaymentMethod();
@@ -86,36 +116,111 @@ if (!instance) return alert("Payment UI not ready");
    const productInfo=OrderInfo.map((prod)=>({name:prod.name,price:prod.price,quantity:prod.quantity,Product_id:prod.Product_id,image:prod.image}));
     const totalPrice=price.totalPrice;
     const other_price=price.other_price;
+    console.log('here is the nonce',nonce);
 
+    setPayLoading(true);
+     try {
     const { data } = await axios.post(`${backendUrl}/api/v1/payment/paypal/pay/braintree/paymentGateway/secure`, {
         nonce,
-        amount:totalPrice,
         shiping_info,
         productInfo,
+        amount:totalPrice.toFixed(2),
         other_price,
         totalPrice
       },{withCredentials:true});
-      alert("Payment Successful 🎉\nTransaction ID: " + data.transactionId);
+setPaymentSucess(true);
+setPayLoading(false);
+console.log(data);
+
+showInfo(`payment is done sucessfully with transcation id ${data.transactionId}`);
+
+// setPaymentSucess(true);
+
+     
+
       instance.clearSelectedPaymentMethod(); // Reset UI
-
-
-   console.log("here is the prodduct detaisl",{productInfo:productInfo,shiping_info:shiping_info,totalPrice:totalPrice,other_price:other_price});
+}catch(err){
+   console.log(err);
+  }finally{
+    setLoading(false);
+  }}
+// setPaymentSucess(true);
+  //  console.log("here is the prodduct detaisl",{productInfo:productInfo,shiping_info:shiping_info,totalPrice:totalPrice,other_price:other_price});
 
 
    
 
 
       
-  }catch(err){
-    err.response?.data?.error
-  }finally{
-    setLoading(false);
-  }}
+  
 
   const handleBack = () => {
     navigate('/cart/ProceedToCheckOut');
     showSuccess('Back to shipping');
   };
+
+  if(PayLoading){
+   return( <div className='flex h-screen w-screen flex-col items-center-safe justify-items-center '>
+   <h1>Payment is in process ......</h1>
+   <Spiner/></div>);
+  }
+  // if(PaymentSucess){
+  //   return(<div className='flex h-screen w-screen flex-col items-center-safe justify-items-center '>
+  //    <h1> Payment is sucessfully done </h1>
+  //    <h4>transactionId is : {Transaction_id}</h4>
+
+  //   </div>)
+  // }
+
+
+  if (paymentSucess) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-yellow-100 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 text-center animate-fadeIn">
+
+        {/* Success Icon */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-green-600"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Title */}
+        <h2 className="text-xl font-semibold text-green-700">
+          Payment Successful
+        </h2>
+
+        {/* Countdown */}
+        <p className="mt-3 text-gray-600 text-sm">
+          Redirecting to <span className="font-medium">Order Status</span> in
+        </p>
+
+        <div className="mt-4 text-4xl font-bold text-amber-500">
+          {count}
+        </div>
+
+        {/* Warning */}
+        <p className="mt-4 text-xs text-red-500 font-medium">
+          ⚠ Do not refresh or leave this page
+        </p>
+
+        {/* Loader */}
+        <div className="mt-5 flex justify-center">
+          <div className="h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
   return (
     <div className="min-h-screen bg-[url('https://res.cloudinary.com/djgboajkm/image/upload/f_auto/20944051_io6wgm')] bg-cover bg-center flex flex-col items-center p-2">

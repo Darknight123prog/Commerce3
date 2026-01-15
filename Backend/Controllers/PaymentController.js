@@ -25,7 +25,7 @@ const PostingPaymets=async(req,res)=>{
 
 
     const result = await gateway.transaction.sale({
-      amount,
+      amount:amount,
       paymentMethodNonce: nonce,
       options: { submitForSettlement: true },
     });
@@ -64,5 +64,9 @@ try{
     });
  
 }
+
+//adding the feature for the user to get  the order's placed info
+
+
 
 module.exports={getToken,PostingPaymets};
