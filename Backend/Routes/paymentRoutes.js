@@ -1,13 +1,9 @@
-// routes/payment.routes.js
-const express =require("express");
-const  {
-  initiatePayment,
-  paymentCallback
-} =require("../Controllers/PaymentGateWayController");
+const express=require('express');
+const { auth } = require('../Utils/Authetication');
+const { getToken, PostingPaymets } = require('../Controllers/PaymentController');
+const payRoutes=express.Router();
 
-const router = express.Router();
+payRoutes.route('/pay/getToken').get(getToken);
+payRoutes.route('/pay/braintree/paymentGateway/secure').post(auth,PostingPaymets)
 
-router.post("/pay", initiatePayment);
-router.post("/callback", paymentCallback);
-
-module.exports= router;
+module.exports={payRoutes};

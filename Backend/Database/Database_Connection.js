@@ -5,7 +5,7 @@ const  Db_Connect= async (req,res)=>{
   console.log("Sucessfully connected withe Database");
   }
   catch(err){
-    console.log("Cannot connect to the Database")
+    console.log(`Cannot connect to the Database : ${err}`)
   }
 
   

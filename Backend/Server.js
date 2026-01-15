@@ -5,18 +5,20 @@ const cookieParser=require("cookie-parser");
 const  Db_Connect  = require("./Database/Database_Connection");
 const  router  = require("./Routes/ProductsRoutes");
 const Router_User = require("./Routes/UserRoutes");
-const OrderRouter = require("./Routes/OrderRoutes");
+const OrderRoutes = require("./Routes/OrderRoutes");
 const AddBannerRouter = require("./Routes/AddBannerRoutes");
 const cors=require('cors');
 
 app.use(cookieParser());
-const paymentRoutes=require('./Routes/paymentRoutes')
+
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 const passport = require("passport");
-const session = require("express-session");
+// const session = require("express-session");
 require("./config/passport");
 const AuthRouter = require("./Routes/authRoutes");
+const { payRoutes } = require("./Routes/paymentRoutes");
+// const { getToken } = require("./Controllers/PaymentController");
 
 
 
@@ -57,19 +59,20 @@ app.set("trust proxy", 1);
 // );
 
 
-app.use("/api/payment", paymentRoutes);
+
 app.use(passport.initialize());
 // app.use(passport.session());
 
-
+app.use('/api/v1/payment/paypal',payRoutes)
 //routes for all the products routes
 
 app.use('/api/v1/products',router);
 //need to test
+
 app.use('/api/v1/user',Router_User);
 app.use('/api/v1', AuthRouter);
 //ok
-app.use('/api/v1',OrderRouter)
+app.use("/api/orders", OrderRoutes);
 //ok
 app.use('/api/v1',AddBannerRouter);
 //ok

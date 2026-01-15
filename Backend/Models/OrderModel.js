@@ -13,6 +13,10 @@ const OrderSchema=new mongoose.Schema({
       type:String,
       required:true,
     },
+    phoneNumber:{
+      type:Number,
+      required:true
+    }
   },
   OrderInfo:[{
     name:{
@@ -42,14 +46,9 @@ const OrderSchema=new mongoose.Schema({
   },
   OrderStatus:{
     type:String,
-    default:"processing"
+    default:"shipping"
   },
-  paymentInfo:{
-    id:{
-      type:String,
-    }
-  },
-  status:{
+  Payment_status:{
     type:String,
     default:"pending"
   },
@@ -58,12 +57,9 @@ const OrderSchema=new mongoose.Schema({
   },
   paidAt:{
     type:Date,
+    default: Date.now
   },
-  itemPrice:{
-    type:Number,
-    default:0,
-  },
-  shippingPrice:{
+  other_price:{
     type:Number,
     default:0,
   },
@@ -72,7 +68,8 @@ const OrderSchema=new mongoose.Schema({
     default:0,
   },
   deleviredAt:{
-    type:Date,
+   type: Date,
+  default: () => Date.now() + 7 * 24 * 60 * 60 * 1000
   }
 
 },{timestamps:true});
