@@ -15,7 +15,8 @@ useEffect(() => {
       const res = await axios.get(`${backendUrl}/api/v1/me`, {
         withCredentials: true,
       });
-      console.log("here is the data from the google auth",res.data);
+
+     
       if(res.data){
       setUser(res.data.user);
       setCart(res.data.user.cart || []);

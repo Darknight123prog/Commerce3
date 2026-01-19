@@ -74,7 +74,7 @@ router.get(
 
 
 router.get("/me", auth, (req, res) => {
-  // console.log('hits the backend');
+  console.log('hits the backend',req.RequestName);
   res.json({ user: req.RequestName });
 });
 

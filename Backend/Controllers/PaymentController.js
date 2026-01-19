@@ -54,7 +54,7 @@ try{
      } catch (err) {
     console.log(`error is ${err}`);
   }
-    // console.log("here is the data :",d1);
+   
     
 
     res.json({

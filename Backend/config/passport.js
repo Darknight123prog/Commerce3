@@ -36,7 +36,7 @@ passport.use(
           });
         }
 
-        console.log("here is the final user after the googlr auth : ",user);
+     
         return done(null, user);
       } catch (err) {
         return done(err, null);
