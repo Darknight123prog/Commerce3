@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import { showSuccess, showError } from "../../Utils/Toast";
+import { showSuccess, showError, showInfo } from "../../Utils/Toast";
 import axios from "axios";
 
 const Profile = () => {
   const { user, loading, setUser } = useAuth();
   const navigate = useNavigate();
+  const handleOrder=()=>{
+    navigate('/success/secure/OrderList');
+    showInfo('Redirecting to Order Section');
+
+  }
  const backendUrl=import.meta.env.VITE_BACKEND_URL;
 
 
@@ -60,6 +65,7 @@ const Profile = () => {
           alt="avatar"
           className="w-28 h-28 rounded-full mx-auto mb-4 border-4 border-indigo-500 object-cover shadow-md"
         />
+        
 
         <h2 className="text-2xl font-bold text-gray-800 mt-2">
           {user.name}
@@ -72,6 +78,9 @@ const Profile = () => {
         <span className="inline-block mt-4 px-6 py-1 text-sm font-medium rounded-full bg-indigo-100 text-indigo-700">
           {user.role}
         </span>
+         <button onClick={handleOrder} className="text-md m-2 w-22 bg-amber-300 p-1 rounded-2xl font-bold text-gray-800 mt-2">
+         Order
+        </button>
 
         <button
           type="button"

@@ -46,7 +46,7 @@ const OrderSchema=new mongoose.Schema({
   },
   OrderStatus:{
     type:String,
-    default:"shipping"
+    default:"PLACED"
   },
   Payment_status:{
     type:String,

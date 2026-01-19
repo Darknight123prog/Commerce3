@@ -28,6 +28,7 @@ const AllAdminsInfo=lazy(()=>import('./assets/Pages/AllAdminsInfo'));
 const BlackFridaySale=lazy(()=>import('./assets/Pages/BlackFridaySale'));
 import Spiner from './Componets/Spiner'
 import Order_tracking_page from './assets/Pages/Order_tracking_page'
+import SingleOrderDetails from './assets/Pages/SingleOrderDetails'
 
 
 
@@ -51,6 +52,7 @@ function App() {
 
          <Route path='/auth/admin/MainAdmin/updateProduct' element={<UpdateProductAdmin/>} />
          <Route path='/success/secure/OrderList' element={<Order_tracking_page/>} />
+         <Route path='/success/secure/SingleOrder/Details/:id' element={<SingleOrderDetails/>} />
 
          <Route path='/auth/admin/MainAdmin/DeleteAnyProduct' element={<DeleteAnyProduct/>} />
           <Route path='/auth/admin/MainAdmin/GetAllUserInfo' element={<AllUserData/>} />

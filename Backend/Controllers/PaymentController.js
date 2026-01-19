@@ -66,7 +66,58 @@ try{
 }
 
 //adding the feature for the user to get  the order's placed info
+const getOrderDetails=async(req,res)=>{
+  try{
+  const order=await OrderModel.find({user:req.RequestName._id});
+  if(Object.keys(order).length==0){
+    return res.status(200).json({
+      success:true,
+      message:"No Order in queue",
+      details:order
+    })
+  }
+  else{
+    return res.status(200).json({
+      success:true,
+      message:"order is found",
+      details:order
+    })
+  }
+}
+catch(err){
+  return res.status(500).json({
+    success:false,
+    message:"Intenernal server errorr while fetching order details"
+  })
+}
+}
+
+//ading the feature for the seeingf individual 
+const getSingleOrderInfo=async(req,res)=>{
+  const order_id=req.params.id;
+  if(!order_id){
+    return res.status(400).json({
+      success:false,
+      message:"Order id is given",
+    })
+  }
+  else{
+    const order=await OrderModel.findOne({_id:order_id});
+    if(!order){
+      res.status(404).json({
+        success:false,
+        message:"Order is not found"
+      })
+    }
+    else{
+      res.status(200).json({
+        success:true,
+        message:"Order info is fetched sucessfully ",
+        details:order
+      })
+    }
+  }
+}
 
 
-
-module.exports={getToken,PostingPaymets};
+module.exports={getToken,PostingPaymets,getOrderDetails,getSingleOrderInfo};

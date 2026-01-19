@@ -87,7 +87,7 @@ function NavBar() {
             <Link to="/auth/admin" className="text-gray-700 hover:text-purple-700">Admin Panel</Link>
             <Link to="/devloperInfo" className="text-gray-700 hover:text-purple-700">Developer Info</Link>
 
-            {user ? (
+            {user? (
               <button type="button" onClick={handleLogout} className="px-3 py-1 bg-black text-white rounded hover:bg-red-600">LogOut</button>
             ) : (
               <button type="button" onClick={handleLogin} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">LogIn / SignUp</button>
@@ -105,12 +105,12 @@ function NavBar() {
                   alt="profile"
                 />
               </Link>
-              <Link to="/Cart/details" className=" mr-1 relative">
+              {cart &&<Link to="/Cart/details" className=" mr-1 relative">
                 <MdOutlineShoppingCart size={24} />
                 <span className="absolute -top-2 -right-2 h-4 w-4 border-2 border-black bg-white rounded-full flex items-center justify-center text-black text-xs font-bold">
                   {cart.length}
                 </span>
-              </Link>
+              </Link>}
             </div>
           )}
 
