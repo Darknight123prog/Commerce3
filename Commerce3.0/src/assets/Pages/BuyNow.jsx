@@ -115,17 +115,17 @@ function BuyNow() {
 
         <div className="flex flex-col gap-3 text-gray-800 font-medium">
           <div className="flex justify-between">
-            <span>Quantity:</span>
+        <span>Quantity:</span>
             <span className="font-semibold">{quantity}</span>
           </div>
 
-          <div className="flex justify-between">
+        <div className="flex justify-between">
             <span>Orginial Price:</span>
-            <span className="flex items-center gap-1 font-semibold">
+        <span className="flex items-center gap-1 font-semibold">
               <FaIndianRupeeSign /> {basePrice.toLocaleString('en-IN')}
             </span>
           </div>
-          <div className="flex justify-between">
+    <div className="flex justify-between">
             <span>Discount:</span>
             <span className="flex items-center gap-1 font-semibold">
               <FaIndianRupeeSign /> {discount}%

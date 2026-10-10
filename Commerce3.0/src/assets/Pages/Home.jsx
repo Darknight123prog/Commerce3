@@ -18,55 +18,51 @@ function Home() {
   const [url, setUrl] = useState([]);
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
-  const[searchedLoaded,setSearchedLoaded]=useState(true);
-  const[searchedArray,setSearchedArray]=useState([]);
-  const[TreandyWearArray,setTreandyWearArray]=useState([]);
-   const[GadgetsArray,setGadgetsArray]=useState([]);
-  const {user}=useAuth();
- 
- const backendUrl=import.meta.env.VITE_BACKEND_URL;
+  const [searchedArray, setSearchedArray] = useState([]);
+  const [trendyWear, setTrendyWear] = useState([]);
+  const [gadgets, setGadgets] = useState([]);
+
+  const auth = useAuth();
+  const user = auth?.user;
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  // Page data (independent requests, one failure doesn't block the rest)
   useEffect(() => {
-    const fetchData = async () => {
-     
-      try {
-        const res = await axios.get(`${backendUrl}/api/v1/getBannerUrl`);
-        setUrl(res.data.url);
-        const trend=await axios.get(`${backendUrl}/api/v1/products/products?catogary=menSherwani`)
-        setTreandyWearArray(trend.data.details);
-         const gadget=await axios.get(`${backendUrl}/api/v1/products/products?catogary=electronics`)
-        setGadgetsArray(gadget.data.details);
-       
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+    const load = async () => {
+      const [banner, trend, gadget, all] = await Promise.allSettled([
+        axios.get(`${backendUrl}/api/v1/getBannerUrl`),
+        axios.get(`${backendUrl}/api/v1/products/products?catogary=menSherwani`),
+        axios.get(`${backendUrl}/api/v1/products/products?catogary=electronics`),
+        axios.get(`${backendUrl}/api/v1/products/products`),
+      ]);
+
+      if (banner.status === 'fulfilled') setUrl(banner.value.data?.url || []);
+      if (trend.status === 'fulfilled') setTrendyWear(trend.value.data?.details || []);
+      if (gadget.status === 'fulfilled') setGadgets(gadget.value.data?.details || []);
+      if (all.status === 'fulfilled') setProduct(all.value.data?.details || []);
+
+      [banner, trend, gadget, all].forEach((r) => {
+        if (r.status === 'rejected') console.error(r.reason);
+      });
+      setLoading(false);
     };
+    load();
+  }, [backendUrl]);
 
-    const fetchProduct = async () => {
-      try {
-        const product_data = await axios.get(`${backendUrl}/api/v1/products/products`);
-        setProduct(product_data.data.details);
-        if(user){
-          const recentSearch=await axios.get(`${backendUrl}/api/v1/user/add/keywords/searched`,{withCredentials:true});
-          setSearchedArray(recentSearch.data.details)
-          setSearchedLoaded(false);
-       
+  // Recent searches (re-runs when the user logs in)
+  useEffect(() => {
+    if (!user) {
+      setSearchedArray([]);
+      return;
+    }
+    axios
+      .get(`${backendUrl}/api/v1/user/add/keywords/searched`, { withCredentials: true })
+      .then((res) => setSearchedArray(res.data?.details || []))
+      .catch((err) => console.error(err));
+  }, [user, backendUrl]);
 
-        }
-        else{
-          setSearchedArray(false);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchProduct();
-    fetchData();
-  }, []);
-
-  if (loading && searchedLoaded) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
         <HashLoader color="#77e56e" />
@@ -75,131 +71,74 @@ function Home() {
   }
 
   return (
-    <div className='overflow-x-hidden'>
-      {/* Hero Section */}
+    <div className="overflow-x-hidden">
+      {/* Hero */}
       <div className="flex flex-col sm:flex-row flex-wrap items-start gap-2 px-3 py-4 bg-black">
         <span className="text-5xl tracking-[0.08em] text-white uppercase font-['Bodoni_Moda',serif]">
-  Achora
-</span>
-
-
+          Achora
+        </span>
         <RotatingText
           texts={["Click,", " Cart,", " Celebrate!"]}
-          mainClassName="
-            text-lg
-            sm:text-xl
-            md:text-2xl
-            lg:text-3xl
-            font-extrabold
-            bg-[#2E2EFF]
-            text-white
-            px-2 sm:px-3 md:px-4
-            py-1 sm:py-2
-            rounded-xl
-            overflow-hidden
-          "
+          mainClassName="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold bg-[#2E2EFF] text-white px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-xl overflow-hidden"
           rotationInterval={1500}
         />
-       <Catogory/>
+        <Catogory />
       </div>
 
       {/* Slider */}
-      {url.length > 0 ? (
-        <Link to={'/Blackfriday/sale'} >
+      {url.length > 0 && (
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           navigation
           loop
-          className="
-            w-full
-            overflow-x-hidden
-            h-[30vh]
-            sm:h-[40vh]
-            md:h-[50vh]
-            lg:h-[60vh]
-            xl:h-[70vh]
-            bg-black
-          "
+          className="w-full overflow-x-hidden h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[60vh] xl:h-[70vh] bg-black"
         >
           {url.map((m, index) => (
             <SwiperSlide key={index} className="w-full h-full">
-              <img
-              loading="lazy"  
-                src={m.url}
-               
-                alt={`banner-${index}`}
-                className="w-full h-full object-cover rounded-md"
-              />
+              <Link to="/Blackfriday/sale">
+                <img
+                  loading="lazy"
+                  src={m.url}
+                  alt={`banner-${index}`}
+                  className="w-full h-full object-cover rounded-md"
+                />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
-        </Link>
-      ) : (
-        <div className="flex items-center justify-center h-[200px] sm:h-[300px]">
-          <HashLoader color="#77e56e" />
-        </div>
       )}
 
-
-      
-
-      {/* Products Section */}
+      {/* Products */}
       <div className="px-3 sm:px-5 py-4">
-        <div className="h-16 mt-12  sm:h-14 md:h-16 bg-white w-full max-w-3xl flex items-center justify-center rounded-md mb-8 mx-auto">
-  <TrueFocus
-    sentence="Trending Products"
-    manualMode={false}
-    blurAmount={5}
-    borderColor="red"
-    animationDuration={1.5}
-    pauseBetweenAnimations={1}
-  />
+        <div className="h-16 mt-12 sm:h-14 md:h-16 bg-white w-full max-w-3xl flex items-center justify-center rounded-md mb-8 mx-auto">
+          <TrueFocus
+            sentence="Trending Products"
+            manualMode={false}
+            blurAmount={5}
+            borderColor="red"
+            animationDuration={1.5}
+            pauseBetweenAnimations={1}
+          />
+        </div>
 
-  
-</div>
-{user  && searchedArray.length>0 ?(<div>
-        
-        <SuggestedProducts title={'Based on recently Searched'} products={searchedArray} />
-      </div>):('')}
+        {user && searchedArray.length > 0 && (
+          <SuggestedProducts title="Based on recently searched" products={searchedArray} />
+        )}
+        {trendyWear.length > 0 && (
+          <SuggestedProducts title="Trendy wedding wear" products={trendyWear} />
+        )}
+        {gadgets.length > 0 && (
+          <SuggestedProducts title="Trendy gadgets" products={gadgets} />
+        )}
 
-
-     {TreandyWearArray.length>0&& <div>
-      <SuggestedProducts title={'Treandy Wedding wear'} products={TreandyWearArray} />
-       
-      </div>}
-      {GadgetsArray.length>0&& <div>
-      <SuggestedProducts title={'Gadgets treandy'} products={GadgetsArray} />
-       
-      </div>}
-
-        {/* Product Grid */}
-        <div className="
-          grid
-    w-full
-    grid-cols-2       
-    sm:grid-cols-1
-    md:grid-cols-1
-    lg:grid-cols-1
-    xl:grid-cols-5
-    gap-3 sm:gap-4 md:gap-5
-    bg-white
-    shadow-2xs
-    p-2 sm:p-4
-    overflow-x-hidden
-          
-        ">
-
-
+        <div className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 bg-white shadow-2xs p-2 sm:p-4 overflow-x-hidden">
           {product.map((prod) => (
             <Product key={prod._id} className="w-full min-w-0" product={prod} />
           ))}
         </div>
       </div>
-
-
-     
     </div>
   );
 }
