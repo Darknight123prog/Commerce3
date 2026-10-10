@@ -1,5 +1,5 @@
 const express=require('express');
-const { createUser,UserSignIn,UserLogOut ,ForgetPassword,resetPassword,AddReviewAndUpdate,AddToCart,GetCartProductList,RemoveFromCart,addSearch,getAllSearchedKeyWord} = require('../Controllers/UserController');
+const { createUser,UserSignIn,UserLogOut ,ForgetPassword,resetPassword,AddReviewAndUpdate,AddToCart,GetCartProductList,RemoveFromCart,addSearch,getAllSearchedKeyWord, GoogleAuthStart, GoogleAuthCallback} = require('../Controllers/UserController');
 const {auth} = require('../Utils/Authetication');
 
 const Router_User=express.Router();
@@ -7,6 +7,9 @@ Router_User.route('/register').post(createUser);
 Router_User.route('/signin').post(UserSignIn);
 Router_User.route('/signout').post(UserLogOut);
 Router_User.route('/forgot/password').post(ForgetPassword);
+
+router.get("/auth/google", GoogleAuthStart);
+router.get("/auth/google/callback", GoogleAuthCallback);
 
 
 Router_User.route('/add/Reviews').post(auth,AddReviewAndUpdate);

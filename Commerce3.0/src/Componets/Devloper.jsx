@@ -3,7 +3,13 @@ import LiquidEther from '../components/LiquidEther';
 import TrueFocus from '@/components/TrueFocus';
 import { TypeAnimation } from 'react-type-animation';
 
+
 function Devloper() {
+
+
+  // function reddirect(){
+  //   navi('https://github.com/Darknight123prog');
+  // }
   return (
     <div className="relative w-screen min-h-screen bg-black overflow-hidden">
 
@@ -99,10 +105,10 @@ function Devloper() {
             </h3>
           </div>
 
-          {/* Optional CTA */}
-          <button className="mt-4 px-6 py-2 rounded-full bg-violet-600 hover:bg-violet-700 transition text-white font-semibold">
+        
+          <a  href='https://github.com/Darknight123prog' className="mt-4 px-6 py-2 rounded-full bg-violet-600 hover:bg-violet-700 transition text-white font-semibold">
             View Portfolio
-          </button>
+          </a>
         </div>
 
       </div>
