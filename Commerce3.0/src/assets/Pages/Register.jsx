@@ -4,6 +4,8 @@ import { useAuth } from "../../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LiquidEther from "@/components/LiquidEther";
+import { toast } from "react-toastify";
+
 
 const Register = () => {
  const backendUrl=import.meta.env.VITE_BACKEND_URL;
@@ -28,9 +30,11 @@ const handleSubmit=(e)=>{
    const Muser= await axios.post(`${backendUrl}/api/v1/user/register`,form,{withCredentials:true});
   
    setUser(Muser.data.details);
+   toast.success("User created Successfully");
    navigate('/');
     }catch(err){
-      console.error(err);
+       console.log(err.response?.data); 
+      toast.error(err?.response?.data?.message || "Something went wrong");
     }
 
   }

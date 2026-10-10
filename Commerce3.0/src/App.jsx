@@ -29,6 +29,7 @@ const BlackFridaySale=lazy(()=>import('./assets/Pages/BlackFridaySale'));
 import Spiner from './Componets/Spiner'
 import Order_tracking_page from './assets/Pages/Order_tracking_page'
 import SingleOrderDetails from './assets/Pages/SingleOrderDetails'
+import { ToastContainer } from 'react-toastify'
 
 
 
@@ -40,11 +41,14 @@ function App() {
       {/* <Header/> */}
       
       <NavBar/>
+
+       <ToastContainer/>
      
         <Routes>
 
          
         <Route path='/' element={<Home/>} />
+       
          <Route path='/cart/buyNow' element={<BuyNow/>} />
         /cart/proceedToCheckOut/OrderSummary
         /auth/admin/MainAdmin/updateProduct
