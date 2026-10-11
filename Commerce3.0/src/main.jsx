@@ -7,9 +7,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter } from "react-router-dom"
 import App from './App.jsx'
 // import { Provider } from 'react-redux'
-
+const hashToken = new URLSearchParams(window.location.hash.slice(1)).get("token");
+if (hashToken) {
+  localStorage.setItem("token", hashToken);
+  window.history.replaceState(null, "", window.location.pathname);
+}
 
 createRoot(document.getElementById('root')).render(
+
+  
 
      <AuthProvider>
       <BrowserRouter>
