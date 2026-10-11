@@ -74,8 +74,15 @@ router.get(
 
 
 router.get("/me", auth, (req, res) => {
-  console.log('hits the backend',req.RequestName);
-  res.json({ user: req.RequestName });
+  const user = req.RequestName.toObject
+    ? req.RequestName.toObject()
+    : { ...req.RequestName };
+
+  delete user.password;
+  delete user.resetPasswordToken;
+  delete user.resetPasswordExpire;
+
+  res.json({ user });
 });
 
 module.exports = router;

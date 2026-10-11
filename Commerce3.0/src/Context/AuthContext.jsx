@@ -17,7 +17,8 @@ useEffect(() => {
 
         
       });
-      console.log(`user data is ${res.data?.user}`);
+      console.log("here is the information ");
+      console.log(res.data.user);
 
       if (res.data?.user) {
         setUser(res.data.user);

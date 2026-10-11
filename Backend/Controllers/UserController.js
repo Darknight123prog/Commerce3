@@ -172,6 +172,7 @@ const UserSignIn = async (req, res) => {
 const GoogleAuthSuccess = async (req, res) => {
   try {
     const user = req.user;
+    console.log("here is the user"+req.user);
 
     if (!user) {
       return res.redirect(
