@@ -1,49 +1,56 @@
-const jwt=require('jsonwebtoken');
-const UserModel = require('../Models/UserModel');
+const jwt = require("jsonwebtoken");
+const UserModel = require("../Models/UserModel");
 
-const auth=async(req,res,next)=>{
-const token=req.cookies.token;
+const auth = async (req, res, next) => {
+  try {
+    const token =
+      req.cookies?.token ||
+      (req.headers.authorization?.startsWith("Bearer ")
+        ? req.headers.authorization.split(" ")[1]
+        : null);
 
-try{
-if(!token){
-  return res.status(404).json({
-    success:false,
-    message:"Not sign in"
-  })
-}
-//if token exist then verifi=ying the token
-const flag=jwt.verify(token,process.env.JWT_SECRET);
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Not sign in",
+      });
+    }
 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-if(!flag){
-  return res.status(404).json({
-    success:false,
-    message:"Not sign in"
-  })
-}
+    // Supports new tokens ({ id, email }) and old tokens ({ email })
+    const user = decoded.id
+      ? await UserModel.findById(decoded.id)
+      : await UserModel.findOne({ email: decoded.email });
 
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-const user=await UserModel.findOne({email:flag.email});
+    req.RequestName = user;
+    next();
+  } catch (err) {
+    console.log(`Authentication error: ${err.message}`);
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
+    });
+  }
+};
 
-req.RequestName=user;
-
-next();
-}catch(err){
-  console.log(`something is wrong in the authentication : ${err}`);
-}
-}
-
-
-const roleBasedAccess=(...roles)=>{
-  return (req,res,next)=>{
-    if(!roles.includes(req.RequestName.role)){
-     return res.status(403).json({
-        success:false,
-        message:`you cannot access the resource as an ${req.RequestName.role}`
-      })
+const roleBasedAccess = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.RequestName.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `you cannot access the resource as an ${req.RequestName.role}`,
+      });
     }
     next();
-  }
-}
+  };
+};
 
-module.exports={auth,roleBasedAccess};
+module.exports = { auth, roleBasedAccess };
