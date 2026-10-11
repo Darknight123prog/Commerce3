@@ -26,7 +26,7 @@ if(!flag){
 const user=await UserModel.findOne({email:flag.email});
 
 req.RequestName=user;
-// console.log("here is the set value : ",req.RequestName.name);
+
 next();
 }catch(err){
   console.log(`something is wrong in the authentication : ${err}`);
