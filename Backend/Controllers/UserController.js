@@ -30,6 +30,7 @@ const createAuthCookie = (res, user) => {
     sameSite: isProd ? "none" : "lax",
     maxAge: 30 * 60 * 1000,
   });
+  return token;
 };
 
 // ======================================================
@@ -178,10 +179,10 @@ const GoogleAuthSuccess = async (req, res) => {
       );
     }
 
-    createAuthCookie(res, user);
+    const token = createAuthCookie(res, user);
 
     return res.redirect(
-      `${process.env.FRONTEND_URL}/auth/success`
+      `${process.env.FRONTEND_URL}/auth/success#token=${token}`
     );
   } catch (err) {
     console.error("Google OAuth error:", err.message);
@@ -191,7 +192,6 @@ const GoogleAuthSuccess = async (req, res) => {
     );
   }
 };
-
 // ======================================================
 // OPTIONAL GOOGLE OAUTH ROUTE HANDLERS
 // Mount these at /auth/google and /auth/google/callback.
