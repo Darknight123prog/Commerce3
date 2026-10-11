@@ -38,7 +38,7 @@ function About() {
 
         <img
           className="h-16 sm:h-20 lg:h-32 my-2"
-          src="https://res.cloudinary.com/djgboajkm/image/upload/f_auto/GE_logo_rfdojk.svg"
+          src="https://res.cloudinary.com/djgboajkm/image/upload/q_auto,f_auto/v1767896712/Achora_vgxybh.png"
           alt="Logo"
         />
 
@@ -47,7 +47,7 @@ function About() {
         </h1>
         <h6 className="text-xs sm:text-sm">Presents</h6>
         <h1 className="text-xs sm:text-sm md:text-lg font-semibold">
-          Commerce3.0
+          ACHORA AUREA
         </h1>
       </div>
 
@@ -109,7 +109,7 @@ function About() {
             About Our Site
           </h2>
           <p className="text-sm sm:text-base text-blue-200 leading-relaxed">
-            Commerce3.0 is your one-stop platform for premium fashion and lifestyle products.
+            ACHORE AUREA is your one-stop platform for premium fashion and lifestyle products.
             We bring together the best brands and curated collections to provide an immersive
             shopping experience. Our mission is to deliver quality, innovation, and convenience
             in every transaction. Explore our extensive catalog, enjoy exclusive discounts,

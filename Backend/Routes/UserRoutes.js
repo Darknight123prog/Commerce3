@@ -8,8 +8,8 @@ Router_User.route('/signin').post(UserSignIn);
 Router_User.route('/signout').post(UserLogOut);
 Router_User.route('/forgot/password').post(ForgetPassword);
 
-router.get("/auth/google", GoogleAuthStart);
-router.get("/auth/google/callback", GoogleAuthCallback);
+Router_User.get("/auth/google", GoogleAuthStart);
+Router_User.get("/auth/google/callback", GoogleAuthCallback);
 
 
 Router_User.route('/add/Reviews').post(auth,AddReviewAndUpdate);
