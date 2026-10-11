@@ -162,7 +162,7 @@ sessionStorage.setItem('price',JSON.stringify(save))
               <tbody>
                 {product.map((e) => (
                  
-                  <tr onClick={()=>navigate(`/ProductDetails/${e._id}`)} key={e._id} className="hover:bg-gray-50 text-center">
+                  <tr  key={e._id} className="hover:bg-gray-50 text-center">
                     <td className="p-3 border">
                       <img
                       loading="lazy"  

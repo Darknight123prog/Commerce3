@@ -14,6 +14,7 @@ const [loading,setLoading]=useState(true);
     const fetchOrder=async()=>{
       const order=await axios.get(`${backendUrl}/api/v1/payment/paypal/Order/details/secure/user`,{withCredentials:true});
       setOrderPlaced(order.data.details);
+      console.log(order.data.details);
     }
      fetchOrder();
 }

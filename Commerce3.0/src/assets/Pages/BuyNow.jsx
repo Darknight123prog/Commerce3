@@ -23,8 +23,8 @@ function BuyNow() {
   }
 
   
-  const basePrice = product.price * quantity;
-  const discount=product.discount;
+  const basePrice = (product?.price||1) * quantity;
+  const discount=product?.discount || 0;
   const DiscountedPrice=basePrice*0.01*discount;
   const gst = (basePrice-DiscountedPrice) * 0.18;
   const shipping = basePrice > 500 ? 0 : 23;
