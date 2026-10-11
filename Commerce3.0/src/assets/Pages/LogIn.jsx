@@ -1,66 +1,79 @@
-import React, { useState } from 'react'
-import GoogleLogin from './GoogleLogin'
-import { Link ,useNavigate} from 'react-router-dom'
-import axios from 'axios'
-import { useAuth } from '../../Context/AuthContext'
-import GitHub from './GitHub'
-import LiquidEther from '@/components/LiquidEther'
+import React, { useState } from "react";
+import GoogleLogin from "./GoogleLogin";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../../Context/AuthContext";
+import GitHub from "./GitHub";
+import LiquidEther from "@/components/LiquidEther";
+import { toast } from "react-toastify";
 
 function LogIn() {
- const backendUrl=import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const navigate=useNavigate();
-const {setUser,setLoading}=useAuth()
-  const [form,setForm]=useState({
-    email:"",
-    password:""
-  })
- const handleChange=(e)=>{
-  setForm({...form,[e.target.name]:e.target.value});
- }
- const handleSubmit=async(e)=>{
-  e.preventDefault();
- 
-  try{
-const logedIn=await axios.post(`${backendUrl}/api/v1/user/signin`,form,{withCredentials:true});
-setUser(logedIn.data.details)
-setLoading(false);
-navigate('/');
-  }
-  catch(err){
-    console.error(err);
-  }
+  const navigate = useNavigate();
+  const { setUser, setLoading, setCart } = useAuth();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
- }
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const logedIn = await axios.post(
+        `${backendUrl}/api/v1/user/signin`,
+        form,
+        { withCredentials: true }
+      );
+
+      // Save the token so requests work even when the cookie is blocked (cross-site)
+      if (logedIn.data.token) {
+        localStorage.setItem("token", logedIn.data.token);
+      }
+
+      setUser(logedIn.data.details);
+      setCart(logedIn.data.details?.cart || []);
+      setLoading(false);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.response?.data?.message || "Login failed");
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center  justify-center bg-black px-4 sm:px-6">
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 sm:px-6">
       <div className="absolute inset-0 z-0 pointer-events-none">
-                         <LiquidEther
-                           colors={['#5227F', '#FF9FFC', '#B19EEF']}
-                           mouseForce={20}
-                           cursorSize={100}
-                           isViscous={false}
-                           viscous={30}
-                           iterationsViscous={32}
-                           iterationsPoisson={32}
-                           resolution={0.5}
-                           isBounce={false}
-                           autoDemo
-                           autoSpeed={0.5}
-                           autoIntensity={2.2}
-                           takeoverDuration={0.25}
-                           autoResumeDelay={3000}
-                           autoRampDuration={0.6}
-                         />
-                       </div>
-      
+        <LiquidEther
+          colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
+          mouseForce={20}
+          cursorSize={100}
+          isViscous={false}
+          viscous={30}
+          iterationsViscous={32}
+          iterationsPoisson={32}
+          resolution={0.5}
+          isBounce={false}
+          autoDemo
+          autoSpeed={0.5}
+          autoIntensity={2.2}
+          takeoverDuration={0.25}
+          autoResumeDelay={3000}
+          autoRampDuration={0.6}
+        />
+      </div>
+
       <div className="w-full max-w-sm sm:max-w-md bg-[white] backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8">
-        
         {/* Header */}
         <div className="flex flex-col items-center mb-6">
           <img
-          loading="lazy"  
-            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full shadow-emerald-500 shadow-card-foreground  border-b-cyan-300 shadow-2xl border-2  mb-3"
+            loading="lazy"
+            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full shadow-emerald-500 shadow-card-foreground border-b-cyan-300 shadow-2xl border-2 mb-3"
             src="https://res.cloudinary.com/djgboajkm/image/upload/q_auto,f_auto/v1767896712/Achora_vgxybh.png"
             alt="Logo"
           />
@@ -72,7 +85,7 @@ navigate('/');
           </p>
         </div>
 
-        {/* Google Signup */}
+        {/* Google Login */}
         <div className="mb-5 bg-white rounded-xl">
           <GoogleLogin />
         </div>
@@ -85,22 +98,20 @@ navigate('/');
           <div className="flex-grow h-px bg-gray-300"></div>
         </div>
 
-        {/* Email Signup Form */}
+        {/* Email Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          
           <input
             type="email"
-            onChange={(e)=>handleChange(e)}
+            onChange={handleChange}
             placeholder="Email address"
-            name='email'
-           
+            name="email"
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
 
           <input
             type="password"
-            onChange={(e)=>handleChange(e)}
-            name='password'
+            onChange={handleChange}
+            name="password"
             placeholder="Password"
             className="w-full px-4 py-2.5 sm:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
           />
@@ -115,9 +126,9 @@ navigate('/');
 
         {/* Footer */}
         <p className="text-center text-xs sm:text-sm text-gray-600 mt-6">
-         Don't have an account?{" "}
+          Don't have an account?{" "}
           <Link
-           to="/register"
+            to="/register"
             className="text-indigo-600 font-medium hover:underline"
           >
             SignUp
@@ -125,7 +136,7 @@ navigate('/');
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default LogIn
+export default LogIn;
