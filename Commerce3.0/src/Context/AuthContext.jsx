@@ -14,14 +14,19 @@ useEffect(() => {
     try {
       const res = await axios.get(`${backendUrl}/api/v1/me`, {
         withCredentials: true,
-      });
 
-     
-      if(res.data){
-      setUser(res.data.user);
-      setCart(res.data.user.cart || []);
+        
+      });
+      console.log(res.data?.user);
+
+      if (res.data?.user) {
+        setUser(res.data.user);
+        setCart(res.data.user.cart || []);
       }
     } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token"); // drop an expired token
+      }
       setUser(null);
       setCart([]);
     } finally {
@@ -29,11 +34,8 @@ useEffect(() => {
     }
   };
 
-  
-    
- fetchUser();
-    
-  }, []);
+  fetchUser();
+}, []);
 
   return (
     <AuthContext.Provider

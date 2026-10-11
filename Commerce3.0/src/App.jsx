@@ -30,6 +30,7 @@ import Spiner from './Componets/Spiner'
 import Order_tracking_page from './assets/Pages/Order_tracking_page'
 import SingleOrderDetails from './assets/Pages/SingleOrderDetails'
 import { ToastContainer } from 'react-toastify'
+import AuthSuccess from './assets/Pages/AuthSuccess'
 
 
 
@@ -53,7 +54,7 @@ function App() {
         /cart/proceedToCheckOut/OrderSummary
         /auth/admin/MainAdmin/updateProduct
         /auth/admin/MainAdmin/updateProduct/UpdateForm
-
+          <Route path="/auth/success" element={<AuthSuccess />} />
          <Route path='/auth/admin/MainAdmin/updateProduct' element={<UpdateProductAdmin/>} />
          <Route path='/success/secure/OrderList' element={<Order_tracking_page/>} />
          <Route path='/success/secure/SingleOrder/Details/:id' element={<SingleOrderDetails/>} />

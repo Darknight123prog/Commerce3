@@ -10,6 +10,7 @@ import App from './App.jsx'
 const hashToken = new URLSearchParams(window.location.hash.slice(1)).get("token");
 if (hashToken) {
   localStorage.setItem("token", hashToken);
+  // console.log(`here is the token${hashToken}`);
   window.history.replaceState(null, "", window.location.pathname);
 }
 
