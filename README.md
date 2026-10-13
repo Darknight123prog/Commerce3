@@ -30,9 +30,7 @@ A MERN stack e-commerce platform that provides smart product recommendations, se
 
 ---
 
-## 🤖 AI Recommendation System
-When a user clicks on a product:
-- AI analyzes the product category
+
 - Similar products are dynamically suggested
 - Popup recommendations improve user engagement and shopping experience
 <img width="1243" height="676" alt="Screenshot 2026-05-21 at 8 45 57 AM" src="https://github.com/user-attachments/assets/91fc9dc3-8dc8-4dd5-a420-d66ba35a2d03" />
