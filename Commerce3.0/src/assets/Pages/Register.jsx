@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 
 const Register = () => {
+  const [errorMessage, setErrorMessage] = useState("");
  const backendUrl=import.meta.env.VITE_BACKEND_URL;
 
   const { user ,setUser} = useAuth();
@@ -23,33 +24,36 @@ const handleChange=(e)=>{
  })
 
 }
-const handleSubmit=(e)=>{
+
+const handleSubmit = async (e) => {
   e.preventDefault();
-  const signup=async()=>{
-    try{
-   const Muser= await axios.post(`${backendUrl}/api/v1/user/register`,form,{withCredentials:true});
-  
-   setUser(Muser.data.details);
-   toast.success("User created Successfully");
-   navigate('/');
-    }catch(err){
-       console.log(err.response?.data); 
-      toast.error(err?.response?.data?.message || "Something went wrong");
+  setErrorMessage("");
+
+  try {
+    const response = await axios.post(
+      `${backendUrl}/api/v1/user/register`,
+      form,
+      { withCredentials: true }
+    );
+
+    if (response.data.success) {
+      setUser(response.data.details);
+      toast.success("User created successfully!");
+      navigate("/", { replace: true });
     }
+  } catch (err) {
+    console.error("Signup error:", err.response?.data || err.message);
 
+    setErrorMessage(
+      err.response?.data?.message || "Something went wrong"
+    );
   }
-  signup();
+};
 
-}
-
-  useEffect(()=>{
-
-  },[]);
 
   useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
-
+  if (user) navigate("/");
+}, [user, navigate]);
   return (
     <div className="min-h-screen flex items-center justify-center bg-black  px-4 sm:px-6">
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -133,6 +137,15 @@ const handleSubmit=(e)=>{
           >
             Sign Up
           </button>
+          {errorMessage && (
+  <div
+    role="alert"
+    className="rounded-lg border border-red-300 bg-red-50 px-4 py-3
+               text-sm font-medium text-red-700"
+  >
+    {errorMessage}
+  </div>
+)}
         </form>
 
         {/* Footer */}
